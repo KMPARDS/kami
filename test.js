@@ -1,1 +1,1 @@
-require('./test/utils.test');
+require('./test/index');

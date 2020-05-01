@@ -7,7 +7,7 @@ const providerESN = new ethers.providers.Web3Provider(
   ganache.provider({ gasLimit: 8000000 })
 );
 
-const { fetchBlocks } = require('../build/utils/provider');
+const { fetchBlocks } = require('../../build/utils/provider');
 
 describe('Ganache Setup', async () => {
   it('initiate ganache and generates a bunch of demo accounts', async () => {

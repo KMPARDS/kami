@@ -1,4 +1,7 @@
+import dotenv from 'dotenv';
 import { app } from './app';
+
+dotenv.config();
 
 const isMainnet = process.env.NODE_ENV === 'production';
 const port = isMainnet ? 25985 : 15985;

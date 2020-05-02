@@ -30,7 +30,13 @@ describe('Bunch Root Controller', async () => {
 
   it('call bunch-roots/generate', async () => {
     const response = await axios.get(
-      'http://localhost:15985/bunch-roots/generate?startBlockNumber=0&bunchDepth=1'
+      'http://localhost:15985/bunch-roots/generate',
+      {
+        params: {
+          startBlockNumber: 0,
+          bunchDepth: 1,
+        },
+      }
     );
     console.log(response.data);
   });

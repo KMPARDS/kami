@@ -7,12 +7,30 @@ export function check(value: any, type: Type): boolean {
   return type.check(value);
 }
 
-export function validate(value: any, type: Type): void | never {
+import { string } from './type-checkers';
+
+export function validate(
+  value: any,
+  type: Type,
+  errorHandler?: (error: TypeError) => any
+): boolean | never {
   if (!check(value, type)) {
-    throw new TypeError(
-      `${value} (${typeof value}) is an invalid value of type ${type.name}`
+    const error = new TypeError(
+      `${
+        string.check(value) ? `"${value}"` : value
+      } of type '${typeof value}' is an invalid value for expected type '${
+        type.name
+      }'`
     );
+    if (errorHandler) {
+      errorHandler(error);
+      return false;
+    } else {
+      throw error;
+    }
   }
+
+  return true;
 }
 
 export * as t from './type-checkers';

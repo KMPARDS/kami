@@ -10,7 +10,7 @@ export const string: Type = {
 export const number: Type = {
   name: 'number',
   check: (input: number): boolean => {
-    return typeof input === 'number';
+    return typeof input === 'number' && !isNaN(input);
   },
 };
 

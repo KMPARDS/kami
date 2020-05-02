@@ -1,7 +1,11 @@
+// load the .env file into process.env
 import dotenv from 'dotenv';
-import { app } from './app';
-
 dotenv.config();
+
+// setup global configurations
+import './global';
+
+import { app } from './app';
 
 const isMainnet = process.env.NODE_ENV === 'production';
 const port = isMainnet ? 25985 : 15985;

@@ -1,15 +1,13 @@
 const assert = require('assert');
 const ganache = require('ganache-cli');
-
 const ethers = require('ethers');
+const axios = require('axios');
 
-const providerESN = new ethers.providers.JsonRpcProvider(
-  'http://localhost:8545'
+const providerESN = new ethers.providers.Web3Provider(
+  ganache.provider({ gasLimit: 8000000 })
 );
 
-const { fetchBlocks } = require('../../build/utils/provider');
-
-describe('Ganache Setup', async () => {
+describe('Bunch Root Controller', async () => {
   it('initiate ganache and generates a bunch of demo accounts', async () => {
     accounts = await providerESN.listAccounts();
 
@@ -30,8 +28,10 @@ describe('Ganache Setup', async () => {
     }
   });
 
-  it('get blocks', async () => {
-    const blocks = await fetchBlocks(0, 1, providerESN);
-    // console.log(blocks);
+  it('call bunch-roots/generate', async () => {
+    const response = await axios.get(
+      'http://localhost:15985/bunch-roots/generate?startBlockNumber=0&bunchDepth=1'
+    );
+    console.log(response.data);
   });
 });

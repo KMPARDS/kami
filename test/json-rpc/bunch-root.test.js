@@ -9,7 +9,7 @@ describe('Bunch Root RPC', () => {
       JSON.stringify({
         jsonrpc: '2.0',
         method: 'kami_computeBunchProposal',
-        params: [0, 2],
+        params: [0, '2'],
         id: ethers.utils.hexlify(ethers.utils.randomBytes(32)),
       })
     );

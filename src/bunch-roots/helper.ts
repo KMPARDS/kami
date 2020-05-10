@@ -1,5 +1,6 @@
 import { computeMerkleRoot } from '../utils/merkle';
 import { fetchBlocks } from '../utils/provider';
+import { t, validate } from '../type-validation';
 
 export interface BunchProposal {
   startBlockNumber: number;
@@ -12,6 +13,9 @@ export async function computeBunchProposal(
   startBlockNumber: number,
   bunchDepth: number
 ): Promise<BunchProposal> {
+  validate(startBlockNumber, t.number);
+  validate(bunchDepth, t.number);
+
   const blocks = await fetchBlocks(
     startBlockNumber,
     bunchDepth,

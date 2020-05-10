@@ -1,5 +1,7 @@
 const assert = require('assert');
 const ethers = require('ethers');
+const { Bytes } = require('../../build/utils/bytes');
+const { t, validate } = require('../../build/type-validation');
 
 const providerESN = new ethers.providers.JsonRpcProvider(
   'http://localhost:8545'
@@ -12,19 +14,9 @@ describe('Provider methods', async () => {
     const blocks = await fetchBlocks(0, 1, providerESN);
     assert.equal(blocks.length, 2);
     blocks.forEach((block) => {
-      assert.equal(
-        typeof block.blockNumber,
-        'number',
-        'blockNumber should be a number'
-      );
-      assert.ok(
-        block.transactionsRoot instanceof Uint8Array,
-        'transactionsRoot should be Uint8Array'
-      );
-      assert.ok(
-        block.receiptsRoot instanceof Uint8Array,
-        'receiptsRoot should be Uint8Array'
-      );
+      validate(block.blockNumber, t.number);
+      validate(block.transactionsRoot, t.bytes);
+      validate(block.receiptsRoot, t.bytes);
     });
   });
 });

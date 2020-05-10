@@ -35,3 +35,24 @@ export function parseRequest(request: any): JsonRequest | never {
 
   return parsed;
 }
+
+import { t, check } from '../type-validation';
+
+export function hexlifyObject(input: any): any {
+  if (check(input, t.bytes)) {
+    return input.hex();
+  } else if (check(input, t.array)) {
+    return input.forEach((child: any): any => hexlifyObject(child));
+  } else if (check(input, t.object)) {
+    let entries = Object.entries(input);
+    entries = entries.map((entry: any) => {
+      return [entry[0], hexlifyObject(entry[1])];
+    });
+    return entries.reduce((accum: any, [k, v]: any) => {
+      accum[k] = v;
+      return accum;
+    }, {});
+  } else {
+    return input;
+  }
+}

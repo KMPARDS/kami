@@ -5,7 +5,7 @@ import {
   JsonSuccessResponse,
 } from './interfaces';
 import { INVALID_REQUEST, INVALID_PARAMS, INTERNAL_ERROR } from './errors';
-import { parseRequest } from './parser';
+import { parseRequest, hexlifyObject } from './parser';
 import { methods } from './methods';
 
 export const router = Router();
@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
       console.log(result);
       const response: JsonSuccessResponse = {
         jsonrpc: '2.0',
-        result,
+        result: hexlifyObject(result),
         id: req.body?.id,
         signature: null,
       };

@@ -1,9 +1,10 @@
 import { ethers } from 'ethers';
+import { Bytes32 } from './bytes';
 
 interface BlockCompact {
   blockNumber: number;
-  transactionsRoot: Uint8Array;
-  receiptsRoot: Uint8Array;
+  transactionsRoot: Bytes32;
+  receiptsRoot: Bytes32;
 }
 
 interface ParityBlock {
@@ -38,8 +39,10 @@ export async function fetchBlocks(
 
         blockArray[currentBlockNumber - startBlockNumber] = {
           blockNumber: currentBlockNumber,
-          transactionsRoot: ethers.utils.arrayify(block.transactionsRoot),
-          receiptsRoot: ethers.utils.arrayify(block.receiptsRoot),
+          transactionsRoot: new Bytes32(
+            ethers.utils.arrayify(block.transactionsRoot)
+          ),
+          receiptsRoot: new Bytes32(ethers.utils.arrayify(block.receiptsRoot)),
         };
 
         resolve();

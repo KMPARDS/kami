@@ -1,12 +1,13 @@
 import { computeMerkleRoot } from '../utils/merkle';
 import { fetchBlocks } from '../utils/provider';
 import { t, validate } from '../type-validation';
+import { Bytes32 } from '../utils/bytes';
 
 export interface BunchProposal {
   startBlockNumber: number;
   bunchDepth: number;
-  transactionsMegaRoot: Uint8Array;
-  receiptsMegaRoot: Uint8Array;
+  transactionsMegaRoot: Bytes32;
+  receiptsMegaRoot: Bytes32;
 }
 
 export async function computeBunchProposal(

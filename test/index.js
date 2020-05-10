@@ -1,2 +1,3 @@
-require('./utils/index');
-require('./bunch-roots/index');
+require('./ganache');
+require('./utils');
+require('./json-rpc');

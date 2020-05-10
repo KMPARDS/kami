@@ -1,9 +1,13 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 import { ethers } from 'ethers';
 import { fetchBlocks } from './utils/provider';
 import { router as bunchRootRouter } from './bunch-roots/controller';
+import { router as jsonRpcRouter } from './json-rpc';
 
 export const app = express();
+
+app.use(bodyParser.json());
 
 app.get('/hello', (req, res) => {
   res.json({
@@ -13,3 +17,4 @@ app.get('/hello', (req, res) => {
 });
 
 app.use('/bunch-roots', bunchRootRouter);
+app.use('/json-rpc', jsonRpcRouter);

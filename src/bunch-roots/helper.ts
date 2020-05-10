@@ -13,8 +13,8 @@ export async function computeBunchProposal(
   startBlockNumber: number,
   bunchDepth: number
 ): Promise<BunchProposal> {
-  validate(startBlockNumber, t.number);
-  validate(bunchDepth, t.number);
+  validate(startBlockNumber, t.uint);
+  validate(bunchDepth, t.uint);
 
   const blocks = await fetchBlocks(
     startBlockNumber,

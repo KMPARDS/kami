@@ -1,7 +1,7 @@
-import { computeMerkleRoot } from '../utils/merkle';
-import { fetchBlocks } from '../utils/provider';
-import { t, validate } from '../type-validation';
-import { Bytes32 } from '../utils/bytes';
+import { computeMerkleRoot } from '../../utils/merkle';
+import { fetchBlocks } from '../../utils/provider';
+import { t, validate } from '../../type-validation';
+import { Bytes32 } from '../../utils/bytes';
 
 export interface BunchProposal {
   startBlockNumber: number;

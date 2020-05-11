@@ -7,10 +7,21 @@ import './global';
 
 import { app } from './app';
 
-const isMainnet = process.env.NODE_ENV === 'production';
-const port = isMainnet ? 25985 : 15985;
+const isProduction = process.env.NODE_ENV === 'production';
+const port = isProduction ? 25985 : 15985;
 
-app.listen(port, () => {
-  console.log(`Started ${isMainnet ? 'mainnet' : 'testnet'} on PORT ${port}`);
-  console.log('Press [control]+[c] to stop');
-});
+app
+  .listen(port, () => {
+    console.log(
+      `Started ${isProduction ? 'mainnet' : 'testnet'} on PORT ${port}`
+    );
+    console.log('Press [control]+[c] to stop');
+  })
+  .on('error', (error) => {
+    if (isProduction) {
+      throw error;
+    } else {
+      // keep the process from terminating (for the test cases to run while active development)
+      process.stdin.resume();
+    }
+  });

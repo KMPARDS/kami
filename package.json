@@ -7,6 +7,7 @@
     "start:build": "tsc -w",
     "start:run": "nodemon build/server.js",
     "start": "concurrently npm:start:*",
+    "build": "tsc",
     "test:config1": "ganache-cli -q",
     "test:config2": "node build/server.js",
     "test:run": "mocha -t 20000 test/index.js",

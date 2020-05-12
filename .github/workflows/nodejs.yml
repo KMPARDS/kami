@@ -31,6 +31,9 @@ jobs:
       run: npm run build
       
   test:
+    needs: [build]
+    if: always()
+    
     runs-on: ubuntu-latest
     
     steps:

@@ -22,7 +22,7 @@ export function check(value: any, type: Type): boolean {
   }
 }
 
-import { string } from './type-checkers';
+import { string, array } from './type-checkers';
 
 export function validate(
   value: any,
@@ -55,6 +55,36 @@ export function validate(
         type.name
       }'. More information: ${insideError.message}`
     );
+    if (errorHandler) {
+      errorHandler(error);
+      return false;
+    } else {
+      throw error;
+    }
+  }
+
+  return true;
+}
+
+export function validateMultiple(
+  value: any,
+  typeArray: Array<Type>,
+  errorHandler?: (error: TypeError) => any
+): boolean | never {
+  validate(typeArray, array);
+
+  let error: TypeError | null = null;
+  for (const type of typeArray) {
+    try {
+      validate(value, type);
+      error = null;
+      break;
+    } catch (err) {
+      error = err;
+    }
+  }
+
+  if (error) {
     if (errorHandler) {
       errorHandler(error);
       return false;

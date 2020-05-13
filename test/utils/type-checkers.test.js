@@ -1,5 +1,10 @@
 const assert = require('assert');
-const { t, check, validate } = require('../../build/type-validation');
+const {
+  t,
+  check,
+  validate,
+  validateMultiple,
+} = require('../../build/type-validation');
 const { Bytes } = require('../../build/utils/bytes');
 
 const testCases = [
@@ -99,6 +104,32 @@ const testCases = [
       },
       {
         value: -2,
+        isCorrectValue: false,
+      },
+    ],
+  },
+  {
+    name: 'UInteger8',
+    type: t.uint8,
+    cases: [
+      {
+        value: 0,
+        isCorrectValue: true,
+      },
+      {
+        value: 2,
+        isCorrectValue: true,
+      },
+      {
+        value: 255,
+        isCorrectValue: true,
+      },
+      {
+        value: -2,
+        isCorrectValue: false,
+      },
+      {
+        value: 256,
         isCorrectValue: false,
       },
     ],
@@ -262,6 +293,25 @@ describe('Type Checkers', () => {
           }
         });
       });
+    });
+  });
+
+  describe('Multiple Type Checkings', () => {
+    it('checking two types with first correct', () => {
+      validateMultiple(2, [t.number, t.string]);
+    });
+
+    it('checking two types with second correct', () => {
+      validateMultiple('2', [t.number, t.string]);
+    });
+
+    it('checking two types with no correct', () => {
+      try {
+        validateMultiple([2], [t.number, t.string]);
+        assert.ok(false, 'should give error');
+      } catch (error) {
+        assert.ok(true);
+      }
     });
   });
 });

@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import { Bytes32 } from './bytes';
+import { t, validate } from '../type-validation';
 
 interface BlockCompact {
   blockNumber: number;
@@ -20,6 +21,9 @@ export async function fetchBlocks(
     | ethers.providers.Web3Provider
     | ethers.providers.InfuraProvider
 ): Promise<BlockCompact[]> {
+  validate(startBlockNumber, t.uint);
+  validate(bunchDepth, t.uint);
+
   const blockNumbersToScan = [...Array(2 ** bunchDepth).keys()].map(
     (n) => n + startBlockNumber
   );

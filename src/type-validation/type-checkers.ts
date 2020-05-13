@@ -62,6 +62,18 @@ export const uint: Type = {
   },
 };
 
+export const uint8: Type = {
+  name: 'uint8',
+  validate: (input: number): true | never => {
+    uint.validate(input);
+    if (input >= 256) {
+      throw new Error(`the number ${input} is not in the range 0, 255`);
+    } else {
+      return true;
+    }
+  },
+};
+
 export const array: Type = {
   name: 'Array',
   validate: (input: any[]): true | never => {

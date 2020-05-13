@@ -1,5 +1,6 @@
 import assert from 'assert';
 import { ethers } from 'ethers';
+import { t, check, validate, validateMultiple } from '../type-validation';
 
 export interface Byted {
   data: Uint8Array;
@@ -11,7 +12,11 @@ export class Bytes {
   data: Uint8Array;
 
   constructor(data: string | Uint8Array, length?: number) {
+    validateMultiple(data, [t.uint8array, t.hex]);
+    if (length) validate(length, t.uint);
+
     this.data = typeof data === 'string' ? ethers.utils.arrayify(data) : data;
+
     if (length) {
       assert.equal(
         this.data.length,
@@ -45,10 +50,11 @@ export class Bytes32 extends Bytes {
 export class Bytes1 extends Bytes {
   constructor(data: string | Uint8Array | number) {
     if (typeof data === 'number') {
-      assert.ok(0 <= data && data <= 255, 'Number should be within 0 and 255');
+      validate(data, t.uint8);
       data = new Uint8Array([data]);
+    } else {
+      super(data, 1);
     }
-    super(data, 1);
   }
 }
 

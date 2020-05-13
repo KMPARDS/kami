@@ -4,7 +4,11 @@ const {
   utils: { arrayify, keccak256, concat },
 } = ethers;
 
+import { t, validate } from '../type-validation';
+
 export function computeMerkleRoot(inputArray: Bytes[]): Bytes32 {
+  inputArray.forEach((input) => validate(input, t.byted));
+
   if (inputArray.length === 1) return inputArray[0];
 
   if (

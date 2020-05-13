@@ -1,5 +1,7 @@
 # Kami - the guardian of ESN
 
+![CI](https://github.com/KMPARDS/kami/workflows/CI/badge.svg)
+
 This project is a part of Era Swap Network and it's development is in progress.
 
 ### Development Notes

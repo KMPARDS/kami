@@ -1,10 +1,25 @@
 export interface Type {
   name: string;
-  check(input: any): boolean;
+  check(input: any): true | never;
 }
 
 export function check(value: any, type: Type): boolean {
-  return type.check(value);
+  if (!type) {
+    console.warn(
+      `\n\n${'='.repeat(
+        process.stdout.columns
+      )}\nWarning: type is ${type}\n${'='.repeat(process.stdout.columns)}\n\n`
+    );
+
+    throw new Error(`type is ${type}`);
+  }
+
+  try {
+    type.check(value);
+    return true;
+  } catch (error) {
+    return false;
+  }
 }
 
 import { string } from './type-checkers';
@@ -14,13 +29,31 @@ export function validate(
   type: Type,
   errorHandler?: (error: TypeError) => any
 ): boolean | never {
-  if (!check(value, type)) {
+  if (!type) {
+    console.warn(
+      `\n\n${'='.repeat(
+        process.stdout.columns
+      )}\nWarning: type is ${type}\n${'='.repeat(process.stdout.columns)}\n\n`
+    );
+
+    throw new Error(`type is ${type}`);
+  }
+
+  const insideError = (() => {
+    try {
+      type.check(value);
+      return null;
+    } catch (error) {
+      return error;
+    }
+  })();
+  if (insideError) {
     const error = new TypeError(
       `${
-        string.check(value) ? `"${value}"` : value
+        check(value, string) ? `"${value}"` : value
       } of type '${typeof value}' is an invalid value for expected type '${
         type.name
-      }'`
+      }'. More information: ${insideError.message}`
     );
     if (errorHandler) {
       errorHandler(error);

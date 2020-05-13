@@ -26,6 +26,6 @@
     "ganache-cli": "^6.9.1",
     "mocha": "^7.1.2",
     "nodemon": "2.0.3",
-    "typescript": "3.8.3"
+    "typescript": "^3.9.2"
   }
 }

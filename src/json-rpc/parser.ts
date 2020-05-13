@@ -39,7 +39,7 @@ export function parseRequest(request: any): JsonRequest | never {
 import { t, check } from '../type-validation';
 
 export function hexlifyObject(input: any): any {
-  if (check(input, t.bytes)) {
+  if (check(input, t.byted)) {
     return input.hex();
   } else if (check(input, t.array)) {
     return input.forEach((child: any): any => hexlifyObject(child));

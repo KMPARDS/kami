@@ -10,13 +10,15 @@ const providerESN = new ethers.providers.JsonRpcProvider(
 const { fetchBlocks } = require('../../build/utils/provider');
 
 describe('Provider methods', async () => {
-  it('get blocks', async () => {
-    const blocks = await fetchBlocks(0, 1, providerESN);
-    assert.equal(blocks.length, 2);
-    blocks.forEach((block) => {
-      validate(block.blockNumber, t.number);
-      validate(block.transactionsRoot, t.bytes);
-      validate(block.receiptsRoot, t.bytes);
+  describe('get blocks method', () => {
+    it('get blocks', async () => {
+      const blocks = await fetchBlocks(0, 1, providerESN);
+      assert.equal(blocks.length, 2);
+      blocks.forEach((block) => {
+        validate(block.blockNumber, t.number);
+        validate(block.transactionsRoot, t.byted);
+        validate(block.receiptsRoot, t.byted);
+      });
     });
   });
 });

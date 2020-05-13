@@ -1,6 +1,6 @@
 export interface Type {
   name: string;
-  check(input: any): true | never;
+  validate(input: any): true | never;
 }
 
 export function check(value: any, type: Type): boolean {
@@ -15,7 +15,7 @@ export function check(value: any, type: Type): boolean {
   }
 
   try {
-    type.check(value);
+    type.validate(value);
     return true;
   } catch (error) {
     return false;
@@ -41,7 +41,7 @@ export function validate(
 
   const insideError = (() => {
     try {
-      type.check(value);
+      type.validate(value);
       return null;
     } catch (error) {
       return error;

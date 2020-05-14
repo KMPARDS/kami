@@ -10,6 +10,12 @@ declare global {
 
     interface Global {
       providerEsn: ethers.providers.JsonRpcProvider;
+      config: {
+        ETH_URL: string;
+        ESN_URL: string;
+        JSON_RPC_PORT: number;
+      };
+      wallet: ethers.Wallet;
     }
   }
 }

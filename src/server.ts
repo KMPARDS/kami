@@ -4,21 +4,20 @@ dotenv.config();
 
 // setup global configurations
 import './global';
+console.log(global.config);
 
 import { app } from './app';
 
-const isProduction = process.env.NODE_ENV === 'production';
-const port = isProduction ? 25985 : 15985;
+const productionPort = 25985;
+const port = global.config.JSON_RPC_PORT ?? productionPort;
 
 app
   .listen(port, () => {
-    console.log(
-      `Started ${isProduction ? 'mainnet' : 'testnet'} on PORT ${port}`
-    );
+    console.log(`Started on PORT ${port}`);
     console.log('Press [control]+[c] to stop');
   })
   .on('error', (error) => {
-    if (isProduction) {
+    if (port === productionPort) {
       throw error;
     } else {
       // keep the process from terminating (for the test cases to run while active development)

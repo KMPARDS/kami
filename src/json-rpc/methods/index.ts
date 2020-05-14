@@ -1,9 +1,11 @@
 import { METHOD_NOT_FOUND } from '../errors';
 import { computeBunchProposal } from './compute-bunch-proposal';
+import { signBunch } from './sign-bunch';
 
 const _methods = {
   kami: {
     computeBunchProposal,
+    signBunch,
   },
 };
 

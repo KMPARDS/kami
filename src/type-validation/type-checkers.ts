@@ -1,5 +1,16 @@
 import { Type } from './';
 
+export const boolean: Type = {
+  name: 'boolean',
+  validate: (input: boolean): true | never => {
+    if (typeof input !== 'boolean') {
+      throw new Error('not a boolean value');
+    } else {
+      return true;
+    }
+  },
+};
+
 export const string: Type = {
   name: 'string',
   validate: (input: string): true | never => {
@@ -19,6 +30,42 @@ export const hex: Type = {
       throw new Error('hex string must have 0x prefix');
     } else if (!/^[A-F0-9]+$/i.test(input.slice(2))) {
       throw new Error('invalid hex string');
+    } else {
+      return true;
+    }
+  },
+};
+
+export const hex20: Type = {
+  name: 'hex20',
+  validate: (input: string): true | never => {
+    hex.validate(input);
+    if (input.length !== 42) {
+      throw new Error('address hex string should have 20 bytes / 42 length');
+    } else {
+      return true;
+    }
+  },
+};
+
+export const hex32: Type = {
+  name: 'hex32',
+  validate: (input: string): true | never => {
+    hex.validate(input);
+    if (input.length !== 66) {
+      throw new Error('bytes32 hex string should have 32 bytes / 66 length');
+    } else {
+      return true;
+    }
+  },
+};
+
+export const hex65: Type = {
+  name: 'hex65',
+  validate: (input: string): true | never => {
+    hex.validate(input);
+    if (input.length !== 132) {
+      throw new Error('signature hex string should have 65 bytes / 132 length');
     } else {
       return true;
     }

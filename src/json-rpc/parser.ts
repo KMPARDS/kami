@@ -42,7 +42,7 @@ export function hexlifyObject(input: any): any {
   if (check(input, t.byted)) {
     return input.hex();
   } else if (check(input, t.array)) {
-    return input.forEach((child: any): any => hexlifyObject(child));
+    return input.map((child: any): any => hexlifyObject(child));
   } else if (check(input, t.object)) {
     let entries = Object.entries(input);
     entries = entries.map((entry: any) => {

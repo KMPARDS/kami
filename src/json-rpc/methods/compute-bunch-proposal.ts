@@ -2,13 +2,7 @@ import { computeMerkleRoot } from '../../utils/merkle';
 import { fetchBlocks } from '../../utils/provider';
 import { t, validate } from '../../type-validation';
 import { Bytes32 } from '../../utils/bytes';
-
-export interface BunchProposal {
-  startBlockNumber: number;
-  bunchDepth: number;
-  transactionsMegaRoot: Bytes32;
-  receiptsMegaRoot: Bytes32;
-}
+import { BunchProposal } from '../../utils/bunch-proposal';
 
 export async function computeBunchProposal(
   startBlockNumber: number,
@@ -32,5 +26,6 @@ export async function computeBunchProposal(
     receiptsMegaRoot: computeMerkleRoot(
       blocks.map((block) => block.receiptsRoot)
     ),
+    signatures: [],
   };
 }

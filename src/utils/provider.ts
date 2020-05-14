@@ -39,7 +39,6 @@ export async function fetchBlocks(
           blockNumberHex,
           true,
         ]);
-        console.log(`Received block ${currentBlockNumber} from ESN node`);
 
         blockArray[currentBlockNumber - startBlockNumber] = {
           blockNumber: currentBlockNumber,

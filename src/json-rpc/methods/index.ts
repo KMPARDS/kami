@@ -10,8 +10,6 @@ const _methods = {
 };
 
 export function methods(methodName: string): Function | never {
-  console.log({ methodName });
-
   const partitioned = methodName.split('_');
 
   if (!(partitioned[0] in _methods))

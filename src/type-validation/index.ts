@@ -1,3 +1,4 @@
+import assert from 'assert';
 export interface Type {
   name: string;
   validate(input: any): true | never;
@@ -64,6 +65,23 @@ export function validate(
   }
 
   return true;
+}
+
+export function validateParam(
+  valueObj: { [key: string]: any },
+  type: Type
+): boolean | never {
+  const entries = Object.entries(valueObj);
+  // to catch development errors
+  assert.strictEqual(
+    entries.length,
+    1,
+    'There should be only one property in the valueObj'
+  );
+  const [name, value]: [string, any] = entries[0];
+  return validate(value, type, (err: TypeError): never => {
+    throw new TypeError(`${name}: ${err.message}`);
+  });
 }
 
 export function validateMultiple(

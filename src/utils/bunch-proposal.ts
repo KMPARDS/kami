@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { t, validate } from '../type-validation';
+import { t, validateParam } from '../type-validation';
 import { Signature, Bytes32 } from './bytes';
 
 export interface BunchProposal {
@@ -14,16 +14,23 @@ export function validateBunchProposal(
   bunchProposal: BunchProposal,
   signaturesPresent: boolean
 ): void | never {
-  validate(signaturesPresent, t.boolean);
-  validate(bunchProposal, t.object);
-  validate(bunchProposal.startBlockNumber, t.number);
-  validate(bunchProposal.bunchDepth, t.number);
-  validate(bunchProposal.transactionsMegaRoot, t.hex32);
-  validate(bunchProposal.receiptsMegaRoot, t.hex32);
-  validate(bunchProposal.signatures, t.array);
+  validateParam({ signaturesPresent }, t.boolean);
+  validateParam({ bunchProposal }, t.object);
+  const {
+    startBlockNumber,
+    bunchDepth,
+    transactionsMegaRoot,
+    receiptsMegaRoot,
+    signatures,
+  } = bunchProposal;
+  validateParam({ startBlockNumber }, t.number);
+  validateParam({ bunchDepth }, t.number);
+  validateParam({ transactionsMegaRoot }, t.hex32);
+  validateParam({ receiptsMegaRoot }, t.hex32);
+  validateParam({ signatures }, t.array);
   if (signaturesPresent) {
     bunchProposal.signatures.forEach((signature) => {
-      validate(signature, t.hex65);
+      validateParam({ signature }, t.hex65);
     });
   } else {
     assert.strictEqual(

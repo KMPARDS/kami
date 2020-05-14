@@ -32,7 +32,7 @@ describe('Sign Bunch RPC', () => {
     );
 
     const bunchProposal2 = response2.result;
-    // console.log(response);
-    validateBunchProposal(bunchProposal, true);
+    // console.log(response2);
+    validateBunchProposal(bunchProposal2, true);
   });
 });

@@ -1,3 +1,13 @@
+// prints console.logs
+global.consoleLog = (...input) => {
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('\n╭' + '-'.repeat(process.stdout.columns - 2 || 30) + '╮');
+    console.log('  DEBUG\n');
+    console.log(...input);
+    console.log('\n╰' + '-'.repeat(process.stdout.columns - 2 || 30) + '╯\n');
+  }
+};
+
 import { ethers } from 'ethers';
 
 const providerEsn: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
@@ -29,7 +39,6 @@ const keystorePassword: string = fs.readFileSync(
   path.resolve(process.cwd(), configUrl, '..', config.KEYSTORE_PASSWORD_PATH),
   'utf8'
 );
-console.log({ keystorePassword });
 
 (async () => {
   try {

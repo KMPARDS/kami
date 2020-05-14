@@ -4,7 +4,7 @@ dotenv.config();
 
 // setup global configurations
 import './global';
-console.log(global.config);
+global.consoleLog('global.config', global.config);
 
 import { app } from './app';
 

@@ -13,10 +13,11 @@ export const router = Router();
 router.post('/', async (req, res) => {
   try {
     const request = parseRequest(req.body);
+    global.consoleLog('JSON RPC ReQuest', request);
 
     try {
       const result = await methods(request.method)(...request.params);
-      console.log(result);
+      global.consoleLog('JSON RPC ReSponse', result);
       const response: JsonSuccessResponse = {
         jsonrpc: '2.0',
         result: hexlifyObject(result),
@@ -34,7 +35,7 @@ router.post('/', async (req, res) => {
       }
     }
   } catch (error) {
-    console.log('catch err', error);
+    global.consoleLog('JSON RPC Error', error);
 
     const response: JsonErrorResponse = {
       jsonrpc: '2.0',

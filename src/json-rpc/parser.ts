@@ -29,7 +29,7 @@ export function parseRequest(request: any): JsonRequest | never {
       parsed.signature = new Signature(request.signature);
     }
   } catch (error) {
-    console.log(error);
+    global.consoleLog(error);
     throw { ...PARSE_ERROR, data: error };
   }
 

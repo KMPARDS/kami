@@ -9,6 +9,7 @@ declare global {
     }
 
     interface Global {
+      consoleLog: (...input: any) => void;
       providerEsn: ethers.providers.JsonRpcProvider;
       config: {
         ETH_URL: string;

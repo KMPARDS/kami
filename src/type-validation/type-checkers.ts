@@ -128,7 +128,7 @@ export const byted: Type = {
     functionObject.validate(input.hex);
     hex.validate(input.hex());
     functionObject.validate(input.number);
-    number.validate(input.number());
+    // number.validate(input.number()); // casting of byted to number can result into an overflow error
 
     return true;
   },

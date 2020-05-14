@@ -1,21 +1,27 @@
 import assert from 'assert';
 import { ethers } from 'ethers';
-import { t, check, validate, validateMultiple } from '../type-validation';
+import { t, validate, validateMultiple } from '../type-validation';
 
 export interface Byted {
   data: Uint8Array;
   hex(): string;
-  number(): number;
+  number(): number | never;
 }
 
-export class Bytes {
+export class Bytes implements Byted {
   data: Uint8Array;
 
-  constructor(data: string | Uint8Array, length?: number) {
-    validateMultiple(data, [t.uint8array, t.hex]);
+  constructor(data: string | Uint8Array | number, length?: number) {
+    validateMultiple(data, [t.uint8array, t.uint, t.hex]);
     if (length) validate(length, t.uint);
 
-    this.data = typeof data === 'string' ? ethers.utils.arrayify(data) : data;
+    if (typeof data === 'string') {
+      this.data = ethers.utils.arrayify(data);
+    } else if (typeof data === 'number') {
+      this.data = ethers.utils.arrayify('0x' + data.toString(16));
+    } else {
+      this.data = data;
+    }
 
     if (length) {
       assert.equal(
@@ -30,7 +36,11 @@ export class Bytes {
     return ethers.utils.hexlify(this.data);
   }
 
-  number(): number {
+  number(): number | never {
+    assert.ok(
+      this.data.length <= 4,
+      'Converting Bytes to Number resulted in overflow'
+    );
     return +this.hex();
   }
 }
@@ -49,16 +59,11 @@ export class Bytes32 extends Bytes {
 
 export class Bytes1 extends Bytes {
   constructor(data: string | Uint8Array | number) {
-    if (typeof data === 'number') {
-      validate(data, t.uint8);
-      data = new Uint8Array([data]);
-    } else {
-      super(data, 1);
-    }
+    super(data, 1);
   }
 }
 
-export class Signature {
+export class Signature implements Byted {
   r: Bytes32;
   s: Bytes32;
   v: Bytes1;
@@ -80,7 +85,19 @@ export class Signature {
     );
   }
 
+  get data() {
+    return this.joint().data;
+  }
+
   hex(): string {
     return this.joint().hex();
+  }
+
+  number(): number | never {
+    assert.ok(
+      this.data.length <= 4,
+      'Converting Bytes to Number resulted in overflow'
+    );
+    return this.joint().number();
   }
 }

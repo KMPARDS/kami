@@ -5,12 +5,12 @@
   "main": "build/app.js",
   "scripts": {
     "start:build": "tsc -w",
-    "start:run": "nodemon build/server.js test/kami1/kami-config.json",
+    "start:run": "nodemon build/server.js test/test-configs/kami1/kami-config.json",
     "start": "concurrently npm:start:*",
     "build": "tsc",
     "test:config1": "ganache-cli -q",
-    "test:config2": "node build/server.js test/kami1/kami-config.json",
-    "test:config3": "node build/server.js test/kami2/kami-config.json",
+    "test:config2": "node build/server.js test/test-configs/kami1/kami-config.json",
+    "test:config3": "node build/server.js test/test-configs/kami2/kami-config.json",
     "test:run": "mocha -t 20000 test/index.js",
     "test": "concurrently -r -s first -k npm:test:*"
   },

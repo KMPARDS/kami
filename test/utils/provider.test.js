@@ -3,9 +3,8 @@ const ethers = require('ethers');
 const { Bytes } = require('../../build/utils/bytes');
 const { t, validate } = require('../../build/type-validation');
 
-const providerESN = new ethers.providers.JsonRpcProvider(
-  'http://localhost:8545'
-);
+const { kami1, getProvider } = require('../test-configs');
+let providerESN = getProvider(kami1.ESN_URL);
 
 const { fetchBlocks } = require('../../build/utils/provider');
 

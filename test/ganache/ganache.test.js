@@ -1,9 +1,8 @@
 const assert = require('assert');
 const ethers = require('ethers');
 
-const getProviderESN = () =>
-  new ethers.providers.JsonRpcProvider('http://localhost:8545');
-let providerESN = getProviderESN();
+const { kami1, getProvider } = require('../test-configs');
+let providerESN = getProvider(kami1.ESN_URL);
 
 let accounts;
 
@@ -16,7 +15,7 @@ describe('Ganache Setup', () => {
           break;
         } catch (error) {
           console.log('waiting for ganache to start...');
-          providerESN = getProviderESN();
+          providerESN = getProvider(kami1.ESN_URL);
         }
         await new Promise((res) => setTimeout(res, 1000));
       }

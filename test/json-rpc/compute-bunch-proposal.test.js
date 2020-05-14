@@ -8,8 +8,8 @@ const { kami1, getProvider } = require('../test-configs');
 const KAMI_URL = `http://localhost:${kami1.JSON_RPC_PORT}/json-rpc`;
 const providerESN = getProvider(kami1.ESN_URL);
 
-describe('Bunch Root RPC', () => {
-  it('call compute bunch root RPC', async () => {
+describe('Bunch Proposal RPC', () => {
+  it('call compute bunch proposal RPC', async () => {
     const response = await ethers.utils.fetchJson(
       KAMI_URL,
       JSON.stringify({
@@ -24,7 +24,7 @@ describe('Bunch Root RPC', () => {
     validateBunchProposal(bunchProposal, false);
   });
 
-  it('call compute bunch root RPC with 0 bunch depth', async () => {
+  it('call compute bunch proposal RPC with 0 bunch depth', async () => {
     const response = await ethers.utils.fetchJson(
       KAMI_URL,
       JSON.stringify({

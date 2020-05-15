@@ -4,6 +4,7 @@ import { t, validate, validateMultiple } from '../type-validation';
 
 export interface Byted {
   data: Uint8Array;
+  length: number;
   hex(): string;
   number(): number | never;
 }
@@ -32,6 +33,10 @@ export class Bytes implements Byted {
         `Input should be of ${length} bytes`
       );
     }
+  }
+
+  get length(): number {
+    return this.data.length;
   }
 
   hex(): string {
@@ -65,41 +70,26 @@ export class Bytes1 extends Bytes {
   }
 }
 
-export class Signature implements Byted {
-  r: Bytes32;
-  s: Bytes32;
-  v: Bytes1;
-
+export class Signature extends Bytes {
   constructor(data: string | Uint8Array) {
     const sig = ethers.utils.splitSignature(new Bytes(data, 65).data);
     if (sig.v === undefined && sig.recoveryParam === undefined) {
       assert(false, 'There should be v or recoveryParam');
     }
 
-    this.r = new Bytes32(sig.r);
-    this.s = new Bytes32(sig.s);
-    this.v = new Bytes1(sig.v ?? (sig.recoveryParam ?? 0) + 27);
+    super(data, 65);
   }
 
-  joint(): Bytes {
-    return new Bytes(
-      ethers.utils.concat([this.r.data, this.s.data, this.v.data])
-    );
+  get r(): Bytes32 {
+    const sig = ethers.utils.splitSignature(this.data);
+    return new Bytes32(sig.r);
   }
-
-  get data() {
-    return this.joint().data;
+  get s(): Bytes32 {
+    const sig = ethers.utils.splitSignature(this.data);
+    return new Bytes32(sig.s);
   }
-
-  hex(): string {
-    return this.joint().hex();
-  }
-
-  number(): number | never {
-    assert.ok(
-      this.data.length <= 4,
-      'Converting Bytes to Number resulted in overflow'
-    );
-    return this.joint().number();
+  get v(): Bytes1 {
+    const sig = ethers.utils.splitSignature(this.data);
+    return new Bytes1(sig.v ?? (sig.recoveryParam ?? 0) + 27);
   }
 }

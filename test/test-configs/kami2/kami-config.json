@@ -3,5 +3,6 @@
   "ESN_URL": "http://localhost:8545",
   "JSON_RPC_PORT": 15986,
   "KEYSTORE_PATH": "keystore.json",
-  "KEYSTORE_PASSWORD_PATH": "password.txt"
+  "KEYSTORE_PASSWORD_PATH": "password.txt",
+  "SEED_PEER_PATH": "seed-peers.txt"
 }

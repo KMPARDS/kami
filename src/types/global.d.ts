@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import { Peer } from '../peers/';
 
 declare global {
   namespace NodeJS {
@@ -15,8 +16,12 @@ declare global {
         ETH_URL: string;
         ESN_URL: string;
         JSON_RPC_PORT: number;
+        KEYSTORE_PATH: string | null;
+        KEYSTORE_PASSWORD_PATH: string | null;
+        SEED_PEER_PATH: string | null;
       };
       wallet: ethers.Wallet;
+      peers: Peer[];
     }
   }
 }

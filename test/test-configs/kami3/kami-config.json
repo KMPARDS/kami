@@ -1,7 +1,7 @@
 {
   "ETH_URL": "http://localhost:7545",
   "ESN_URL": "http://localhost:8545",
-  "JSON_RPC_PORT": 15985,
+  "JSON_RPC_PORT": 15987,
   "KEYSTORE_PATH": "keystore.json",
   "KEYSTORE_PASSWORD_PATH": "password.txt",
   "SEED_PEER_PATH": "seed-peers.txt"

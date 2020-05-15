@@ -6,6 +6,8 @@ dotenv.config();
 import './global';
 global.consoleLog('global.config', global.config);
 
+import './peers';
+
 import { app } from './app';
 
 const productionPort = 25985;

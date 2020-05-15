@@ -34,8 +34,8 @@ export async function signBunch(
 
   const encoded = ethers.utils.RLP.encode([
     '0x144d',
-    '0x' + _bunchProposal.startBlockNumber.toString(16),
-    '0x' + _bunchProposal.bunchDepth.toString(16),
+    new Bytes(_bunchProposal.startBlockNumber).hex(),
+    new Bytes(_bunchProposal.bunchDepth).hex(),
     _bunchProposal.transactionsMegaRoot.hex(),
     _bunchProposal.receiptsMegaRoot.hex(),
   ]);

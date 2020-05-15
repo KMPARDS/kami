@@ -18,7 +18,9 @@ export class Bytes implements Byted {
     if (typeof data === 'string') {
       this.data = ethers.utils.arrayify(data);
     } else if (typeof data === 'number') {
-      this.data = ethers.utils.arrayify('0x' + data.toString(16));
+      let hexed = data.toString(16);
+      if (hexed.length % 2) hexed = '0' + hexed;
+      this.data = ethers.utils.arrayify('0x' + hexed);
     } else {
       this.data = data;
     }

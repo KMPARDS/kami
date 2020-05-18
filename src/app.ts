@@ -15,4 +15,4 @@ app.get('/hello', (req, res) => {
   });
 });
 
-app.use('/json-rpc', jsonRpcRouter);
+app.use('/', jsonRpcRouter);

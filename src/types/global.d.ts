@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { Peer } from '../peers/';
+import { Peer } from '../peers/peer-request';
 
 declare global {
   namespace NodeJS {

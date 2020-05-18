@@ -5,7 +5,7 @@ const { fetchBlocks } = require('../../build/utils/provider');
 const { validateBunchProposal } = require('../../build/utils/bunch-proposal');
 
 const { kami1, getProvider } = require('../test-configs');
-const KAMI_URL = `http://localhost:${kami1.JSON_RPC_PORT}/json-rpc`;
+const KAMI_URL = `http://localhost:${kami1.JSON_RPC_PORT}/`;
 const providerESN = getProvider(kami1.ESN_URL);
 
 describe('Bunch Proposal RPC', () => {
@@ -14,7 +14,7 @@ describe('Bunch Proposal RPC', () => {
       KAMI_URL,
       JSON.stringify({
         jsonrpc: '2.0',
-        method: 'kami_computeBunchProposal',
+        method: 'informer_computeBunchProposal',
         params: [0, 2],
         id: ethers.utils.hexlify(ethers.utils.randomBytes(32)),
       })
@@ -29,7 +29,7 @@ describe('Bunch Proposal RPC', () => {
       KAMI_URL,
       JSON.stringify({
         jsonrpc: '2.0',
-        method: 'kami_computeBunchProposal',
+        method: 'informer_computeBunchProposal',
         params: [1, 0],
         id: ethers.utils.hexlify(ethers.utils.randomBytes(32)),
       })

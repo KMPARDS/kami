@@ -146,7 +146,7 @@ export const uint8array: Type = {
 export const object: Type = {
   name: 'object',
   validate: (input: Object): true | never => {
-    if (typeof input !== 'object') {
+    if (typeof input !== 'object' || input === null) {
       throw new Error('not an object pointer');
     } else {
       return true;

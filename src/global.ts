@@ -25,8 +25,6 @@ global.peers = [];
 const configUrl: string = process.argv[2] ?? 'kami-config';
 const config = require(path.resolve(process.cwd(), configUrl));
 
-console.log(config);
-
 global.config = {
   ETH_URL: config.ETH_URL ?? 'http://localhost:7545',
   ESN_URL: config.ESN_URL ?? 'http://localhost:8545',

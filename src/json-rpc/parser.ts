@@ -27,7 +27,6 @@ export function parseRequest(request: any): JsonRequest | never {
     validateParam({ params }, t.array);
 
     if (request.id !== null) {
-      console.log({ id: request.id });
       validateParam({ id: request.id }, t.hex32);
       parsed = {
         ...request,

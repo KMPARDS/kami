@@ -39,9 +39,7 @@ describe('Serialize Request', () => {
       if (!response.result) {
         console.log(response);
       }
-      // const rlp = ethers.utils.RLP.decode(response.result);
-      // const unserialized = hexlifyObject(deRlpizeByteArray(rlp));
-      // consoleLog({ rlp, unserialized });
+
       const unserialized = deSerializeJson(response.result);
 
       assert.deepStrictEqual(
@@ -51,10 +49,9 @@ describe('Serialize Request', () => {
       );
     });
 
-    it('Check if Hash matches', () => {
+    it('Check if Request Hash matches', () => {
       const serialized = serializeJson(testCase);
       const previousHash = new Bytes32(ethers.utils.keccak256(serialized.data));
-      // console.log(response, { hash: previousHash.hex() });
 
       assert.strictEqual(
         response.previousHash,

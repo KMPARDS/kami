@@ -38,10 +38,6 @@ describe('Signing', () => {
     const signature = signData(bytes, wallet);
 
     const recoveredAddress = recoverAddress(bytes, signature);
-    console.log({
-      recoveredAddress: recoveredAddress.hex(),
-      walletAddress: wallet.address,
-    });
 
     assert.ok(
       recoveredAddress.eq(new Bytes(wallet.address)),

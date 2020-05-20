@@ -18,7 +18,6 @@ describe('Sign Bunch RPC', () => {
     );
 
     const bunchProposal = response.result;
-    // console.log(response);
     validateBunchProposal(bunchProposal, false);
 
     const response2 = await ethers.utils.fetchJson(
@@ -32,7 +31,6 @@ describe('Sign Bunch RPC', () => {
     );
 
     const bunchProposal2 = response2.result;
-    // console.log(response2);
     validateBunchProposal(bunchProposal2, true);
   });
 });

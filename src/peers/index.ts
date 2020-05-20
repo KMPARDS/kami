@@ -4,7 +4,6 @@ import { requestPeerInit } from './peer-request';
 
 // check if any initial peers are given in the file
 import fs from 'fs';
-// console.log(global);
 
 if (typeof global.config.SEED_PEER_PATH === 'string') {
   const seedPeersContent: string = fs.readFileSync(
@@ -17,7 +16,6 @@ if (typeof global.config.SEED_PEER_PATH === 'string') {
     .split('\n')
     .map((rawUrl) => new URL(rawUrl));
 
-  // console.log(urls);
   urls.forEach(async (url) => {
     try {
       await requestPeerInit(url);

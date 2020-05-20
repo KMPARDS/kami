@@ -51,15 +51,11 @@ function generatePeerRequest(): JsonRequest {
 }
 
 export async function requestPeerInit(url: URL): Promise<void | never> {
-  console.log('hi45346');
-
   // request an id
   const response = await ethers.utils.fetchJson(
     url.toString(),
     JSON.stringify(hexlifyObject(generatePeerRequest()))
   );
-
-  console.log('response of peer init', response);
 
   // once id is received, create a new request and sign it and send it with nonce 0
   if (!('result' in response)) {
@@ -90,11 +86,6 @@ export async function requestPeerInit(url: URL): Promise<void | never> {
 
   validationRequest.signature = signature;
 
-  console.log(
-    'validation request',
-    validationRequest,
-    hexlifyObject(validationRequest)
-  );
   {
     const response = await ethers.utils.fetchJson(
       url.toString(),
@@ -133,8 +124,6 @@ export function peerInit(
   const peer: Peer = new Peer(urls[0], connectionId);
   global.peers.push(peer);
 
-  // console.log(global.peers);
-
   return [peer.connectionId, peer.verified];
 }
 
@@ -154,10 +143,8 @@ export function peerValidate(request: JsonRequest, req: Request): boolean {
   const preSignedRequest = { ...request };
   delete preSignedRequest.signature;
   const serializedRequest = serializeJson(preSignedRequest);
-  console.log('serialized hexified', serializedRequest.hex());
 
   const address = recoverAddress(serializedRequest, request.signature);
-  console.log('address detected', address.hex());
   peer.walletAddress = address;
 
   const existingPeer = global.peers.find((peer) => {

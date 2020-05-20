@@ -1,6 +1,6 @@
 import { Bytes32, Address } from '../utils/bytes';
 import { URL } from '../utils/url';
-import { requestPeerInit } from './peer-request';
+import { performPeerHandshake } from './peer-request';
 
 // check if any initial peers are given in the file
 import fs from 'fs';
@@ -18,7 +18,7 @@ if (typeof global.config.SEED_PEER_PATH === 'string') {
 
   urls.forEach(async (url) => {
     try {
-      await requestPeerInit(url);
+      await performPeerHandshake(url);
     } catch (err) {
       console.log(`Error connecting to peer: ${url.toString()}`, err.message);
     }

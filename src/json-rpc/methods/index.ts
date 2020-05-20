@@ -1,8 +1,8 @@
 import { METHOD_NOT_FOUND } from '../errors';
+// @TODO: Move computeBunchProposal and signBunch an informer directory
 import { computeBunchProposal } from './compute-bunch-proposal';
 import { signBunch } from './sign-bunch';
-import { peerInit, peerValidate } from '../../peers/peer-request';
-import { listPeers } from './list-peers';
+import { peerInit, peerValidate, listPeers } from '../../peers/methods';
 import { serializeRequest } from './serialize-request';
 
 const _methods = {

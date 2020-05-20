@@ -6,7 +6,7 @@
   "scripts": {
     "start:build": "tsc -w",
     "start:run": "nodemon build/server.js test/test-configs/kami1/kami-config.json",
-    "start": "concurrently npm:start:*",
+    "start": "concurrently -r npm:start:*",
     "build": "tsc",
     "test:provider1": "ganache-cli -q",
     "test:kami1": "node build/server.js test/test-configs/kami1/kami-config.json",

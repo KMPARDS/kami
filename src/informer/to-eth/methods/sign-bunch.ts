@@ -1,14 +1,14 @@
 // this method receives a bunch proposal, checks if it is valid, and returns with valid signature
 import { ethers } from 'ethers';
 import assert from 'assert';
-import { t, validate } from '../../type-validation';
-import { Bytes, Signature } from '../../utils/bytes';
-import { signMessage } from '../../utils/sign';
+import { t, validate } from '../../../type-validation';
+import { Bytes, Signature } from '../../../utils/bytes';
+import { signMessage } from '../../../utils/sign';
 import { computeBunchProposal } from './compute-bunch-proposal';
 import {
   BunchProposal,
   validateBunchProposal,
-} from '../../utils/bunch-proposal';
+} from '../../../utils/bunch-proposal';
 
 export async function signBunch(
   bunchProposal: BunchProposal

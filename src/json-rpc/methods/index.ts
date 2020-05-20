@@ -1,7 +1,5 @@
 import { METHOD_NOT_FOUND } from '../errors';
-// @TODO: Move computeBunchProposal and signBunch an informer directory
-import { computeBunchProposal } from './compute-bunch-proposal';
-import { signBunch } from './sign-bunch';
+import { computeBunchProposal, signBunch } from '../../informer/to-eth/methods';
 import { peerInit, peerValidate, listPeers } from '../../peers/methods';
 import { serializeRequest } from './serialize-request';
 

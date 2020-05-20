@@ -1,8 +1,8 @@
-import { computeMerkleRoot } from '../../utils/merkle';
-import { fetchBlocks } from '../../utils/provider';
-import { t, validateParam } from '../../type-validation';
-import { Bytes32 } from '../../utils/bytes';
-import { BunchProposal } from '../../utils/bunch-proposal';
+import { computeMerkleRoot } from '../../../utils/merkle';
+import { fetchBlocks } from '../../../utils/provider';
+import { t, validateParam } from '../../../type-validation';
+import { Bytes32 } from '../../../utils/bytes';
+import { BunchProposal } from '../../../utils/bunch-proposal';
 
 export async function computeBunchProposal(
   startBlockNumber: number,

@@ -1,7 +1,11 @@
 const ethers = require('ethers');
 const assert = require('assert');
 const { Bytes } = require('../../build/utils/bytes');
-const { signMessage, serializeJson2Object } = require('../../build/utils/sign');
+const {
+  signMessage,
+  signData,
+  recoverAddress,
+} = require('../../build/utils/sign');
 
 const wallet = ethers.Wallet.createRandom();
 
@@ -29,5 +33,19 @@ describe('Signing', () => {
     );
   });
 
-  it('use serializeJson2Object', () => {});
+  it('sign data', () => {
+    const bytes = new Bytes('0x1234');
+    const signature = signData(bytes, wallet);
+
+    const recoveredAddress = recoverAddress(bytes, signature);
+    console.log({
+      recoveredAddress: recoveredAddress.hex(),
+      walletAddress: wallet.address,
+    });
+
+    assert.ok(
+      recoveredAddress.eq(new Bytes(wallet.address)),
+      'address recovered should be same'
+    );
+  });
 });

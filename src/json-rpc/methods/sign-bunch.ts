@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 import assert from 'assert';
 import { t, validate } from '../../type-validation';
 import { Bytes, Signature } from '../../utils/bytes';
-import { sign } from '../../utils/sign';
+import { signMessage } from '../../utils/sign';
 import { computeBunchProposal } from './compute-bunch-proposal';
 import {
   BunchProposal,
@@ -44,7 +44,7 @@ export async function signBunch(
     ...bunchProposal,
     signatures: [
       ...bunchProposal.signatures,
-      await sign(new Bytes(encoded), global.wallet),
+      await signMessage(new Bytes(encoded), global.wallet),
     ],
   };
 }

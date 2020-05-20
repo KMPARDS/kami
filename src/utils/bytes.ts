@@ -7,6 +7,9 @@ export interface Byted {
   length: number;
   hex(): string;
   number(): number | never;
+  concat(byted: Byted): Bytes;
+  toBytes32(): Bytes32;
+  eq(byted: Byted): boolean;
 }
 
 export class Bytes implements Byted {
@@ -49,6 +52,36 @@ export class Bytes implements Byted {
       'Converting Bytes to Number resulted in overflow'
     );
     return +this.hex();
+  }
+
+  concat(byted: Byted): Bytes {
+    validate(byted, t.byted);
+    return new Bytes(ethers.utils.concat([this.data, byted.data]));
+  }
+
+  toBytes32(): Bytes32 {
+    return new Bytes32(this.data);
+  }
+
+  eq(byted: Byted): boolean {
+    if (this.length !== byted.length) {
+      return false;
+    }
+
+    let result = true;
+    for (let i = 0; i < this.data.length; i++) {
+      if (this.data[i] !== byted.data[i]) {
+        result = false;
+        // below line is commented by purpose to prevent any related side channel timing attacks
+        // break;
+      }
+    }
+    return result;
+  }
+
+  slice(start?: number | undefined, end?: number | undefined): Bytes {
+    const sliced = this.data.slice(start, end);
+    return new Bytes(sliced);
   }
 }
 

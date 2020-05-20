@@ -1,5 +1,16 @@
 import { Type } from './';
 
+export const nullish: Type = {
+  name: 'null',
+  validate: (input: null): true | never => {
+    if (input !== null) {
+      throw new Error('not an explicit null value');
+    } else {
+      return true;
+    }
+  },
+};
+
 export const boolean: Type = {
   name: 'boolean',
   validate: (input: boolean): true | never => {

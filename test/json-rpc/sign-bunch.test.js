@@ -2,8 +2,8 @@ const ethers = require('ethers');
 const { validateBunchProposal } = require('../../build/utils/bunch-proposal');
 
 const { kami1, kami2 } = require('../test-configs');
-const KAMI_1_URL = `http://localhost:${kami1.JSON_RPC_PORT}/`;
-const KAMI_2_URL = `http://localhost:${kami2.JSON_RPC_PORT}/`;
+const KAMI_1_URL = `http://localhost:${kami1.config.JSON_RPC_PORT}/`;
+const KAMI_2_URL = `http://localhost:${kami2.config.JSON_RPC_PORT}/`;
 
 describe('Sign Bunch RPC', () => {
   it('compute a bunch root RPC and request signature', async () => {
@@ -32,7 +32,7 @@ describe('Sign Bunch RPC', () => {
     );
 
     const bunchProposal2 = response2.result;
-    console.log(response2);
+    // console.log(response2);
     validateBunchProposal(bunchProposal2, true);
   });
 });

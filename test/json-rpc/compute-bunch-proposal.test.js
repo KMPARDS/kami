@@ -5,8 +5,8 @@ const { fetchBlocks } = require('../../build/utils/provider');
 const { validateBunchProposal } = require('../../build/utils/bunch-proposal');
 
 const { kami1, getProvider } = require('../test-configs');
-const KAMI_URL = `http://localhost:${kami1.JSON_RPC_PORT}/`;
-const providerESN = getProvider(kami1.ESN_URL);
+const KAMI_URL = `http://localhost:${kami1.config.JSON_RPC_PORT}/`;
+const providerESN = getProvider(kami1.config.ESN_URL);
 
 describe('Bunch Proposal RPC', () => {
   it('call compute bunch proposal RPC', async () => {

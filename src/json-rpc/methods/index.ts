@@ -1,13 +1,16 @@
 import { METHOD_NOT_FOUND } from '../errors';
 import { computeBunchProposal } from './compute-bunch-proposal';
 import { signBunch } from './sign-bunch';
-import { peerInit } from '../../peers/peer-request';
+import { peerInit, peerValidate } from '../../peers/peer-request';
 import { listPeers } from './list-peers';
+import { serializeRequest } from './serialize-request';
 
 const _methods = {
   kami: {
     peerInit,
+    peerValidate,
     listPeers,
+    serializeRequest,
   },
   informer: {
     computeBunchProposal,

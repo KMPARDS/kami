@@ -4,22 +4,27 @@ export interface JsonRequest {
   jsonrpc: '2.0';
   method: string;
   params: any[];
-  id: Bytes32;
-  signature: Signature | null;
+  id: Bytes32 | null;
+  nonce?: number;
+  signature?: Signature;
 }
 
 export interface JsonSuccessResponse {
   jsonrpc: '2.0';
+  previousHash: Bytes32;
   result: any;
-  id: Bytes32;
-  signature: Signature | null;
+  id: Bytes32 | null;
+  nonce?: number;
+  signature?: Signature;
 }
 
 export interface JsonErrorResponse {
   jsonrpc: '2.0';
+  previousHash?: Bytes32;
   error: JsonErrorObject;
-  id?: Bytes32;
-  signature: null;
+  id: Bytes32 | null;
+  nonce?: number;
+  signature?: Signature;
 }
 
 export interface JsonErrorObject {

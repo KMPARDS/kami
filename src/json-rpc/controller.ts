@@ -7,24 +7,41 @@ import {
 import { INVALID_REQUEST, INVALID_PARAMS, INTERNAL_ERROR } from './errors';
 import { parseRequest, hexlifyObject } from './parser';
 import { methods } from './methods';
+import { serializeJson } from '../utils/serialize-json';
+import { signData } from '../utils/sign';
+import { ethers } from 'ethers';
+import { Bytes32 } from '../utils/bytes';
 
 export const router = Router();
 
 router.post('/', async (req, res) => {
+  let previousHash: Bytes32 | null = null;
+  let connectionId: Bytes32 | null = null;
   try {
     const request = parseRequest(req.body);
     global.consoleLog('JSON RPC ReQuest', request);
-
+    if (request.id) {
+      connectionId = request.id;
+    }
+    previousHash = new Bytes32(
+      ethers.utils.keccak256(serializeJson(request).data)
+    );
     try {
-      const result = await methods(request.method)(...request.params);
-      global.consoleLog('JSON RPC ReSponse', result);
+      const result = await methods(request.method)(
+        ...request.params,
+        request,
+        req
+      );
       const response: JsonSuccessResponse = {
         jsonrpc: '2.0',
-        result: hexlifyObject(result),
-        id: req.body?.id,
-        signature: null,
+        previousHash,
+        result: result,
+        id: request.id,
       };
-      res.json(response);
+
+      global.consoleLog('JSON RPC ReSponse', response);
+
+      res.json(hexlifyObject(response));
     } catch (error) {
       if (error instanceof TypeError) {
         throw { ...INVALID_PARAMS, data: error.message };
@@ -35,14 +52,17 @@ router.post('/', async (req, res) => {
       }
     }
   } catch (error) {
-    global.consoleLog('JSON RPC Error', error);
-
     const response: JsonErrorResponse = {
       jsonrpc: '2.0',
       error,
-      id: req.body?.id,
-      signature: null,
+      id: connectionId,
     };
-    res.json(response);
+
+    if (previousHash) {
+      response.previousHash = previousHash;
+    }
+
+    global.consoleLog('JSON RPC Error Response', response);
+    res.json(hexlifyObject(response));
   }
 });

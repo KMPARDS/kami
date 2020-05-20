@@ -1,13 +1,14 @@
 import path from 'path';
 import fs from 'fs';
 import { ethers } from 'ethers';
+import util from 'util';
 
 // prints console.logs
 global.consoleLog = (...input) => {
   if (process.env.NODE_ENV !== 'production') {
     console.log('\n╭' + '-'.repeat(process.stdout.columns - 2 || 30) + '╮');
     console.log('  DEBUG\n');
-    console.log(...input);
+    console.log(util.inspect([...input]));
     console.log('\n╰' + '-'.repeat(process.stdout.columns - 2 || 30) + '╯\n');
   }
 };
@@ -17,6 +18,8 @@ const providerEsn: ethers.providers.JsonRpcProvider = new ethers.providers.JsonR
 );
 
 global.providerEsn = providerEsn;
+
+global.peers = [];
 
 // loading config from file
 const configUrl: string = process.argv[2] ?? 'kami-config';

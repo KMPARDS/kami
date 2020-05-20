@@ -7,23 +7,33 @@ import { URL } from '../utils/url';
 export function parseRequest(request: any): JsonRequest | never {
   try {
     validateParam({ request }, t.object);
-    const { jsonrpc, method, params } = request;
+  } catch (error) {
+    throw { ...INVALID_REQUEST, data: error.message };
+  }
+
+  const { jsonrpc, method, params, id, nonce, signature } = request;
+  let parsed: JsonRequest = {
+    jsonrpc,
+    method,
+    params,
+    id: null,
+  };
+
+  try {
     if (jsonrpc !== '2.0') {
       throw new Error('Invalid jsonrpc version');
     }
     validateParam({ method }, t.string);
     validateParam({ params }, t.array);
-  } catch (error) {
-    throw { ...INVALID_REQUEST, data: error.message };
-  }
 
-  let parsed: JsonRequest;
-
-  try {
-    parsed = {
-      ...request,
-      id: request.id !== null ? new Bytes32(request.id) : null,
-    };
+    if (request.id !== null) {
+      console.log({ id: request.id });
+      validateParam({ id: request.id }, t.hex32);
+      parsed = {
+        ...request,
+        id: request.id ? new Bytes32(request.id) : null,
+      };
+    }
 
     if ('nonce' in request) {
       validateParam({ nonce: request.nonce }, t.uint);
@@ -34,8 +44,8 @@ export function parseRequest(request: any): JsonRequest | never {
       parsed.signature = new Signature(request.signature);
     }
   } catch (error) {
-    global.consoleLog(error);
-    throw { ...PARSE_ERROR, data: error };
+    global.consoleLog('error while parsing request', error);
+    throw { ...PARSE_ERROR, data: error.message };
   }
 
   return parsed;

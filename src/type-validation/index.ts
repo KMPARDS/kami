@@ -23,7 +23,7 @@ export function check(value: any, type: Type): boolean {
   }
 }
 
-import { string, array } from './type-checkers';
+import { string, array, object } from './type-checkers';
 
 export function validate(
   value: any,
@@ -50,9 +50,15 @@ export function validate(
   })();
   if (insideError) {
     const error = new TypeError(
-      `${
-        check(value, string) ? `"${value}"` : value
-      } of type '${typeof value}' is an invalid value for expected type '${
+      `${(() => {
+        if (check(value, string)) {
+          return `"${value}"`;
+        } else if (check(value, object)) {
+          return `${JSON.stringify(value)}`;
+        } else {
+          return value;
+        }
+      })()} of type '${typeof value}' is an invalid value for expected type '${
         type.name
       }'. More information: ${insideError.message}`
     );

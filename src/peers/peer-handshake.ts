@@ -22,7 +22,7 @@ function generatePeerRequest(): JsonRequest {
   };
 }
 
-export async function performPeerHandshake(url: URL): Promise<void | never> {
+export async function startPeerHandshake(url: URL): Promise<void | never> {
   // request an id
   const response = await ethers.utils.fetchJson(
     url.toString(),

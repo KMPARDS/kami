@@ -1,5 +1,5 @@
 import { Bytes32, Address } from '../utils/bytes';
-import { URL } from '../utils/url';
+import { URLMask } from '../utils/url';
 import { startPeerHandshake } from './peer-handshake';
 
 // check if any initial peers are given in the file
@@ -19,7 +19,7 @@ export function connectSeedPeers(): void {
     const urls = seedPeersContent
       .replace(/\s/g, '')
       .split('\n')
-      .map((rawUrl) => new URL(rawUrl));
+      .map((rawUrl) => new URLMask(rawUrl));
 
     urls.forEach(async (url) => {
       try {

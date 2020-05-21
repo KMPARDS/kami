@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { JsonRequest } from '../json-rpc';
 import { Bytes, Bytes32 } from '../utils/bytes';
-import { URL } from '../utils/url';
+import { URLMask } from '../utils/url';
 import { getLocalExternalIP } from '../utils/ip';
 import { t, validate, validateParam } from '../type-validation';
 import { signData, recoverAddressFromSignedJson } from '../utils/sign';
@@ -22,7 +22,7 @@ function generatePeerRequest(): JsonRequest {
   };
 }
 
-export async function startPeerHandshake(url: URL): Promise<void | never> {
+export async function startPeerHandshake(url: URLMask): Promise<void | never> {
   // request an id
   const response = await ethers.utils.fetchJson(
     url.toString(),

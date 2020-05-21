@@ -1,4 +1,4 @@
-const { URL } = require('../../build/utils/url');
+const { URLMask } = require('../../build/utils/url');
 const assert = require('assert');
 
 const testCases = [
@@ -16,7 +16,7 @@ describe('URL', () => {
     }`, () => {
       let isUrlInitiated = false;
       try {
-        const url = new URL(testCaseEntry[0]);
+        const url = new URLMask(testCaseEntry[0]);
         isUrlInitiated = true;
       } catch (error) {
         // console.log(error);

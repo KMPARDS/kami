@@ -1,9 +1,8 @@
 import { Bytes32, Address } from '../utils/bytes';
-// @TODO: remove the custom made URL Class and use default JavaScript URL class class
-import { URL } from '../utils/url';
+import { URLMask } from '../utils/url';
 
 export class Peer {
-  connectionUrl: URL;
+  connectionUrl: URLMask;
   connectionId: Bytes32;
   trusted: boolean;
   reqNonce: number;
@@ -13,7 +12,7 @@ export class Peer {
   walletAddress: Address | null = null;
   seats: number | null = null;
 
-  constructor(url: URL, connectionId: Bytes32) {
+  constructor(url: URLMask, connectionId: Bytes32) {
     this.connectionUrl = url;
     this.connectionId = connectionId;
     this.trusted = false;

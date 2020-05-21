@@ -3,7 +3,7 @@ import { Request } from 'express';
 import { JsonRequest } from '../../json-rpc';
 import { Bytes, Bytes32 } from '../../utils/bytes';
 import { Peer } from '../peer';
-import { URL } from '../../utils/url';
+import { URLMask } from '../../utils/url';
 
 export function peerInit(
   peerRandomHex: string,
@@ -13,11 +13,11 @@ export function peerInit(
 ): [Bytes32, boolean] {
   const urls = [];
   try {
-    const url = new URL(urlStr);
+    const url = new URLMask(urlStr);
     urls.push(url);
   } catch {}
   try {
-    const url = new URL(req.connection.remoteAddress ?? '');
+    const url = new URLMask(req.connection.remoteAddress ?? '');
     urls.push(url);
   } catch {}
   if (urls.length === 0) {

@@ -2,7 +2,7 @@ import { JsonRequest } from './interfaces';
 import { INVALID_REQUEST, PARSE_ERROR } from './errors';
 import { Bytes, Bytes32, Signature } from '../utils/bytes';
 import { t, check, validate, validateParam } from '../type-validation';
-import { URL } from '../utils/url';
+import { URLMask } from '../utils/url';
 
 export function parseRequest(request: any): JsonRequest | never {
   try {
@@ -53,7 +53,7 @@ export function parseRequest(request: any): JsonRequest | never {
 export function hexlifyObject(input: any): any {
   if (check(input, t.byted)) {
     return input.hex();
-  } else if (input instanceof URL) {
+  } else if (input instanceof URLMask) {
     return input.toString();
   } else if (input instanceof Date) {
     return input.toUTCString();

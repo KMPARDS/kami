@@ -3,6 +3,7 @@ import fs from 'fs';
 import { ethers } from 'ethers';
 import util from 'util';
 import { PeerList } from './peers';
+import { URLMask } from './utils/url';
 
 // prints console.logs
 global.consoleLog = (...input) => {
@@ -27,8 +28,8 @@ const configUrl: string = process.argv[2] ?? 'kami-config';
 const config = require(path.resolve(process.cwd(), configUrl));
 
 global.config = {
-  ETH_URL: config.ETH_URL ?? 'http://localhost:7545',
-  ESN_URL: config.ESN_URL ?? 'http://localhost:8545',
+  ETH_URL: new URLMask(config.ETH_URL ?? 'http://localhost:7545'),
+  ESN_URL: new URLMask(config.ESN_URL ?? 'http://localhost:8545'),
   JSON_RPC_PORT: config.JSON_RPC_PORT ?? 25985,
   KEYSTORE_PATH: config.KEYSTORE_PATH
     ? path.resolve(process.cwd(), configUrl, '..', config.KEYSTORE_PATH)

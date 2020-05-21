@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { Peer } from '../peers/peer';
+import { PeerList } from '../peers';
 
 declare global {
   namespace NodeJS {
@@ -21,7 +21,7 @@ declare global {
         SEED_PEER_PATH: string | null;
       };
       wallet: ethers.Wallet;
-      peers: Peer[];
+      peerList: PeerList;
     }
   }
 }

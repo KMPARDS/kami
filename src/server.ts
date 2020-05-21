@@ -6,7 +6,7 @@ dotenv.config();
 import './global';
 global.consoleLog('global.config', global.config);
 
-import './peers';
+import { connectSeedPeers } from './peers';
 
 import { app } from './app';
 
@@ -17,6 +17,8 @@ app
   .listen(port, () => {
     console.log(`Started on PORT ${port}`);
     console.log('Press [control]+[c] to stop');
+
+    connectSeedPeers();
   })
   .on('error', (error) => {
     if (port === productionPort) {

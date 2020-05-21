@@ -5,24 +5,30 @@ import { startPeerHandshake } from './peer-handshake';
 // check if any initial peers are given in the file
 import fs from 'fs';
 
-if (typeof global.config.SEED_PEER_PATH === 'string') {
-  const seedPeersContent: string = fs.readFileSync(
-    global.config.SEED_PEER_PATH,
-    'utf8'
-  );
+export * from './methods';
+export * from './peer';
+export * from './peer-list';
 
-  const urls = seedPeersContent
-    .replace(/\s/g, '')
-    .split('\n')
-    .map((rawUrl) => new URL(rawUrl));
+export function connectSeedPeers(): void {
+  if (typeof global.config.SEED_PEER_PATH === 'string') {
+    const seedPeersContent: string = fs.readFileSync(
+      global.config.SEED_PEER_PATH,
+      'utf8'
+    );
 
-  urls.forEach(async (url) => {
-    try {
-      await startPeerHandshake(url);
-    } catch (err) {
-      console.log(`Error connecting to peer: ${url.toString()}`, err.message);
-    }
-  });
+    const urls = seedPeersContent
+      .replace(/\s/g, '')
+      .split('\n')
+      .map((rawUrl) => new URL(rawUrl));
+
+    urls.forEach(async (url) => {
+      try {
+        await startPeerHandshake(url);
+      } catch (err) {
+        console.log(`Error connecting to peer: ${url.toString()}`, err.message);
+      }
+    });
+  }
 }
 
 // make a connect function which exchanges messages and both add each other as Peers

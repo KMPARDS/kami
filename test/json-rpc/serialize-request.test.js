@@ -18,12 +18,12 @@ const testCases = [
     params: ['0x1234'],
     id: null,
   },
-  {
-    jsonrpc: '2.0',
-    method: 'kami_serializeRequest',
-    params: ['0x1234'],
-    id: ethers.utils.hexlify(ethers.utils.randomBytes(32)),
-  },
+  // {
+  //   jsonrpc: '2.0',
+  //   method: 'kami_serializeRequest',
+  //   params: ['0x1234'],
+  //   id: ethers.utils.hexlify(ethers.utils.randomBytes(32)),
+  // },
 ];
 
 describe('Serialize Request', () => {

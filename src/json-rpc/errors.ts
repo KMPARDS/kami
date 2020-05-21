@@ -29,3 +29,18 @@ export const SERVER_ERROR: JsonErrorObject = {
   code: -32000,
   message: 'Server error',
 };
+
+export const ID_ERROR: JsonErrorObject = {
+  code: -32001,
+  message: 'Id error',
+};
+
+export const NONCE_ERROR: JsonErrorObject = {
+  code: -32002,
+  message: 'Nonce error',
+};
+
+export const SIGNATURE_ERROR: JsonErrorObject = {
+  code: -32003,
+  message: 'Signature error',
+};

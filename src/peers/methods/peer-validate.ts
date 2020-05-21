@@ -11,7 +11,8 @@ export function peerValidate(request: JsonRequest, req: Request): boolean {
     throw new Error('signature is required for handshake validation');
   }
   // @ts-ignore https://github.com/microsoft/TypeScript/issues/38636
-  let peer = global.peers.find((peer) => peer.connectionId.eq(request.id));
+  let peer: Peer = global.peerList.getPeerByConnectionId(request.id);
+
   if (!peer) {
     throw new Error('ConnectionId not found');
   }
@@ -23,10 +24,7 @@ export function peerValidate(request: JsonRequest, req: Request): boolean {
   const address = recoverAddress(serializedRequest, request.signature);
   peer.walletAddress = address;
 
-  const existingPeer = global.peers.find((peer) => {
-    if (!peer.walletAddress) return false;
-    return peer.walletAddress.eq(address);
-  });
+  const existingPeer = global.peerList.getPeerByAddress(address);
 
   if (existingPeer) {
     existingPeer.updateConnection(peer);

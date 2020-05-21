@@ -43,14 +43,17 @@ export async function startPeerHandshake(url: URL): Promise<void | never> {
 
   const peer: Peer = new Peer(url, new Bytes32(connectionId));
 
-  global.peers.push(peer);
+  global.peerList.add(peer);
+
+  // @TODO: check if user has enough seats then only trust
+  peer.updateTrustStatus(true);
 
   const validationRequest: JsonRequest = {
     jsonrpc: '2.0',
     method: 'kami_peerValidate',
     params: [],
     id: peer.connectionId,
-    nonce: peer.nonce,
+    nonce: peer.reqNonce++,
   };
 
   const serializedRequest = serializeJson(validationRequest);

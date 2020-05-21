@@ -29,7 +29,7 @@ export function peerInit(
   const connectionId = selfRandomBytes.concat(peerRandomBytes).toBytes32();
 
   const peer: Peer = new Peer(urls[0], connectionId);
-  global.peers.push(peer);
+  global.peerList.add(peer);
 
-  return [peer.connectionId, peer.verified];
+  return [peer.connectionId, peer.trusted];
 }

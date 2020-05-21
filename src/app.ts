@@ -1,7 +1,6 @@
+// TODO remove dependency of express js
 import express from 'express';
 import bodyParser from 'body-parser';
-import { ethers } from 'ethers';
-import { fetchBlocks } from './utils/provider';
 import { router as jsonRpcRouter } from './json-rpc';
 
 export const app = express();

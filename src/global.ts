@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import { ethers } from 'ethers';
 import util from 'util';
+import { PeerList } from './peers';
 
 // prints console.logs
 global.consoleLog = (...input) => {
@@ -19,7 +20,7 @@ const providerEsn: ethers.providers.JsonRpcProvider = new ethers.providers.JsonR
 
 global.providerEsn = providerEsn;
 
-global.peers = [];
+global.peerList = new PeerList();
 
 // loading config from file
 const configUrl: string = process.argv[2] ?? 'kami-config';

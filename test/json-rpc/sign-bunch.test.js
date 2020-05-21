@@ -13,7 +13,7 @@ describe('Sign Bunch RPC', () => {
         jsonrpc: '2.0',
         method: 'informer_computeBunchProposal',
         params: [0, 2],
-        id: ethers.utils.hexlify(ethers.utils.randomBytes(32)),
+        id: null,
       })
     );
 
@@ -26,7 +26,7 @@ describe('Sign Bunch RPC', () => {
         jsonrpc: '2.0',
         method: 'informer_signBunch',
         params: [bunchProposal],
-        id: ethers.utils.hexlify(ethers.utils.randomBytes(32)),
+        id: null,
       })
     );
 

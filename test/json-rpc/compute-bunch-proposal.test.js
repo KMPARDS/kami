@@ -16,7 +16,7 @@ describe('Bunch Proposal RPC', () => {
         jsonrpc: '2.0',
         method: 'informer_computeBunchProposal',
         params: [0, 2],
-        id: ethers.utils.hexlify(ethers.utils.randomBytes(32)),
+        id: null,
       })
     );
 
@@ -31,7 +31,7 @@ describe('Bunch Proposal RPC', () => {
         jsonrpc: '2.0',
         method: 'informer_computeBunchProposal',
         params: [1, 0],
-        id: ethers.utils.hexlify(ethers.utils.randomBytes(32)),
+        id: null,
       })
     );
 

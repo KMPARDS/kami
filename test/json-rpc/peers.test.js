@@ -17,7 +17,7 @@ describe('Peers', () => {
         jsonrpc: '2.0',
         method: 'kami_listPeers',
         params: [],
-        id: ethers.utils.hexlify(ethers.utils.randomBytes(32)),
+        id: null,
       })
     );
 

@@ -5,8 +5,9 @@ import { URL } from '../utils/url';
 export class Peer {
   connectionUrl: URL;
   connectionId: Bytes32;
-  verified: boolean;
-  nonce: number;
+  trusted: boolean;
+  reqNonce: number;
+  checkNonce: number;
   connected: Date;
   lastTalk: Date;
   walletAddress: Address | null = null;
@@ -15,17 +16,24 @@ export class Peer {
   constructor(url: URL, connectionId: Bytes32) {
     this.connectionUrl = url;
     this.connectionId = connectionId;
-    this.verified = false;
-    this.nonce = 0;
+    this.trusted = false;
+    this.reqNonce = 0;
+    this.checkNonce = 0;
     this.connected = new Date();
     this.lastTalk = new Date();
     this.walletAddress = null;
     this.seats = null;
   }
 
+  updateTrustStatus(newTrustStatus: boolean): void {
+    this.trusted = newTrustStatus;
+  }
+
   updateConnection(peer: Peer): void {
     this.connectionUrl = peer.connectionUrl;
     this.connectionId = peer.connectionId;
     this.lastTalk = peer.lastTalk;
+    this.reqNonce = 0;
+    this.checkNonce = 0;
   }
 }

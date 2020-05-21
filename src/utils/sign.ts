@@ -24,7 +24,7 @@ function getDomainSeperator(): Bytes32 {
 }
 
 function prepareDigest(byted: Byted): Bytes32 {
-  const preDigest = new Bytes(ethers.utils.toUtf8Bytes('\x19\x00'))
+  const preDigest = new Bytes(ethers.utils.toUtf8Bytes('\x19\x97'))
     .concat(getDomainSeperator())
     .concat(byted);
   return new Bytes32(ethers.utils.keccak256(preDigest.data));

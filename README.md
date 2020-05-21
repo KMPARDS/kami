@@ -2,24 +2,28 @@
 
 ![CI](https://github.com/KMPARDS/kami/workflows/CI/badge.svg)
 
-This project is a part of Era Swap Network and it's development is in progress.
+[WIP] This project is a part of Era Swap Network.
 
 ### Development Notes
 
 - When adding test cases for methods, add cases for expected errors and successful too.
-- Add runtime type validation for all method inputs.
-- Ensure a debug mode, i.e switchable consolelogs.
 - Add a unique identifier to all console.logs to be able to find it in the code
+- Check for TODO comments left out for working on later
+- Refactor `utils` module code into into other modules, i.e. add `utils.ts` in other modules and export them from `index.ts`.
 
-## Technical Specification
+# Technical Specification
 
-Kami is a background process that runs with an EVM machine, which completes an ESN Validator Node. Aspects related to Kami are specified here.
+Kami is a daemon (long running background process) that runs with a seperate EVM machine daemon, which completes an ESN Validator Node. Technical aspects related to Kami are specified here.
 
-### P2P Connection
+## Peer-to-peer Networking
 
-Peer-to-peer networking connections between Kami's are based on TCP/IP. The existing JSON RPC 2.0 standard is modified for representing authenticated asks, answers and tells in the P2P communication with ECC.
+### Peer Discovery
+Since, Kami works with an ESN node daemon, it will utilise the peer discovery from the ESN nodes.
 
-### Modified JSON RPC
+### Connection
+Peer-to-peer networking connections between Kami instances's are based on TCP/IP. The existing JSON RPC 2.0 standard is modified for representing authenticated asks, answers and tells in the P2P communication with ECC.
+
+## Modified JSON RPC Standard
 
 This is an experimental extension of the existing JSON RPC standard as it is. This modification is done for the purpose of identification and authentication between the nodes.
 
@@ -28,25 +32,27 @@ interface JsonRequest {
   jsonrpc: '2.0';
   method: string;
   params: any[];
-  id: Bytes32;
-  nonce?: number | null;
-  signature?: Signature | null;
+  id: Bytes32 | null;
+  nonce?: number;
+  signature?: Signature;
 }
 
 interface JsonSuccessResponse {
   jsonrpc: '2.0';
+  previousHash: Bytes32;
   result: any;
-  id: Bytes32;
-  nonce?: number | null;
-  signature?: Signature | null;
+  id: Bytes32 | null;
+  nonce?: number;
+  signature?: Signature;
 }
 
 interface JsonErrorResponse {
   jsonrpc: '2.0';
+  previousHash?: Bytes32;
   error: JsonErrorObject;
-  id: Bytes32;
-  nonce?: number | null;
-  signature?: Signature | null;
+  id: Bytes32 | null;
+  nonce?: number;
+  signature?: Signature;
 }
 
 interface JsonErrorObject {
@@ -58,22 +64,46 @@ interface JsonErrorObject {
 
 ### Non Authentic Communication
 
-When doing non-authentic communication, the communication is compatible with JSON RPC 2.0.
+When doing non-authentic communication, the communication is much like normal JSON RPC 2.0.
 
-1. Requester makes a `JsonRequest` to the responder with any choice of a request identidier (`id`) and signature `null` (which means is an annomyous communication).
-2. Responder responds with `JsonSuccessResponse` if the execution was successful or `JsonErrorResponse` if there was any error.
+1. Requester makes a `JsonRequest` to the responder with `id = null` (which means is an annomyous communication).
+2. Responder responds with interface `JsonSuccessResponse` if the execution was successful or `JsonErrorResponse` if there was any error.
 
-### Authentic Communication
+> TODO: To make this 100% compliant with JSON RPC 2.0, we can create a seperate key: `connection` and use for purpose of connectionId context (which is currently being used with `id`). 
 
-1. Requester sends a new connection request with 16 random bytes with `null` id to the responder, which means requester wants to initiate an authentic communication.
-2. Responder generates 16 bytes and concatenates it after requester's 16 bytes and uses it in it's responce with a 32-bit `id`, valid for 25 seconds with value of next nonce (starts with `0`) that the requester has to use in their communication.
-3. Initiater uses this `id` and `nonce` for signing the next request. The signature is calculated by calling `JSON.stringify` on the request object without signature property, hashing with `keccak256` algorithm and signing it with ECDSA.
+## Public Key Cryptosystem
+
+This public key cryptosystem is based on the `secp256k1` Eliptic Curve. Being modern and secure, it's been the choice in Ethereum and hence, it's implementation in Kami would be less complex for a developer to maintain it as well as end user to install and use it in context of Era Swap Smart Contracts.
+
+### Signature Generation Standard
+
+ECDSA needs a 32 Byte digest for signing. ECDSA being used commonly in multiple blockchains, gives a security threat for reuse of the signed message in another dApp. The design choice for preparing the 32 Byte digest is explained here. The digest generation is inspired from `EIP 191`. We have defined a `rlpizeObject` method on a request object, which is used to `serializeJson` it into a byte string. Finally, we add a domain seperator and hash it using `keccak256` algorithm and further signing it with ECDSA to generate the signature point on the curve.
+
+`0x19 | 0x97 | <32-byte domain seperator> | <data to sign>`
+
+Here, `0x97` is the version byte (and from the version bytes registry looks like it's not taken). The domain seperator is defined as:
+```
+domainSeperator: Bytes32 = keccak256(
+  serializeJson({
+    name: 'Kami of Era Swap Network',
+    chainId: 5197,
+  })
+)
+```
+
+### RLPize Object Method Standard
+
+> TODO: Add explaination here
+
+### Peer Handshake
+
+1. Requester calls the `kami_peerInit` method with 16 random bytes with `null` id to the responder.
+2. Responder generates random 16 bytes and concatenates it after requester's 16 bytes and sends the 32 bytes back, the requester has to use it as `id` in next communication.
+3. Initiater uses this `id` received and `nonce = 0` for signing the next request. The signature generation standard will be described in the next sections. 
 
 When doing a non-authentic communication using JSON RPC 2.0 for a method that requires authentic communication using Extended JSON RPC 2.0, the Kami node can throw an `INVALID_REQUEST` error. 
 
 The misleading `jsonrpc: '2.0'` might be updated to something else like `2.0-extended` or even `2.0-kami`, to signal the other node for using the extended version for communication, while there are no plans of doing this as of now.
-
-### Peers Connection
 
 A Kami can connect with other Kamis by knowing their IP addresses. Kami needs to know the wallet address of the peer nodes hence an authentication communication is needed here.
 
@@ -84,17 +114,19 @@ A Kami can connect with other Kamis by knowing their IP addresses. Kami needs to
 
 ```typescript
 interface Peer {
-  connectionUrl: string;
+  connectionUrl: URL;
   connectionId: Bytes32;
-  nonce: number;
-  connectedTimestamp: number;
-  lastTalkTimestamp: number;
-  walletAddress: Bytes20;
-  seats: number;
+  trusted: boolean;
+  reqNonce: number;
+  checkNonce: number;
+  connected: Date;
+  lastTalk: Date;
+  walletAddress: Address | null;
+  seats: number | null;
 }
 ```
 
-To limit traffic, a peer limit may be implemented. Also to minimize traffic, nodes can choose to connect to only those Kamis who have seats.
+To limit traffic, a peer limit (of e.g. `100`) may be implemented. Also to minimize traffic, nodes can choose to connect to only those Kamis who have seats.
 
 ### Bunch Proposal
 

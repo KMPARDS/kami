@@ -1,7 +1,7 @@
 const ethers = require('ethers');
 const { kami1, kami2, kami3, consoleLog } = require('../test-configs');
 const assert = require('assert');
-const KAMI_1_URL = `http://localhost:${kami1.config.JSON_RPC_PORT}/`;
+const KAMI_3_URL = `http://localhost:${kami3.config.JSON_RPC_PORT}/`;
 
 const kamiWalletAddresses = [
   kami1.keystore.address,
@@ -12,7 +12,7 @@ const kamiWalletAddresses = [
 describe('Peers', () => {
   it('should list some peers and recognize them', async () => {
     const response = await ethers.utils.fetchJson(
-      KAMI_1_URL,
+      KAMI_3_URL,
       JSON.stringify({
         jsonrpc: '2.0',
         method: 'kami_listPeers',
@@ -20,6 +20,8 @@ describe('Peers', () => {
         id: null,
       })
     );
+
+    // console.log(response.result);
 
     const nullPeers = response.result.filter(
       (peer) => peer.walletAddress === null

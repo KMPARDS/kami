@@ -4,7 +4,7 @@ import { Bytes, Bytes32 } from '../utils/bytes';
 import { URL } from '../utils/url';
 import { getLocalExternalIP } from '../utils/ip';
 import { t, validate, validateParam } from '../type-validation';
-import { signData } from '../utils/sign';
+import { signData, recoverAddressFromSignedJson } from '../utils/sign';
 import { serializeJson } from '../utils/serialize-json';
 import { hexlifyObject } from '../json-rpc/parser';
 import { Peer } from './peer';
@@ -45,9 +45,6 @@ export async function startPeerHandshake(url: URL): Promise<void | never> {
 
   global.peerList.add(peer);
 
-  // @TODO: check if user has enough seats then only trust
-  peer.updateTrustStatus(true);
-
   const validationRequest: JsonRequest = {
     jsonrpc: '2.0',
     method: 'kami_peerValidate',
@@ -70,5 +67,12 @@ export async function startPeerHandshake(url: URL): Promise<void | never> {
     console.log('received response of peerValidate', response);
 
     // check the signature in the response
+    const address = recoverAddressFromSignedJson(response);
+
+    peer.walletAddress = address;
+    // TODO: check for enough stakes / seats and trust the wallet address
+    if (true) {
+      peer.updateTrustStatus(true);
+    }
   }
 }

@@ -15,7 +15,7 @@ import {
 import { parseRequest, hexlifyObject } from './parser';
 import { methods } from './methods';
 import { serializeJson } from '../utils/serialize-json';
-import { signData, recoverAddress } from '../utils/sign';
+import { signData, recoverAddressFromSignedJson } from '../utils/sign';
 import { ethers } from 'ethers';
 import { Bytes32, Address, Bytes } from '../utils/bytes';
 import { Peer } from '../peers';
@@ -25,13 +25,11 @@ export const router = Router();
 
 router.post('/', async (req, res) => {
   let previousHash: Bytes32 | null = null;
-  // let connectionId: Bytes32 | null = null;
   let peer: Peer | null = null;
   try {
     const request = parseRequest(req.body);
     global.consoleLog('JSON RPC ReQuest', request);
     if (request.id) {
-      // connectionId = request.id;
       peer = global.peerList.getPeerByConnectionId(request.id);
       if (!peer) {
         throw {
@@ -40,28 +38,29 @@ router.post('/', async (req, res) => {
         };
       }
 
-      if ((request.nonce ?? 0) < peer.checkNonce) {
+      if (request.nonce === undefined) {
+        throw {
+          ...NONCE_ERROR,
+          data: `Nonce is not set`,
+        };
+      }
+
+      if (request.nonce < peer.checkNonce) {
         throw {
           ...NONCE_ERROR,
           data: `Nonce used should not be smaller than: ${peer.checkNonce}`,
         };
       }
 
-      if (peer.walletAddress && request.signature) {
-        const preSignedRequest: JsonRequest = { ...request };
-        delete preSignedRequest.signature;
-        const serializedRequest: Bytes = serializeJson(preSignedRequest);
-
-        const address: Address = recoverAddress(
-          serializedRequest,
-          request.signature
-        );
+      // if wallet address of peer is set (not set before handshake completion)
+      if (peer.walletAddress) {
+        const address = recoverAddressFromSignedJson(request);
         if (!peer.walletAddress.eq(address)) {
           throw { ...SIGNATURE_ERROR, data: `Signature mismatch` };
         }
       }
 
-      peer.checkNonce++;
+      peer.checkNonce = Math.max(peer.checkNonce + 1, request.nonce + 1);
     }
     previousHash = new Bytes32(
       ethers.utils.keccak256(serializeJson(request).data)
@@ -79,7 +78,7 @@ router.post('/', async (req, res) => {
         id: request.id,
       };
 
-      if (request.id && request.nonce) {
+      if (request.id !== null) {
         response.nonce = request.nonce;
 
         const serializedResponse: Bytes = serializeJson(response);

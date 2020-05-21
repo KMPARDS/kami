@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { JsonRequest } from '../../json-rpc';
-import { recoverAddress } from '../../utils/sign';
+import { recoverAddressFromSignedJson } from '../../utils/sign';
 import { serializeJson } from '../../utils/serialize-json';
 
 export function peerValidate(request: JsonRequest, req: Request): boolean {
@@ -11,24 +11,26 @@ export function peerValidate(request: JsonRequest, req: Request): boolean {
     throw new Error('signature is required for handshake validation');
   }
   // @ts-ignore https://github.com/microsoft/TypeScript/issues/38636
-  let peer: Peer = global.peerList.getPeerByConnectionId(request.id);
+  let peer = global.peerList.getPeerByConnectionId(request.id);
 
   if (!peer) {
     throw new Error('ConnectionId not found');
   }
 
-  const preSignedRequest = { ...request };
-  delete preSignedRequest.signature;
-  const serializedRequest = serializeJson(preSignedRequest);
-
-  const address = recoverAddress(serializedRequest, request.signature);
-  peer.walletAddress = address;
+  const address = recoverAddressFromSignedJson(request);
 
   const existingPeer = global.peerList.getPeerByAddress(address);
 
   if (existingPeer) {
     existingPeer.updateConnection(peer);
     peer = existingPeer;
+  }
+
+  peer.walletAddress = address;
+
+  // TODO: check for enough stakes / seats and trust the wallet address
+  if (true) {
+    peer.trusted = true;
   }
 
   return true;

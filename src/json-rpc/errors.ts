@@ -44,3 +44,11 @@ export const SIGNATURE_ERROR: JsonErrorObject = {
   code: -32003,
   message: 'Signature error',
 };
+
+export function getError(errorObj: JsonErrorObject): Error {
+  return new Error(
+    `${errorObj.message} (${errorObj.code})${
+      errorObj.data ? `: ${errorObj.data}` : ''
+    }`
+  );
+}

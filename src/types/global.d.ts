@@ -5,7 +5,7 @@ import { URLMask } from '../utils/url';
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      NODE_ENV: 'development' | 'production';
+      NODE_ENV: 'production' | 'development' | 'debug';
       PORT?: string;
       ESN_URL: string;
     }

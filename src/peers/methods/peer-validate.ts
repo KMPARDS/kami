@@ -23,6 +23,7 @@ export function peerValidate(request: JsonRequest, req: Request): boolean {
 
   if (existingPeer) {
     existingPeer.updateConnection(peer);
+    global.peerList.remove(peer);
     peer = existingPeer;
   }
 

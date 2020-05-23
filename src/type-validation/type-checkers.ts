@@ -47,6 +47,18 @@ export const hex: Type = {
   },
 };
 
+export const hex16: Type = {
+  name: 'hex16',
+  validate: (input: string): true | never => {
+    hex.validate(input);
+    if (input.length !== 34) {
+      throw new Error('bytes16 hex string should have 16 bytes / 34 length');
+    } else {
+      return true;
+    }
+  },
+};
+
 export const hex20: Type = {
   name: 'hex20',
   validate: (input: string): true | never => {

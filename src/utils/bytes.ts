@@ -30,11 +30,11 @@ export class Bytes implements Byted {
     }
 
     if (length) {
-      assert.equal(
-        this.data.length,
-        length,
-        `Input should be of ${length} bytes`
-      );
+      if (this.data.length !== length) {
+        throw new Error(
+          `Input should be of ${length} bytes but it is ${this.data.length} bytes`
+        );
+      }
     }
   }
 

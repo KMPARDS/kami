@@ -6,7 +6,7 @@ dotenv.config();
 import './global';
 global.consoleLog('global.config', global.config);
 
-import { connectSeedPeers } from './peers';
+import { connectSeedPeers, connectPeersOfPeers } from './peers';
 
 import { app } from './app';
 
@@ -14,11 +14,14 @@ const productionPort = 25985;
 const port = global.config.JSON_RPC_PORT ?? productionPort;
 
 app
-  .listen(port, () => {
+  .listen(port, async () => {
     console.log(`Started on PORT ${port}`);
     console.log('Press [control]+[c] to stop');
 
-    connectSeedPeers();
+    await connectSeedPeers();
+    await connectPeersOfPeers();
+    setInterval(connectPeersOfPeers, 10000);
+    setInterval(global.peerList.clearGarbagePeers.bind(global.peerList), 10000);
   })
   .on('error', (error) => {
     if (port === productionPort) {

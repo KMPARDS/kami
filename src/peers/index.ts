@@ -8,8 +8,9 @@ import fs from 'fs';
 export * from './methods';
 export * from './peer';
 export * from './peer-list';
+export * from './peers-of-peers';
 
-export function connectSeedPeers(): void {
+export async function connectSeedPeers(): Promise<void> {
   if (typeof global.config.SEED_PEER_PATH === 'string') {
     const seedPeersContent: string = fs.readFileSync(
       global.config.SEED_PEER_PATH,
@@ -21,13 +22,18 @@ export function connectSeedPeers(): void {
       .split('\n')
       .map((rawUrl) => new URLMask(rawUrl));
 
-    urls.forEach(async (url) => {
-      try {
-        await startPeerHandshake(url);
-      } catch (err) {
-        console.log(`Error connecting to peer: ${url.toString()}`, err.message);
-      }
-    });
+    await Promise.all(
+      urls.map(async (url) => {
+        try {
+          await startPeerHandshake(url);
+        } catch (err) {
+          global.consoleLog(
+            `Error connecting to peer: ${url.toString()}`,
+            err.message
+          );
+        }
+      })
+    );
   }
 }
 

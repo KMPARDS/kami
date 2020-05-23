@@ -1,5 +1,14 @@
+import { ethers } from 'ethers';
 import { Bytes32, Address } from '../utils/bytes';
 import { URLMask } from '../utils/url';
+import {
+  JsonSuccessResponse,
+  JsonErrorResponse,
+  JsonRequest,
+} from '../json-rpc';
+import { hexlifyObject } from '../json-rpc/parser';
+import { serializeJson } from '../utils/serialize-json';
+import { signData } from '../utils/sign';
 
 export class Peer {
   connectionUrl: URLMask;
@@ -34,5 +43,31 @@ export class Peer {
     this.lastTalk = peer.lastTalk;
     this.reqNonce = 0;
     this.checkNonce = 0;
+    this.walletAddress = peer.walletAddress;
+    // TODO: also refetcht the seats if wallet address is changing
+  }
+
+  async sendRequest(
+    method: string,
+    params: any[]
+  ): Promise<JsonSuccessResponse | JsonErrorResponse | never> {
+    const request: JsonRequest = {
+      jsonrpc: '2.0',
+      method,
+      params,
+      id: this.connectionId,
+      nonce: this.reqNonce++,
+    };
+
+    const serialized = serializeJson(request);
+    request.signature = signData(serialized, global.wallet);
+
+    const response:
+      | JsonSuccessResponse
+      | JsonErrorResponse = await ethers.utils.fetchJson(
+      this.connectionUrl.toString(),
+      JSON.stringify(hexlifyObject(request))
+    );
+    return response;
   }
 }

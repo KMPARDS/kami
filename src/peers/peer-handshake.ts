@@ -10,13 +10,12 @@ import { hexlifyObject } from '../json-rpc/parser';
 import { Peer } from './peer';
 
 function generatePeerRequest(): JsonRequest {
-  const ip = getLocalExternalIP();
   return {
     jsonrpc: '2.0',
     method: 'kami_peerInit',
     params: [
       new Bytes(ethers.utils.randomBytes(16)).hex(),
-      ip ? `http://${ip}:${global.config.JSON_RPC_PORT}` : null,
+      global.config.JSON_RPC_PORT,
     ],
     id: null,
   };
@@ -43,7 +42,17 @@ export async function startPeerHandshake(url: URLMask): Promise<void | never> {
 
   const peer: Peer = new Peer(url, new Bytes32(connectionId));
 
-  global.peerList.add(peer);
+  global.consoleLog(
+    `${getLocalExternalIP()}:${global.config.JSON_RPC_PORT} trying to add peer`,
+    'newpeer:',
+    peer.connectionUrl.toString(),
+    global.peerList.getPeers().map((p) => p.connectionUrl.toString())
+  );
+  const [, errStr] = global.peerList.add(peer);
+  if (errStr) {
+    throw new Error(errStr);
+  }
+  if (errStr) global.consoleLog('Note while adding peer to list', errStr);
 
   const validationRequest: JsonRequest = {
     jsonrpc: '2.0',
@@ -64,7 +73,7 @@ export async function startPeerHandshake(url: URLMask): Promise<void | never> {
       JSON.stringify(hexlifyObject(validationRequest))
     );
 
-    console.log('received response of peerValidate', response);
+    global.consoleLog('received response of peerValidate', response);
 
     // check the signature in the response
     const address = recoverAddressFromSignedJson(response);

@@ -7,10 +7,12 @@ import { URLMask } from './utils/url';
 
 // prints console.logs
 global.consoleLog = (...input) => {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV === 'debug') {
     console.log('\n╭' + '-'.repeat(process.stdout.columns - 2 || 30) + '╮');
     console.log('  DEBUG\n');
-    console.log(util.inspect([...input]));
+    console.log(
+      util.inspect([...input], { showHidden: false, depth: null, colors: true })
+    );
     console.log('\n╰' + '-'.repeat(process.stdout.columns - 2 || 30) + '╯\n');
   }
 };
@@ -23,6 +25,7 @@ global.providerEsn = providerEsn;
 
 global.peerList = new PeerList();
 
+// TODO use minimist package in this case
 // loading config from file
 const configUrl: string = process.argv[2] ?? 'kami-config';
 const config = require(path.resolve(process.cwd(), configUrl));

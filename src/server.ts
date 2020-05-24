@@ -6,7 +6,7 @@ dotenv.config();
 import './global';
 global.consoleLog('global.config', global.config);
 
-import { connectSeedPeers, connectPeersOfPeers } from './peers';
+import { findAndConnectPeers } from './peers';
 
 import { app } from './app';
 
@@ -18,9 +18,8 @@ app
     console.log(`Started on PORT ${port}`);
     console.log('Press [control]+[c] to stop');
 
-    await connectSeedPeers();
-    await connectPeersOfPeers();
-    setInterval(connectPeersOfPeers, 10000);
+    await findAndConnectPeers();
+    setInterval(findAndConnectPeers, 10000);
     setInterval(global.peerList.clearGarbagePeers.bind(global.peerList), 10000);
   })
   .on('error', (error) => {

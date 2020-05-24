@@ -3,18 +3,21 @@ import { JsonSuccessResponse, JsonErrorResponse, getError } from '../json-rpc';
 import { startPeerHandshake } from './peer-handshake';
 import { check, t } from '../type-validation';
 import { getLocalExternalIP } from '../utils/ip';
+import { getSeedPeersUrls } from './seed-peers';
 
-export async function connectPeersOfPeers() {
+export async function findAndConnectPeers() {
   const peerUrls = global.peerList.getPeers().map((peer) => peer.connectionUrl);
+
   global.consoleLog(
     `${getLocalExternalIP()}:${
       global.config.JSON_RPC_PORT
     } iniating listPeers request to current peers:`,
     peerUrls.map((u) => u.toString())
   );
+
   const newUrls: URLMask[] = [];
 
-  const addNewUrl = (newUrl: URLMask) => {
+  const addNewUrl = (newUrl: URLMask): void => {
     const isInPeerUrls = !!peerUrls.find((url) => url.eq(newUrl));
     const isInNewUrls = !!newUrls.find((url) => url.eq(newUrl));
     const selfPort = global.config.JSON_RPC_PORT;
@@ -26,6 +29,13 @@ export async function connectPeersOfPeers() {
       newUrls.push(newUrl);
     }
   };
+
+  try {
+    const seedPeers = getSeedPeersUrls();
+    seedPeers.forEach(addNewUrl);
+  } catch (error) {
+    global.consoleLog('Error reading seed peers', error);
+  }
 
   await Promise.all(
     global.peerList.getTrustedPeers().map(async (peer) => {
@@ -53,18 +63,23 @@ export async function connectPeersOfPeers() {
       }
     })
   );
-  global.consoleLog(
-    global.config.JSON_RPC_PORT,
-    'new urls got to handshake',
-    newUrls
+
+  global.consoleLog('new urls got to handshake', newUrls);
+
+  await Promise.all(
+    newUrls.map(async (url) => {
+      try {
+        global.consoleLog(`starting handshaking with ${url}`);
+        await startPeerHandshake(url);
+        global.consoleLog(`handshake with ${url} success`);
+      } catch (err) {
+        global.consoleLog(
+          `Error connecting to peer: ${url.toString()}`,
+          err.message
+        );
+      }
+    })
   );
 
-  newUrls.forEach(async (url) => {
-    try {
-      global.consoleLog(`starting handshaking with ${url}`);
-      await startPeerHandshake(url);
-    } catch (err) {
-      global.consoleLog(`handshake with ${url} errored:`, err.message);
-    }
-  });
+  return;
 }

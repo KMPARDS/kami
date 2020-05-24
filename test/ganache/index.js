@@ -1,1 +1,3 @@
-require('./ganache.test');
+describe('Ganache', () => {
+  require('./ganache.test');
+});

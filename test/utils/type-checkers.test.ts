@@ -1,13 +1,26 @@
-const assert = require('assert');
-const {
+import assert from 'assert';
+import {
   t,
   check,
   validate,
   validateMultiple,
-} = require('../../build/type-validation');
-const { Bytes } = require('../../build/utils/bytes');
+} from '../../src/type-validation';
+import { Bytes } from '../../src/utils/bytes';
+import { Type } from '../../src/type-validation';
 
-const testCases = [
+interface TestCase {
+  name: string;
+  type: Type;
+  cases: Case[];
+}
+
+interface Case {
+  value: any;
+  isCorrectValue: boolean;
+  errorStrings?: string[];
+}
+
+const testCases: TestCase[] = [
   {
     name: 'Number',
     type: t.number,
@@ -222,96 +235,99 @@ const testCases = [
   },
 ];
 
-describe('Type Checkers', () => {
-  testCases.forEach((mainType) => {
-    describe(`${mainType.name} Type Checker`, () => {
-      mainType.cases.forEach((testCase) => {
-        it(`check for ${
-          check(testCase.value, t.string)
-            ? `"${testCase.value}"`
-            : testCase.value
-        }
+export const TypeCheckers = () =>
+  describe('Type Checkers', () => {
+    testCases.forEach((mainType) => {
+      describe(`${mainType.name} Type Checker`, () => {
+        mainType.cases.forEach((testCase) => {
+          it(`check for ${
+            check(testCase.value, t.string)
+              ? `"${testCase.value}"`
+              : testCase.value
+          }
          should return ${testCase.isCorrectValue}`, () => {
-          const result = check(testCase.value, mainType.type);
+            const result = check(testCase.value, mainType.type);
 
-          assert.strictEqual(
-            result,
-            testCase.isCorrectValue,
-            `should be ${testCase.isCorrectValue} for ${
-              testCase.isCorrectValue ? 'correct' : 'incorrect'
-            } value`
-          );
-        });
+            assert.strictEqual(
+              result,
+              testCase.isCorrectValue,
+              `should be ${testCase.isCorrectValue} for ${
+                testCase.isCorrectValue ? 'correct' : 'incorrect'
+              } value`
+            );
+          });
 
-        it(`validate for ${
-          check(testCase.value, t.string)
-            ? `"${testCase.value}"`
-            : testCase.value
-        } should${testCase.isCorrectValue ? ' not' : ''} throw error`, () => {
-          const error = (() => {
-            try {
-              validate(testCase.value, mainType.type);
-              return null;
-            } catch (error) {
-              return error;
-            }
-          })();
-
-          const isCorrectValue = error === null;
-
-          if (testCase.isCorrectValue && !isCorrectValue) {
-            console.log('testCase.value:', testCase.value);
-            console.log(error);
-          }
-
-          assert.strictEqual(
-            isCorrectValue,
-            testCase.isCorrectValue,
-            `validate method ${
-              isCorrectValue ? 'is not throwing error' : 'is throwing error'
-            } when it ${
-              testCase.isCorrectValue ? 'should not throw' : 'should throw'
-            }`
-          );
-
-          // assert.ok(error instanceof TypeError, 'error should be of TypeError');
-          if (error) {
-            if (!testCase.errorStrings) testCase.errorStrings = [];
-            ['is an invalid value', ...testCase.errorStrings].forEach(
-              (errorString) => {
-                assert.ok(
-                  error.message.includes(errorString),
-                  `Error should include "${errorString}": ${error.message}`
-                );
+          it(`validate for ${
+            check(testCase.value, t.string)
+              ? `"${testCase.value}"`
+              : testCase.value
+          } should${testCase.isCorrectValue ? ' not' : ''} throw error`, () => {
+            const error = (() => {
+              try {
+                validate(testCase.value, mainType.type);
+                return null;
+              } catch (error) {
+                return error;
               }
+            })();
+
+            const isCorrectValue = error === null;
+
+            if (testCase.isCorrectValue && !isCorrectValue) {
+              console.log('testCase.value:', testCase.value);
+              console.log(error);
+            }
+
+            assert.strictEqual(
+              isCorrectValue,
+              testCase.isCorrectValue,
+              `validate method ${
+                isCorrectValue ? 'is not throwing error' : 'is throwing error'
+              } when it ${
+                testCase.isCorrectValue ? 'should not throw' : 'should throw'
+              }`
             );
 
-            assert.ok(
-              error.message.split('More information: ')[1].length > 0,
-              'should have more information'
-            );
-          }
+            // assert.ok(error instanceof TypeError, 'error should be of TypeError');
+            if (error) {
+              // @ts-ignore
+              if (!testCase.errorStrings) testCase.errorStrings = [];
+
+              ['is an invalid value', ...testCase.errorStrings].forEach(
+                (errorString) => {
+                  assert.ok(
+                    error.message.includes(errorString),
+                    `Error should include "${errorString}": ${error.message}`
+                  );
+                }
+              );
+
+              assert.ok(
+                error.message.split('More information: ')[1].length > 0,
+                'should have more information'
+              );
+            }
+          });
         });
       });
     });
+
+    describe('Multiple Type Checkings', () => {
+      it('checking two types with first correct', () => {
+        validateMultiple(2, [t.number, t.string]);
+      });
+
+      it('checking two types with second correct', () => {
+        validateMultiple('2', [t.number, t.string]);
+      });
+
+      it('checking two types with no correct', () => {
+        try {
+          validateMultiple([2], [t.number, t.string]);
+          assert.ok(false, 'should give error');
+        } catch (error) {
+          assert.ok(true);
+        }
+      });
+    });
   });
-
-  describe('Multiple Type Checkings', () => {
-    it('checking two types with first correct', () => {
-      validateMultiple(2, [t.number, t.string]);
-    });
-
-    it('checking two types with second correct', () => {
-      validateMultiple('2', [t.number, t.string]);
-    });
-
-    it('checking two types with no correct', () => {
-      try {
-        validateMultiple([2], [t.number, t.string]);
-        assert.ok(false, 'should give error');
-      } catch (error) {
-        assert.ok(true);
-      }
-    });
-  });
-});

@@ -8,6 +8,7 @@ import {
   INVALID_REQUEST,
   INVALID_PARAMS,
   INTERNAL_ERROR,
+  SERVER_ERROR,
   NONCE_ERROR,
   ID_ERROR,
   SIGNATURE_ERROR,
@@ -90,6 +91,8 @@ router.post('/', async (req, res) => {
     } catch (error) {
       if (error instanceof TypeError) {
         throw { ...INVALID_PARAMS, data: error.message };
+      } else if (error instanceof Error) {
+        throw { ...SERVER_ERROR, data: error.message };
       } else if ('code' in error) {
         throw error;
       } else {

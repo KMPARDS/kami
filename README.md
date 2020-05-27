@@ -4,13 +4,6 @@
 
 [WIP] This project is a part of Era Swap Network.
 
-### Development Notes
-
-- When adding test cases for methods, add cases for expected errors and successful too.
-- Add a unique identifier to all console.logs to be able to find it in the code
-- Check for TODO comments left out for working on later
-- Refactor `utils` module code into into other modules, i.e. add `utils.ts` in other modules and export them from `index.ts`.
-
 # Technical Specification
 
 Kami is a daemon (long running background process) that runs with a seperate EVM machine daemon, which completes an ESN Validator Node. Technical aspects related to Kami are specified here.
@@ -21,7 +14,7 @@ Kami is a daemon (long running background process) that runs with a seperate EVM
 
 Since, Kami works with an ESN node daemon, it will utilise the peer discovery from the ESN nodes.
 
-### Connection
+### ÎConnection
 
 Peer-to-peer networking connections between Kami instances's are based on TCP/IP. The existing JSON RPC 2.0 standard is modified for representing authenticated asks, answers and tells in the P2P communication with ECC.
 

@@ -44,6 +44,11 @@ export const Peers = () =>
               `Wallet address is not defined for peer ${peer.connectionUrl}`
             );
           }
+          // console.log(kamiWalletAddresses, peer.walletAddress);
+
+          // IMP Note: if you get this assert fail, probably the node is not restarted
+          //  (a random peer gets added when doing the handshake test, and it's retained if node is not restarted)
+          //  so to get the tests pass again, simply restart all the associated nodes and re-run the tests
           assert.ok(
             kamiWalletAddresses.includes(peer.walletAddress.slice(2)),
             'peer is not recognized correctly properly'

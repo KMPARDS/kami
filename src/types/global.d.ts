@@ -13,6 +13,7 @@ declare global {
     interface Global {
       consoleLog: (...input: any) => void;
       providerEsn: ethers.providers.JsonRpcProvider;
+      providerETH: ethers.providers.JsonRpcProvider;
       config: {
         ETH_URL: URLMask;
         ESN_URL: URLMask;

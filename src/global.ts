@@ -17,12 +17,6 @@ global.consoleLog = (...input) => {
   }
 };
 
-const providerEsn: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
-  process.env.ESN_URL
-);
-
-global.providerEsn = providerEsn;
-
 global.peerList = new PeerList();
 
 // TODO use minimist package in this case
@@ -50,6 +44,15 @@ global.config = {
     : null,
 };
 
+// loading providers
+global.providerEsn = new ethers.providers.JsonRpcProvider(
+  global.config.ESN_URL.toString()
+);
+global.providerETH = new ethers.providers.JsonRpcProvider(
+  global.config.ETH_URL.toString()
+);
+
+// loading wallet
 if (
   typeof global.config.KEYSTORE_PATH === 'string' &&
   typeof global.config.KEYSTORE_PASSWORD_PATH === 'string'

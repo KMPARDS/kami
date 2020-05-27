@@ -1,6 +1,6 @@
 # Kami - the guardian of ESN
 
-![CI](https://github.com/KMPARDS/kami/workflows/CI/badge.svg)
+[![Build Status](https://travis-ci.org/KMPARDS/kami.svg?branch=master)](https://travis-ci.org/KMPARDS/kami) ![CI](https://github.com/KMPARDS/kami/workflows/CI/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/KMPARDS/kami/badge.svg)](https://coveralls.io/github/KMPARDS/kami) [![Known Vulnerabilities](https://snyk.io/test/github/KMPARDS/kami/badge.svg)](https://snyk.io/test/github/KMPARDS/kami)
 
 [WIP] This project is a part of Era Swap Network.
 
@@ -18,9 +18,11 @@ Kami is a daemon (long running background process) that runs with a seperate EVM
 ## Peer-to-peer Networking
 
 ### Peer Discovery
+
 Since, Kami works with an ESN node daemon, it will utilise the peer discovery from the ESN nodes.
 
 ### Connection
+
 Peer-to-peer networking connections between Kami instances's are based on TCP/IP. The existing JSON RPC 2.0 standard is modified for representing authenticated asks, answers and tells in the P2P communication with ECC.
 
 ## Modified JSON RPC Standard
@@ -69,7 +71,7 @@ When doing non-authentic communication, the communication is much like normal JS
 1. Requester makes a `JsonRequest` to the responder with `id = null` (which means is an annomyous communication).
 2. Responder responds with interface `JsonSuccessResponse` if the execution was successful or `JsonErrorResponse` if there was any error.
 
-> TODO: To make this 100% compliant with JSON RPC 2.0, we can create a seperate key: `connection` and use for purpose of connectionId context (which is currently being used with `id`). 
+> TODO: To make this 100% compliant with JSON RPC 2.0, we can create a seperate key: `connection` and use for purpose of connectionId context (which is currently being used with `id`).
 
 ## Public Key Cryptosystem
 
@@ -82,6 +84,7 @@ ECDSA needs a 32 Byte digest for signing. ECDSA being used commonly in multiple 
 `0x19 | 0x97 | <32-byte domain seperator> | <data to sign>`
 
 Here, `0x97` is the version byte (and from the version bytes registry looks like it's not taken). The domain seperator is defined as:
+
 ```
 domainSeperator: Bytes32 = keccak256(
   serializeJson({
@@ -99,9 +102,9 @@ domainSeperator: Bytes32 = keccak256(
 
 1. Requester calls the `kami_peerInit` method with 16 random bytes with `null` id to the responder.
 2. Responder generates random 16 bytes and concatenates it after requester's 16 bytes and sends the 32 bytes back, the requester has to use it as `id` in next communication.
-3. Initiater uses this `id` received and `nonce = 0` for signing the next request. The signature generation standard will be described in the next sections. 
+3. Initiater uses this `id` received and `nonce = 0` for signing the next request. The signature generation standard will be described in the next sections.
 
-When doing a non-authentic communication using JSON RPC 2.0 for a method that requires authentic communication using Extended JSON RPC 2.0, the Kami node can throw an `INVALID_REQUEST` error. 
+When doing a non-authentic communication using JSON RPC 2.0 for a method that requires authentic communication using Extended JSON RPC 2.0, the Kami node can throw an `INVALID_REQUEST` error.
 
 The misleading `jsonrpc: '2.0'` might be updated to something else like `2.0-extended` or even `2.0-kami`, to signal the other node for using the extended version for communication, while there are no plans of doing this as of now.
 

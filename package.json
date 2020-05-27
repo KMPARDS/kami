@@ -12,7 +12,9 @@
     "test:kami2": "node build/ test/test-configs/kami2/kami-config.json",
     "test:kami3": "node build/ test/test-configs/kami3/kami-config.json",
     "test:run": "mocha -t 20000 -r ts-node/register test/index.ts",
-    "test": "concurrently -r -s first -k npm:test:*"
+    "test": "concurrently -r -s first -k npm:test:*",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "author": "",
   "license": "ISC",
@@ -29,6 +31,8 @@
     "mocha": "^7.1.2",
     "nodemon": "2.0.3",
     "ts-node": "^8.10.1",
-    "typescript": "^3.9.2"
-  }
+    "typescript": "^3.9.2",
+    "snyk": "^1.329.0"
+  },
+  "snyk": true
 }

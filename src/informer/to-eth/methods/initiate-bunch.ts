@@ -43,7 +43,7 @@ export async function initiateBunch(
     )
   );
 
-  // @ts-ignore
+  // @ts-ignore TODO https://github.com/microsoft/TypeScript/issues/38636
   const signatures: string[] = _signatures.filter((sig) => sig !== null);
 
   // self signing
@@ -65,17 +65,17 @@ export async function initiateBunch(
 
   // console.log(rlpArray);
 
-  const plpBunch = ethers.utils.RLP.encode(rlpArray);
+  const rlpBytes = ethers.utils.RLP.encode(rlpArray);
 
   // console.log(plpBunch);
 
   try {
     // TODO: removing this line gives error https://github.com/ethers-io/ethers.js/issues/854
-    await global.plasmaInstanceETH.estimateGas.submitBunchHeader(plpBunch);
+    await global.plasmaInstanceETH.estimateGas.submitBunchHeader(rlpBytes);
 
     // TODO check once if someone already did transaction with higher gas fee, if yes then don't do the tx
     const tx: ethers.ContractTransaction = await global.plasmaInstanceETH.functions.submitBunchHeader(
-      plpBunch
+      rlpBytes
     );
 
     // TODO when transaction done, inform all other kami's regarding the same

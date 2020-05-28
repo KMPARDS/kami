@@ -31,13 +31,14 @@
   },
   "snyk": true,
   "devDependencies": {
+    "concurrently": "5.2.0",
     "coveralls": "^3.1.0",
-    "ts-node": "^8.10.1",
-    "mocha": "^7.1.2",
     "ganache-core": "^2.10.2",
+    "husky": "^4.2.5",
+    "mocha": "^7.1.2",
     "nodemon": "2.0.3",
     "nyc": "^15.0.1",
     "snyk": "^1.329.0",
-    "concurrently": "5.2.0"
+    "ts-node": "^8.10.1"
   }
 }

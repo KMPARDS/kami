@@ -3,7 +3,9 @@ import { ethers } from 'ethers';
 
 interface Kami {
   config: RawConfig;
-  keystore: any;
+  keystore: {
+    address: string;
+  };
 }
 
 interface RawConfig {

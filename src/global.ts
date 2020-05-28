@@ -4,6 +4,7 @@ import { ethers } from 'ethers';
 import util from 'util';
 import { PeerList } from './peers';
 import { URLMask } from './utils/url';
+import { ContractJson } from './informer/utils';
 
 // prints console.logs
 global.consoleLog = (...input) => {
@@ -52,6 +53,26 @@ global.providerETH = new ethers.providers.JsonRpcProvider(
   global.config.ETH_URL.toString()
 );
 
+// loading contracts
+const esJson: ContractJson = require('../static/contracts/ERC20_ERC20.json');
+if (!esJson) {
+  throw new Error('ES JSON not present');
+}
+global.esInstanceETH = new ethers.Contract(
+  '0x3bEb087e33eC0B830325991A32E3F8bb16A51317',
+  esJson.abi,
+  global.providerEsn
+);
+const plasmaJson: ContractJson = require('../static/contracts/PlasmaManager_PlasmaManager.json');
+if (!plasmaJson) {
+  throw new Error('PlasmaManager JSON not present');
+}
+global.plasmaInstanceETH = new ethers.Contract(
+  '0xc4cfb05119Ea1F59fb5a8F949288801491D00110',
+  plasmaJson.abi,
+  global.providerETH
+);
+
 // loading wallet
 if (
   typeof global.config.KEYSTORE_PATH === 'string' &&
@@ -71,6 +92,15 @@ if (
         keystorePassword
       );
       console.log('Wallet loaded', global.wallet.address);
+
+      global.wallet = global.wallet.connect(global.providerETH);
+
+      global.esInstanceETH = global.esInstanceETH.connect(
+        global.wallet.connect(global.providerETH)
+      );
+      global.plasmaInstanceETH = global.plasmaInstanceETH.connect(
+        global.wallet.connect(global.providerETH)
+      );
     } catch (err) {
       console.log('Error while loading wallet', err);
     }

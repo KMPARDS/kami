@@ -51,7 +51,7 @@ export async function initiateBunch(
   signatures.push(sig.signatures[0].hex());
 
   // TODO filter signatures and verify that they r of validators
-  console.log('collectSignatures', signatures);
+  // console.log('collectSignatures', signatures);
 
   const rlpArray = [
     [
@@ -63,22 +63,19 @@ export async function initiateBunch(
     ...signatures,
   ];
 
-  console.log(rlpArray);
+  // console.log(rlpArray);
 
   const plpBunch = ethers.utils.RLP.encode(rlpArray);
 
-  console.log(plpBunch);
+  // console.log(plpBunch);
 
   try {
-    const x = await global.plasmaInstanceETH.functions.esnDepositAddress();
-    console.log({ x });
+    // TODO: removing this line gives error https://github.com/ethers-io/ethers.js/issues/854
+    await global.plasmaInstanceETH.estimateGas.submitBunchHeader(plpBunch);
 
     // TODO check once if someone already did transaction with higher gas fee, if yes then don't do the tx
     const tx: ethers.ContractTransaction = await global.plasmaInstanceETH.functions.submitBunchHeader(
-      plpBunch,
-      {
-        gasLimit: 1000000,
-      }
+      plpBunch
     );
 
     // TODO when transaction done, inform all other kami's regarding the same

@@ -61,7 +61,7 @@ if (!esJson) {
 global.esInstanceETH = new ethers.Contract(
   '0x3bEb087e33eC0B830325991A32E3F8bb16A51317',
   esJson.abi,
-  global.providerEsn
+  global.providerETH
 );
 const plasmaJson: ContractJson = require('../static/contracts/PlasmaManager_PlasmaManager.json');
 if (!plasmaJson) {

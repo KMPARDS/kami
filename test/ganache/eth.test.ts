@@ -101,10 +101,16 @@ export const EthSetup = () =>
       const signer = global.providerETH.getSigner(global.accountsETH[0].hex());
 
       for (let i = 0; i < 10; i++) {
+        await global.providerETH.send('miner_stop', []);
+        for (let j = 0; j < 3; j++) {
           await signer.sendTransaction({
-          to: '0xC8e1F3B9a0CdFceF9fFd2343B943989A22517b26',
-          value: 1,
+            to: validatorAddressArray[i % 3],
+            value: ethers.utils.parseEther('1'),
           });
         }
+        await global.providerETH.send('miner_start', []);
+      }
+      // const block = await global.providerETH.getBlockNumber();
+      // console.log({ block });
     });
   });

@@ -24,20 +24,27 @@
     "@types/mocha": "^7.0.2",
     "@types/node": "^13.13.4",
     "body-parser": "^1.19.0",
-    "concurrently": "5.2.0",
     "dotenv": "^8.2.0",
     "ethers": "^5.0.0-beta.187",
     "express": "4.17.1",
-    "ganache-core": "^2.10.2",
-    "mocha": "^7.1.2",
-    "nodemon": "2.0.3",
-    "nyc": "^15.0.1",
-    "snyk": "^1.329.0",
-    "ts-node": "^8.10.1",
     "typescript": "^3.9.2"
   },
   "snyk": true,
   "devDependencies": {
-    "coveralls": "^3.1.0"
+    "concurrently": "5.2.0",
+    "coveralls": "^3.1.0",
+    "ganache-core": "^2.10.2",
+    "husky": "^4.2.5",
+    "mocha": "^7.1.2",
+    "nodemon": "2.0.3",
+    "nyc": "^15.0.1",
+    "snyk": "^1.329.0",
+    "ts-node": "^8.10.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test",
+      "pre-push": "npm test"
+    }
   }
 }

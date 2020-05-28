@@ -2,8 +2,14 @@ import assert from 'assert';
 import { ethers } from 'ethers';
 import { Address } from '../../src/utils/bytes';
 
-import { kami1, getProvider } from '../test-configs';
+import { kami1, kami2, kami3, getProvider } from '../test-configs';
 global.providerESN = getProvider(kami1.config.ESN_URL);
+
+const validatorAddressArray = [
+  '0x' + kami1.keystore.address,
+  '0x' + kami2.keystore.address,
+  '0x' + kami3.keystore.address,
+];
 
 export const EsnSetup = () =>
   describe('ESN Setup', () => {
@@ -37,10 +43,14 @@ export const EsnSetup = () =>
       const signer = global.providerESN.getSigner(global.accountsESN[0].hex());
 
       for (let i = 0; i < 10; i++) {
-        await signer.sendTransaction({
-          to: '0xC8e1F3B9a0CdFceF9fFd2343B943989A22517b26',
-          value: 1,
-        });
+        await global.providerETH.send('miner_stop', []);
+        for (let j = 0; j < 3; j++) {
+          await signer.sendTransaction({
+            to: validatorAddressArray[i % 3],
+            value: ethers.utils.parseEther('1'),
+          });
+        }
+        await global.providerETH.send('miner_start', []);
       }
     });
   });

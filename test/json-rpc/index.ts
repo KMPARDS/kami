@@ -3,6 +3,8 @@ import { SignBunchRPC } from './sign-bunch.test';
 import { SerializeRequest } from './serialize-request.test';
 import { Peers } from './peers.test';
 import { PeerHandShake, PeerHandshakeWrong } from './peer-handshake.test';
+import { SubmitBunch } from './submit-bunch.test';
+
 export const JsonRpc = () =>
   describe('JSON-RPC', () => {
     ComputeBunchProposal();
@@ -11,4 +13,5 @@ export const JsonRpc = () =>
     Peers();
     PeerHandShake();
     PeerHandshakeWrong();
+    SubmitBunch();
   });

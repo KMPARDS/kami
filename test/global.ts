@@ -12,6 +12,8 @@ declare global {
       providerESN: ethers.providers.JsonRpcProvider;
       accountsESN: Address[];
       consoleLog: (...input: any) => void;
+      esInstanceETH: ethers.Contract;
+      plasmaInstanceETH: ethers.Contract;
     }
   }
 }

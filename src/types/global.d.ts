@@ -24,6 +24,8 @@ declare global {
       };
       wallet: ethers.Wallet;
       peerList: PeerList;
+      esInstanceETH: ethers.Contract;
+      plasmaInstanceETH: ethers.Contract;
     }
   }
 }

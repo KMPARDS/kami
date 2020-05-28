@@ -1,5 +1,9 @@
 import { METHOD_NOT_FOUND } from '../errors';
-import { computeBunchProposal, signBunch } from '../../informer/to-eth/methods';
+import {
+  computeBunchProposal,
+  signBunch,
+  initiateBunch,
+} from '../../informer/to-eth/methods';
 import { peerInit, peerValidate, listPeers } from '../../peers/methods';
 import { serializeRequest } from './serialize-request';
 
@@ -13,6 +17,7 @@ const _methods = {
   informer: {
     computeBunchProposal,
     signBunch,
+    initiateBunch,
   },
 };
 

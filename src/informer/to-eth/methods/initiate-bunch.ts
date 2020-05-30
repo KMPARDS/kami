@@ -70,9 +70,6 @@ export async function initiateBunch(
   // console.log(plpBunch);
 
   try {
-    // TODO: removing this line gives error https://github.com/ethers-io/ethers.js/issues/854
-    await global.plasmaInstanceETH.estimateGas.submitBunchHeader(rlpBytes);
-
     // TODO check once if someone already did transaction with higher gas fee, if yes then don't do the tx
     const tx: ethers.ContractTransaction = await global.plasmaInstanceETH.functions.submitBunchHeader(
       rlpBytes

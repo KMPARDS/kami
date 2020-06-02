@@ -16,7 +16,7 @@ import {
 import { parseRequest, hexlifyObject } from './parser';
 import { methods } from './methods';
 import { serializeJson } from '../utils/serialize-json';
-import { signData, recoverAddressFromSignedJson } from '../utils/sign';
+import { signKamiData, recoverAddressFromSignedJson } from '../utils/sign';
 import { ethers } from 'ethers';
 import { Bytes32, Address, Bytes } from '../utils/bytes';
 import { Peer } from '../peers';
@@ -83,7 +83,7 @@ router.post('/', async (req, res) => {
         response.nonce = request.nonce;
 
         const serializedResponse: Bytes = serializeJson(response);
-        response.signature = signData(serializedResponse, global.wallet);
+        response.signature = signKamiData(serializedResponse, global.wallet);
       }
       global.consoleLog('JSON RPC ReSponse', response);
 

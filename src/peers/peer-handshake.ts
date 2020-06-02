@@ -4,7 +4,7 @@ import { Bytes, Bytes32 } from '../utils/bytes';
 import { URLMask } from '../utils/url';
 import { getLocalExternalIP } from '../utils/ip';
 import { t, validate, validateParam } from '../type-validation';
-import { signData, recoverAddressFromSignedJson } from '../utils/sign';
+import { signKamiData, recoverAddressFromSignedJson } from '../utils/sign';
 import { serializeJson } from '../utils/serialize-json';
 import { hexlifyObject } from '../json-rpc/parser';
 import { Peer } from './peer';
@@ -63,7 +63,7 @@ export async function startPeerHandshake(url: URLMask): Promise<void | never> {
   };
 
   const serializedRequest = serializeJson(validationRequest);
-  const signature = signData(serializedRequest, global.wallet);
+  const signature = signKamiData(serializedRequest, global.wallet);
 
   validationRequest.signature = signature;
 

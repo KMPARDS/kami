@@ -5,40 +5,88 @@ import { JsonRequest, JsonSuccessResponse } from '../json-rpc';
 import { SIGNATURE_ERROR } from '../json-rpc/errors';
 import { check, t } from '../type-validation';
 
-export async function signMessage(
-  byted: Byted,
-  wallet: ethers.Wallet
-): Promise<Signature> {
-  const signature = await wallet.signMessage(byted.data);
-  return new Signature(signature);
+// ------------- digest preparing -------------
+
+interface DomainSeperatorObj {
+  name: string;
+  chainId: number;
+  description: string;
 }
 
-function getDomainSeperator(): Bytes32 {
-  const rlp = ethers.utils.RLP.encode(
-    rlpizeObject({
-      name: 'Kami of Era Swap Network',
-      chainId: 5197,
-    })
-  );
+export function getDomainSeperator(
+  domainSeperatorObj: DomainSeperatorObj
+): Bytes32 {
+  const rlp = ethers.utils.RLP.encode(rlpizeObject(domainSeperatorObj));
   return new Bytes32(ethers.utils.keccak256(rlp));
 }
 
-function prepareDigest(byted: Byted): Bytes32 {
-  const preDigest = new Bytes(ethers.utils.toUtf8Bytes('\x19\x97'))
-    .concat(getDomainSeperator())
-    .concat(byted);
+export function prepareDigest(
+  byted: Byted,
+  domainSeperatorObj: DomainSeperatorObj
+): Bytes32 {
+  const preDigest = new Bytes('0x19') // ensuring not an RLP
+    .concat(new Bytes('0x97')) // 1 byte version
+    .concat(getDomainSeperator(domainSeperatorObj)) // version specific data
+    .concat(byted); // data to sign
   return new Bytes32(ethers.utils.keccak256(preDigest.data));
 }
 
-export function signData(byted: Byted, wallet: ethers.Wallet): Signature {
-  const signature = wallet._signingKey().signDigest(prepareDigest(byted).data);
+export function prepareKamiDigest(byted: Byted): Bytes32 {
+  return prepareDigest(byted, {
+    name: 'Era Swap Network',
+    chainId: 5196, // TODO: add mainnet and testnet
+    description: 'Kami',
+  });
+}
+
+export function prepareBunchDigest(byted: Byted): Bytes32 {
+  return prepareDigest(byted, {
+    name: 'Era Swap Network',
+    chainId: 5196, // TODO: add mainnet and testnet
+    description: 'Bunch',
+  });
+}
+
+// ------------- signing -------------
+
+export function signKamiData(byted: Byted, wallet: ethers.Wallet): Signature {
+  const signature = wallet
+    ._signingKey()
+    .signDigest(prepareKamiDigest(byted).data);
   return new Signature(ethers.utils.joinSignature(signature));
 }
 
-export function recoverAddress(byted: Byted, signature: Signature): Address {
+export function signBunchData(byted: Byted, wallet: ethers.Wallet): Signature {
+  const signature = wallet
+    ._signingKey()
+    .signDigest(prepareBunchDigest(byted).data);
+  return new Signature(ethers.utils.joinSignature(signature));
+}
+
+// ------------- recovering address -------------
+
+function recoverAddress(
+  byted: Byted,
+  signature: Signature,
+  digestPreparer: (byted: Byted) => Bytes32
+): Address {
   return new Address(
-    ethers.utils.recoverAddress(prepareDigest(byted).data, signature.data)
+    ethers.utils.recoverAddress(digestPreparer(byted).data, signature.data)
   );
+}
+
+export function recoverAddressKami(
+  byted: Byted,
+  signature: Signature
+): Address {
+  return recoverAddress(byted, signature, prepareKamiDigest);
+}
+
+export function recoverAddressBunch(
+  byted: Byted,
+  signature: Signature
+): Address {
+  return recoverAddress(byted, signature, prepareBunchDigest);
 }
 
 export function recoverAddressFromSignedJson(
@@ -61,7 +109,7 @@ export function recoverAddressFromSignedJson(
   delete preSignedRequest.signature;
   const serializedRequest: Bytes = serializeJson(preSignedRequest);
 
-  const address: Address = recoverAddress(serializedRequest, signature);
+  const address: Address = recoverAddressKami(serializedRequest, signature);
 
   return address;
 }

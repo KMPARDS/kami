@@ -1,45 +1,75 @@
 import assert from 'assert';
 import { ethers } from 'ethers';
-import { Bytes } from '../../src/utils/bytes';
-import { signMessage, signData, recoverAddress } from '../../src/utils/sign';
+import { Bytes, Signature, Bytes32, Address } from '../../src/utils/bytes';
+import {
+  signBunchData,
+  signKamiData,
+  recoverAddressKami,
+  recoverAddressBunch,
+  prepareDigest,
+} from '../../src/utils/sign';
 
 const wallet = ethers.Wallet.createRandom();
 
 export const Signing = () =>
   describe('Signing', () => {
-    it('sign message', async () => {
+    it('sign bunch data', async () => {
       const hex = '0x1234';
       const bytes = new Bytes(hex);
-      const signature = await signMessage(bytes, wallet);
+      const signature = signBunchData(bytes, wallet);
 
       const pad = new Bytes(
-        ethers.utils.toUtf8Bytes(
-          '\x19Ethereum Signed Message:\n' + bytes.length
-        )
+        '0x19976f3a1e66e989a1cf337b9dd2ce4c98a5e78763cf9f9bdaac5707038c66a4d74e' // testnet 5196
       );
+
       const paddedBytes = pad.concat(bytes);
-      const digest = ethers.utils.keccak256(paddedBytes.data);
+      const manualDigest = ethers.utils.keccak256(paddedBytes.data);
 
-      const recoveredAddress = ethers.utils.recoverAddress(
-        digest,
-        signature.data
+      const preparedDigest = prepareDigest(bytes, {
+        name: 'Era Swap Network',
+        chainId: 5196, // TODO: add mainnet and testnet
+        description: 'Bunch',
+      });
+
+      assert.ok(
+        preparedDigest.eq(new Bytes(manualDigest)),
+        'manual and prepared digest should match'
       );
 
-      assert.strictEqual(
-        recoveredAddress,
-        wallet.address,
+      const recoveredAddress = recoverAddressBunch(bytes, signature);
+
+      assert.ok(
+        recoveredAddress.eq(new Address(wallet.address)),
         'recovered address should be equal to the wallet address'
       );
     });
 
-    it('sign data', () => {
+    it('sign kami data', () => {
       const bytes = new Bytes('0x1234');
-      const signature = signData(bytes, wallet);
+      const signature = signKamiData(bytes, wallet);
 
-      const recoveredAddress = recoverAddress(bytes, signature);
+      const pad = new Bytes(
+        '0x1997ea04d3ef0bb7acb601daaf4affda2d612b064073e27f9cec2326c626c5adeac4' // testnet 5196
+      );
+
+      const paddedBytes = pad.concat(bytes);
+      const manualDigest = ethers.utils.keccak256(paddedBytes.data);
+
+      const preparedDigest = prepareDigest(bytes, {
+        name: 'Era Swap Network',
+        chainId: 5196, // TODO: add mainnet and testnet
+        description: 'Kami',
+      });
 
       assert.ok(
-        recoveredAddress.eq(new Bytes(wallet.address)),
+        preparedDigest.eq(new Bytes(manualDigest)),
+        'manual and prepared digest should match'
+      );
+
+      const recoveredAddress = recoverAddressKami(bytes, signature);
+
+      assert.ok(
+        recoveredAddress.eq(new Address(wallet.address)),
         'address recovered should be same'
       );
     });

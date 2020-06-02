@@ -5,7 +5,10 @@ import { Bytes, Bytes32 } from '../../src/utils/bytes';
 import { t, validateParam } from '../../src/type-validation';
 import { serializeJson } from '../../src/utils/serialize-json';
 import { hexlifyObject } from '../../src/json-rpc/parser';
-import { signData, recoverAddressFromSignedJson } from '../../src/utils/sign';
+import {
+  signKamiData,
+  recoverAddressFromSignedJson,
+} from '../../src/utils/sign';
 import { JsonRequest } from '../../src/json-rpc';
 import { Peer } from '../../src/peers';
 const { kami1 } = require('../test-configs');
@@ -51,7 +54,7 @@ export const PeerHandShake = () => {
       };
 
       const serializedRequest = serializeJson(validationRequest);
-      validationRequest.signature = signData(serializedRequest, wallet);
+      validationRequest.signature = signKamiData(serializedRequest, wallet);
 
       const response2 = await ethers.utils.fetchJson(
         KAMI_URL,

@@ -8,7 +8,7 @@ import {
 } from '../json-rpc';
 import { hexlifyObject } from '../json-rpc/parser';
 import { serializeJson } from '../utils/serialize-json';
-import { signData } from '../utils/sign';
+import { signKamiData } from '../utils/sign';
 
 export class Peer {
   connectionUrl: URLMask;
@@ -60,7 +60,7 @@ export class Peer {
     };
 
     const serialized = serializeJson(request);
-    request.signature = signData(serialized, global.wallet);
+    request.signature = signKamiData(serialized, global.wallet);
 
     const response:
       | JsonSuccessResponse

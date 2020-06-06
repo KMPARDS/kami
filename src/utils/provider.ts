@@ -16,14 +16,10 @@ interface ParityBlock {
 export async function fetchBlocks(
   startBlockNumber: number,
   bunchDepth: number,
-  provider:
-    | ethers.providers.JsonRpcProvider
-    | ethers.providers.Web3Provider
-    | ethers.providers.InfuraProvider
+  provider: { send(method: string, params: any[]): Promise<any> }
 ): Promise<BlockCompact[]> {
   validate(startBlockNumber, t.uint);
   validate(bunchDepth, t.uint);
-
   const blockNumbersToScan = [...Array(2 ** bunchDepth).keys()].map(
     (n) => n + startBlockNumber
   );

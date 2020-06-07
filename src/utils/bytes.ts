@@ -24,7 +24,12 @@ export class Bytes implements Byted {
     } else if (typeof data === 'number') {
       let hexed = data.toString(16);
       if (hexed.length % 2) hexed = '0' + hexed;
-      this.data = ethers.utils.arrayify('0x' + hexed);
+      if (length) {
+        hexed = ethers.utils.hexZeroPad('0x' + hexed, length);
+      } else {
+        hexed = '0x' + hexed;
+      }
+      this.data = ethers.utils.arrayify(hexed);
     } else {
       this.data = data;
     }

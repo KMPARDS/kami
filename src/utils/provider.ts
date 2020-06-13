@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import { Bytes32 } from './bytes';
 import { t, validate } from '../type-validation';
 
-interface BlockCompact {
+export interface BlockCompact {
   blockNumber: number;
   transactionsRoot: Bytes32;
   receiptsRoot: Bytes32;

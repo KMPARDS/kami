@@ -7,6 +7,7 @@ import './global';
 global.consoleLog('global.config', global.config);
 
 import { findAndConnectPeers } from './peers';
+import { InformerToESN } from './informer/to-esn/auto-mode';
 
 import { app } from './app';
 
@@ -18,6 +19,7 @@ app
     console.log(`Started on PORT ${port}`);
     console.log('Press [control]+[c] to stop');
 
+    InformerToESN();
     await findAndConnectPeers();
     setInterval(findAndConnectPeers, 10000);
     setInterval(global.peerList.clearGarbagePeers.bind(global.peerList), 10000);

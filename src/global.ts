@@ -75,14 +75,14 @@ global.plasmaInstanceETH = new ethers.Contract(
   global.providerETH
 );
 const reversePlasmaJson: ContractJson = require('../static/contracts/ReversePlasma.json');
-if (!plasmaJson) {
+if (!reversePlasmaJson) {
   throw new Error('PlasmaManager JSON not present');
 }
 // @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
-global.reverse = new ethers.Contract(
+global.reversePlasmaInstanceESN = new ethers.Contract(
   '0x3bEb087e33eC0B830325991A32E3F8bb16A51317',
-  plasmaJson.abi,
-  global.providerETH
+  reversePlasmaJson.abi,
+  global.providerEsn
 );
 
 // loading wallet

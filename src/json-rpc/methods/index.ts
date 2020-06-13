@@ -6,9 +6,11 @@ import {
 } from '../../informer/to-eth/methods';
 import { peerInit, peerValidate, listPeers } from '../../peers/methods';
 import { serializeRequest } from './serialize-request';
+import { getAddress } from './get-address';
 
 const _methods = {
   kami: {
+    getAddress,
     peerInit,
     peerValidate,
     listPeers,

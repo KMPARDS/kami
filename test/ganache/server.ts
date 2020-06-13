@@ -15,12 +15,16 @@ export interface GanacheServer {
 }
 
 export const startGanache = () => {
-  global.serverETH = ganache.server();
+  global.serverETH = ganache.server({
+    gasPrice: '0x00',
+  });
   global.serverETH.listen(7545, () => {
     console.log('ETH Ganache Started on 7545..');
   });
 
-  global.serverESN = ganache.server();
+  global.serverESN = ganache.server({
+    gasPrice: '0x00',
+  });
   global.serverESN.listen(8545, () => {
     console.log('ESN Ganache Started on 8545..');
   });

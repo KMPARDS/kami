@@ -4,6 +4,7 @@ import { Address } from '../../src/utils/bytes';
 import { ContractJson } from '../../src/informer/utils';
 import { t, validate } from '../../src/type-validation';
 import { kami1, kami2, kami3, getProvider } from '../test-configs';
+
 global.providerETH = getProvider(kami1.config.ETH_URL);
 
 const validatorAddressArray = [
@@ -61,40 +62,44 @@ export const EthSetup = () =>
     });
 
     it('deploy Era Swap Token Contract', async () => {
-      const esContractJson: ContractJson = require('../../static/contracts/ERC20_ERC20.json');
+      const esContractJson: ContractJson = require('../../static/contracts/ERC20.json');
       const ESFactory = new ethers.ContractFactory(
         esContractJson.abi,
         esContractJson.evm.bytecode,
         contractDeployerWallet.connect(global.providerETH)
       );
 
+      // @ts-ignore
       global.esInstanceETH = await ESFactory.deploy();
 
-      console.log({
+      global.consoleLog({
         'global.esInstanceETH.address': global.esInstanceETH.address,
       });
 
       validate(global.esInstanceETH.address, t.hex20);
     });
 
-    it('deploy Plasma Smart Contract', async () => {
-      const plasmaContractJson: ContractJson = require('../../static/contracts/PlasmaManager_PlasmaManager.json');
+    it('deploy Plasma Smart Contract and set initial values', async () => {
+      const plasmaContractJson: ContractJson = require('../../static/contracts/PlasmaManager.json');
       const PlasmaFactory = new ethers.ContractFactory(
         plasmaContractJson.abi,
         plasmaContractJson.evm.bytecode,
         contractDeployerWallet.connect(global.providerETH)
       );
 
-      global.plasmaInstanceETH = await PlasmaFactory.deploy(
-        validatorAddressArray,
-        global.esInstanceETH.address
-      );
+      // @ts-ignore
+      global.plasmaInstanceETH = await PlasmaFactory.deploy();
 
-      console.log({
+      global.consoleLog({
         'global.plasmaInstanceETH.address': global.plasmaInstanceETH.address,
       });
 
       validate(global.plasmaInstanceETH.address, t.hex20);
+
+      await global.plasmaInstanceETH.setInitialValues(
+        global.esInstanceETH.address,
+        validatorAddressArray
+      );
     });
 
     it('create some blocks for generating merkle root', async () => {

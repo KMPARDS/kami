@@ -54,21 +54,33 @@ global.providerETH = new ethers.providers.JsonRpcProvider(
 );
 
 // loading contracts
-const esJson: ContractJson = require('../static/contracts/ERC20_ERC20.json');
+const esJson: ContractJson = require('../static/contracts/ERC20.json');
 if (!esJson) {
   throw new Error('ES JSON not present');
 }
+// @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
 global.esInstanceETH = new ethers.Contract(
   '0x3bEb087e33eC0B830325991A32E3F8bb16A51317',
   esJson.abi,
   global.providerETH
 );
-const plasmaJson: ContractJson = require('../static/contracts/PlasmaManager_PlasmaManager.json');
+const plasmaJson: ContractJson = require('../static/contracts/PlasmaManager.json');
 if (!plasmaJson) {
   throw new Error('PlasmaManager JSON not present');
 }
+// @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
 global.plasmaInstanceETH = new ethers.Contract(
   '0xc4cfb05119Ea1F59fb5a8F949288801491D00110',
+  plasmaJson.abi,
+  global.providerETH
+);
+const reversePlasmaJson: ContractJson = require('../static/contracts/ReversePlasma.json');
+if (!plasmaJson) {
+  throw new Error('PlasmaManager JSON not present');
+}
+// @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
+global.reverse = new ethers.Contract(
+  '0x3bEb087e33eC0B830325991A32E3F8bb16A51317',
   plasmaJson.abi,
   global.providerETH
 );
@@ -95,11 +107,19 @@ if (
 
       global.wallet = global.wallet.connect(global.providerETH);
 
+      // @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
       global.esInstanceETH = global.esInstanceETH.connect(
         global.wallet.connect(global.providerETH)
       );
+
+      // @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
       global.plasmaInstanceETH = global.plasmaInstanceETH.connect(
         global.wallet.connect(global.providerETH)
+      );
+
+      // @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
+      global.reversePlasmaInstanceESN = global.reversePlasmaInstanceESN.connect(
+        global.wallet.connect(global.providerEsn)
       );
     } catch (err) {
       console.log('Error while loading wallet', err);

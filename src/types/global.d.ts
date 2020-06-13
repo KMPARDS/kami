@@ -1,6 +1,9 @@
 import { ethers } from 'ethers';
 import { PeerList } from '../peers';
 import { URLMask } from '../utils/url';
+import { Erc20 } from '../../static/interfaces/Erc20';
+import { PlasmaManager } from '../../static/interfaces/PlasmaManager';
+import { ReversePlasma } from '../../static/interfaces/ReversePlasma';
 
 declare global {
   namespace NodeJS {
@@ -24,8 +27,9 @@ declare global {
       };
       wallet: ethers.Wallet;
       peerList: PeerList;
-      esInstanceETH: ethers.Contract;
-      plasmaInstanceETH: ethers.Contract;
+      esInstanceETH: Erc20;
+      plasmaInstanceETH: PlasmaManager;
+      reversePlasmaInstanceESN: ReversePlasma;
     }
   }
 }

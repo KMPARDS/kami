@@ -1,6 +1,9 @@
 import { ethers } from 'ethers';
 import { Address } from '../src/utils/bytes';
 import { GanacheServer } from './ganache';
+import { Erc20 } from '../static/interfaces/Erc20';
+import { PlasmaManager } from '../static/interfaces/PlasmaManager';
+import { ReversePlasma } from '../static/interfaces/ReversePlasma';
 
 declare global {
   namespace NodeJS {
@@ -12,8 +15,9 @@ declare global {
       providerESN: ethers.providers.JsonRpcProvider;
       accountsESN: Address[];
       consoleLog: (...input: any) => void;
-      esInstanceETH: ethers.Contract;
-      plasmaInstanceETH: ethers.Contract;
+      esInstanceETH: Erc20;
+      plasmaInstanceETH: PlasmaManager;
+      reversePlasmaInstanceESN: ReversePlasma;
     }
   }
 }

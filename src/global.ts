@@ -61,19 +61,26 @@ if (
 ) {
   const keystore = require(global.config.KEYSTORE_PATH);
 
-  const keystorePassword: string = fs.readFileSync(
-    global.config.KEYSTORE_PASSWORD_PATH,
-    'utf8'
-  );
+  const keystorePasswords: string[] = fs
+    .readFileSync(global.config.KEYSTORE_PASSWORD_PATH, 'utf8')
+    .split('\n');
 
   (async () => {
     try {
+      let error: Error | null = null;
       console.log('Loading wallet...');
-
-      global.wallet = await ethers.Wallet.fromEncryptedJson(
-        typeof keystore === 'string' ? keystore : JSON.stringify(keystore),
-        keystorePassword
-      );
+      for (const keystorePassword of keystorePasswords) {
+        try {
+          global.wallet = await ethers.Wallet.fromEncryptedJson(
+            typeof keystore === 'string' ? keystore : JSON.stringify(keystore),
+            keystorePassword
+          );
+          error = null;
+        } catch (err) {
+          error = err;
+        }
+      }
+      if (error) throw error;
       console.log('Wallet loaded', global.wallet.address);
     } catch (err) {
       console.log('Error while loading wallet', err);

@@ -40,6 +40,9 @@ async function main(): Promise<void> {
     ...Array(confirmedBlockETH - latestBlockNumberOnContract),
   ]).map((n: string) => +n + latestBlockNumberOnContract + 1);
 
+  let nonce = await global.providerEsn.getTransactionCount(
+    global.wallet.address
+  );
   for (const blockNumber of range) {
     // STEP 3 before making a proposal, check if already made a proposal
     if (await checkIfAlreadyProposed(blockNumber)) {
@@ -50,10 +53,15 @@ async function main(): Promise<void> {
 
     // STEP 4 make the transaction if not already proposed
     const blockProposal = await generateBlockProposal(blockNumber);
+
     await global.reversePlasmaInstanceESN.proposeBlock(
       blockNumber,
       blockProposal.transactionsRoot.hex(),
-      blockProposal.receiptsRoot.hex()
+      blockProposal.receiptsRoot.hex(),
+      {
+        nonce: nonce++,
+      }
     );
+    console.log(`Informer To ESN: Proposed ${blockNumber} block`);
   }
 }

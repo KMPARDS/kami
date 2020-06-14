@@ -25,7 +25,7 @@ declare global {
 import util from 'util';
 
 global.consoleLog = (...input) => {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV === 'debug') {
     console.log('\n╭' + '-'.repeat(process.stdout.columns - 2 || 30) + '╮');
     console.log('  DEBUG\n');
     console.log(util.inspect([...input], false, null, true));

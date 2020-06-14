@@ -76,6 +76,7 @@ if (
             keystorePassword
           );
           error = null;
+          break;
         } catch (err) {
           error = err;
         }

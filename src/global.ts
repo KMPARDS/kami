@@ -46,21 +46,12 @@ global.config = {
 };
 
 // loading providers
-const getProvider = async (url: string) => {
-  while (true) {
-    try {
-      const provider = new ethers.providers.JsonRpcProvider(url);
-      await provider.ready;
-      return provider;
-    } catch (er) {
-      console.log('uyyy', er.message);
-    }
-    await new Promise((res) => setTimeout(res, 1000));
-  }
-};
-
-const providerESNPromise = getProvider(global.config.ESN_URL.toString());
-const providerETHPromise = getProvider(global.config.ETH_URL.toString());
+global.providerETH = new ethers.providers.JsonRpcProvider(
+  global.config.ETH_URL.toString()
+);
+global.providerEsn = new ethers.providers.JsonRpcProvider(
+  global.config.ESN_URL.toString()
+);
 
 // loading wallet
 if (
@@ -76,28 +67,15 @@ if (
 
   (async () => {
     try {
+      console.log('Loading wallet...');
+
       global.wallet = await ethers.Wallet.fromEncryptedJson(
         typeof keystore === 'string' ? keystore : JSON.stringify(keystore),
         keystorePassword
       );
       console.log('Wallet loaded', global.wallet.address);
 
-      const [providerESN, providerETH] = await Promise.all([
-        providerESNPromise,
-        providerETHPromise,
-      ]);
-
-      if (!providerETH) {
-        throw new Error('Could not connect to Provider ETH');
-      }
-
-      if (!providerESN) {
-        throw new Error('Could not connect to Provider ESN');
-      }
-
-      global.providerEsn = providerESN;
-      global.providerETH = providerETH;
-
+      console.log('Loading contract instances...');
       // loading contracts
       const esJson: ContractJson = require('../static/contracts/ERC20.json');
       if (!esJson) {
@@ -129,6 +107,8 @@ if (
         reversePlasmaJson.abi,
         global.wallet.connect(global.providerEsn)
       );
+
+      console.log('Providers and Contracts are initiated');
     } catch (err) {
       console.log('Error while loading wallet', err);
     }

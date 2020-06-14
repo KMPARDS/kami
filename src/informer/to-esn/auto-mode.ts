@@ -12,7 +12,11 @@ export function InformerToESN(): void {
   setInterval(async () => {
     if (!taskRunning) {
       taskRunning = true;
-      await main();
+      try {
+        await main();
+      } catch (error) {
+        console.log('Error in InformerToESN:', error.message);
+      }
       taskRunning = false;
     }
   }, 6000);

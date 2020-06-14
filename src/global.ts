@@ -46,44 +46,21 @@ global.config = {
 };
 
 // loading providers
-global.providerEsn = new ethers.providers.JsonRpcProvider(
-  global.config.ESN_URL.toString()
-);
-global.providerETH = new ethers.providers.JsonRpcProvider(
-  global.config.ETH_URL.toString()
-);
+const getProvider = async (url: string) => {
+  while (true) {
+    try {
+      const provider = new ethers.providers.JsonRpcProvider(url);
+      await provider.ready;
+      return provider;
+    } catch (er) {
+      console.log('uyyy', er.message);
+    }
+    await new Promise((res) => setTimeout(res, 1000));
+  }
+};
 
-// loading contracts
-const esJson: ContractJson = require('../static/contracts/ERC20.json');
-if (!esJson) {
-  throw new Error('ES JSON not present');
-}
-// @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
-global.esInstanceETH = new ethers.Contract(
-  '0x3bEb087e33eC0B830325991A32E3F8bb16A51317',
-  esJson.abi,
-  global.providerETH
-);
-const plasmaJson: ContractJson = require('../static/contracts/PlasmaManager.json');
-if (!plasmaJson) {
-  throw new Error('PlasmaManager JSON not present');
-}
-// @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
-global.plasmaInstanceETH = new ethers.Contract(
-  '0xc4cfb05119Ea1F59fb5a8F949288801491D00110',
-  plasmaJson.abi,
-  global.providerETH
-);
-const reversePlasmaJson: ContractJson = require('../static/contracts/ReversePlasma.json');
-if (!reversePlasmaJson) {
-  throw new Error('PlasmaManager JSON not present');
-}
-// @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
-global.reversePlasmaInstanceESN = new ethers.Contract(
-  '0x3bEb087e33eC0B830325991A32E3F8bb16A51317',
-  reversePlasmaJson.abi,
-  global.providerEsn
-);
+const providerESNPromise = getProvider(global.config.ESN_URL.toString());
+const providerETHPromise = getProvider(global.config.ETH_URL.toString());
 
 // loading wallet
 if (
@@ -105,20 +82,51 @@ if (
       );
       console.log('Wallet loaded', global.wallet.address);
 
-      global.wallet = global.wallet.connect(global.providerETH);
+      const [providerESN, providerETH] = await Promise.all([
+        providerESNPromise,
+        providerETHPromise,
+      ]);
 
+      if (!providerETH) {
+        throw new Error('Could not connect to Provider ETH');
+      }
+
+      if (!providerESN) {
+        throw new Error('Could not connect to Provider ESN');
+      }
+
+      global.providerEsn = providerESN;
+      global.providerETH = providerETH;
+
+      // loading contracts
+      const esJson: ContractJson = require('../static/contracts/ERC20.json');
+      if (!esJson) {
+        throw new Error('ES JSON not present');
+      }
       // @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
-      global.esInstanceETH = global.esInstanceETH.connect(
+      global.esInstanceETH = new ethers.Contract(
+        '0x3bEb087e33eC0B830325991A32E3F8bb16A51317',
+        esJson.abi,
         global.wallet.connect(global.providerETH)
       );
-
+      const plasmaJson: ContractJson = require('../static/contracts/PlasmaManager.json');
+      if (!plasmaJson) {
+        throw new Error('PlasmaManager JSON not present');
+      }
       // @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
-      global.plasmaInstanceETH = global.plasmaInstanceETH.connect(
+      global.plasmaInstanceETH = new ethers.Contract(
+        '0xc4cfb05119Ea1F59fb5a8F949288801491D00110',
+        plasmaJson.abi,
         global.wallet.connect(global.providerETH)
       );
-
+      const reversePlasmaJson: ContractJson = require('../static/contracts/ReversePlasma.json');
+      if (!reversePlasmaJson) {
+        throw new Error('PlasmaManager JSON not present');
+      }
       // @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
-      global.reversePlasmaInstanceESN = global.reversePlasmaInstanceESN.connect(
+      global.reversePlasmaInstanceESN = new ethers.Contract(
+        '0x3bEb087e33eC0B830325991A32E3F8bb16A51317',
+        reversePlasmaJson.abi,
         global.wallet.connect(global.providerEsn)
       );
     } catch (err) {

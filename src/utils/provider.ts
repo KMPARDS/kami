@@ -32,7 +32,7 @@ export async function fetchBlocks(
         );
 
         const block: ParityBlock = await provider.send('eth_getBlockByNumber', [
-          blockNumberHex,
+          blockNumberHex !== '0x' ? blockNumberHex : '0x00',
           true,
         ]);
 

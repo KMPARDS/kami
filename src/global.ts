@@ -5,6 +5,7 @@ import util from 'util';
 import { PeerList } from './peers';
 import { URLMask } from './utils/url';
 import { ContractJson } from './informer/utils';
+import { validateParam, t } from './type-validation';
 
 // prints console.logs
 global.consoleLog = (...input) => {
@@ -74,43 +75,68 @@ if (
         keystorePassword
       );
       console.log('Wallet loaded', global.wallet.address);
+    } catch (err) {
+      console.log('Error while loading wallet', err);
+    }
 
-      console.log('Loading contract instances...');
+    try {
       // loading contracts
+      console.log('Loading contract instances...');
+
       const esJson: ContractJson = require('../static/contracts/ERC20.json');
       if (!esJson) {
         throw new Error('ES JSON not present');
       }
+      validateParam(
+        {
+          ES_CONTRACT_ADDRESS_ETH: config.ES_CONTRACT_ADDRESS_ETH,
+        },
+        t.hex20
+      );
       // @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
       global.esInstanceETH = new ethers.Contract(
-        '0x3bEb087e33eC0B830325991A32E3F8bb16A51317',
+        config.ES_CONTRACT_ADDRESS_ETH,
         esJson.abi,
         global.wallet.connect(global.providerETH)
       );
+
       const plasmaJson: ContractJson = require('../static/contracts/PlasmaManager.json');
       if (!plasmaJson) {
         throw new Error('PlasmaManager JSON not present');
       }
+      validateParam(
+        {
+          PLASMA_CONTRACT_ADDRESS_ETH: config.PLASMA_CONTRACT_ADDRESS_ETH,
+        },
+        t.hex20
+      );
       // @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
       global.plasmaInstanceETH = new ethers.Contract(
-        '0xc4cfb05119Ea1F59fb5a8F949288801491D00110',
+        config.PLASMA_CONTRACT_ADDRESS_ETH,
         plasmaJson.abi,
         global.wallet.connect(global.providerETH)
       );
+
       const reversePlasmaJson: ContractJson = require('../static/contracts/ReversePlasma.json');
       if (!reversePlasmaJson) {
         throw new Error('PlasmaManager JSON not present');
       }
+      validateParam(
+        {
+          RPLASMA_CONTRACT_ADDRESS_ESN: config.RPLASMA_CONTRACT_ADDRESS_ESN,
+        },
+        t.hex20
+      );
       // @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
       global.reversePlasmaInstanceESN = new ethers.Contract(
-        '0x3bEb087e33eC0B830325991A32E3F8bb16A51317',
+        config.RPLASMA_CONTRACT_ADDRESS_ESN,
         reversePlasmaJson.abi,
         global.wallet.connect(global.providerEsn)
       );
 
       console.log('Providers and Contracts are initiated');
     } catch (err) {
-      console.log('Error while loading wallet', err);
+      console.log('Error while loading contracts', err);
     }
   })();
 }

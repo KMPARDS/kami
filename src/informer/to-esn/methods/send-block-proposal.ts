@@ -8,7 +8,6 @@ export async function sendBlockProposal(
   validateParam({ blockNumber }, t.number);
   validateParam({ transactionsRoot }, t.hex32);
   validateParam({ receiptsRoot }, t.hex32);
-  console.log(global.reversePlasmaInstanceESN);
 
   const tx = await global.reversePlasmaInstanceESN.proposeBlock(
     blockNumber,

@@ -1,9 +1,5 @@
 import { viewBlockProposal, sendBlockProposal } from './methods';
-import {
-  checkIfAlreadyProposed,
-  generateBlockProposal,
-  finalizeBlockIfPossible,
-} from './utils';
+import { shouldPropose, generateBlockProposal } from './utils';
 
 const CONFIRMATIONS = global.config.ETH_CONFIRMATIONS;
 
@@ -30,9 +26,9 @@ export async function informerToESN(): Promise<void> {
   );
   for (const blockNumber of range) {
     // STEP 3 before making a proposal, check if already made a proposal
-    if (await checkIfAlreadyProposed(blockNumber)) {
-      // STEP 5 check if it can be finalized
-      await finalizeBlockIfPossible(blockNumber);
+    // STEP 5 check if it can be finalized (shouldPropose finalizes if consensus is acheived)
+    const shouldKamiProposeBlock = await shouldPropose(blockNumber);
+    if (!shouldKamiProposeBlock) {
       continue;
     }
 

@@ -1,6 +1,6 @@
-export async function finalizeBlockIfPossible(blockNumber: number) {
-  const validators = global.reversePlasmaInstanceESN.getAllValidators();
-  const validatorCount = validators;
+export async function shouldPropose(blockNumber: number) {
+  const validators = await global.reversePlasmaInstanceESN.getAllValidators();
+  const validatorCount = validators.length;
 
   const proposalCount = (
     await global.reversePlasmaInstanceESN.getProposalsCount(blockNumber)
@@ -12,14 +12,20 @@ export async function finalizeBlockIfPossible(blockNumber: number) {
       i
     );
 
-    if (proposalValidators.length * 3 >= proposalCount * 2) {
+    // first checks if consensus is already acheived
+    if (proposalValidators.length * 3 >= validatorCount * 2) {
       // just in case some other node already did this, then this would throw
       try {
         await global.reversePlasmaInstanceESN.finalizeProposal(blockNumber, i);
       } catch {}
-      return;
+      return false;
+    }
+
+    // if consensus is not acheived, should kami propose or has it already proposed
+    if (proposalValidators.includes(global.wallet.address)) {
+      return false;
     }
   }
 
-  return;
+  return true;
 }

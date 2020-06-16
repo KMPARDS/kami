@@ -50,6 +50,9 @@ global.config = {
   FALLBACK_BUNCH_DEPTH: !isNaN(+config.FALLBACK_BUNCH_DEPTH)
     ? +config.FALLBACK_BUNCH_DEPTH
     : 12,
+  ETH_CONFIRMATIONS: !isNaN(+config.ETH_CONFIRMATIONS)
+    ? +config.ETH_CONFIRMATIONS
+    : 15,
 };
 
 // loading providers

@@ -24,6 +24,7 @@ declare global {
         SEED_PEER_PATH: string | null;
         DESIRED_BUNCH_DEPTH: number;
         FALLBACK_BUNCH_DEPTH: number;
+        ETH_CONFIRMATIONS: number;
       };
       providerEsn: ethers.providers.JsonRpcProvider;
       providerETH: ethers.providers.JsonRpcProvider;

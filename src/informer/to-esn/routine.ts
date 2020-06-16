@@ -5,7 +5,7 @@ import {
   finalizeBlockIfPossible,
 } from './utils';
 
-const CONFIRMATIONS = 10;
+const CONFIRMATIONS = global.config.ETH_CONFIRMATIONS;
 
 export async function informerToESN(): Promise<void> {
   // STEP 1 get latest block number on ESN rplasma contract, get confirmed block number from ETH

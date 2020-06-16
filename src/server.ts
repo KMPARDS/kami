@@ -6,9 +6,10 @@ dotenv.config();
 import './global';
 global.consoleLog('global.config', global.config);
 
-import { findAndConnectPeers } from './peers';
-import { InformerToESN } from './informer/to-esn/auto-mode';
-import { InformerToETH } from './informer/to-eth/auto-mode';
+import { createRoutine } from './routine';
+import { findAndConnectPeers } from './peers/routine';
+import { informerToESN } from './informer/to-esn/routine';
+import { informerToETH } from './informer/to-eth/routine';
 
 import { app } from './app';
 
@@ -20,11 +21,14 @@ app
     console.log(`Started on PORT ${port}`);
     console.log('Press [control]+[c] to stop');
 
-    InformerToESN();
-    InformerToETH();
-    await findAndConnectPeers();
-    setInterval(findAndConnectPeers, 10000);
-    setInterval(global.peerList.clearGarbagePeers.bind(global.peerList), 10000);
+    createRoutine(informerToESN, 10000, 'InformerToESN');
+    createRoutine(informerToETH, 10000, 'InformerToETH');
+    createRoutine(findAndConnectPeers, 10000, 'FindAndConnectPeers');
+    createRoutine(
+      global.peerList.clearGarbagePeers.bind(global.peerList),
+      5000,
+      'ClearGarbagePeers'
+    );
   })
   .on('error', (error) => {
     if (port === productionPort) {

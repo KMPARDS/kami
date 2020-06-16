@@ -7,22 +7,7 @@ import {
 
 const CONFIRMATIONS = 10;
 
-export function InformerToESN(): void {
-  let taskRunning = false;
-  setInterval(async () => {
-    if (!taskRunning) {
-      taskRunning = true;
-      try {
-        await main();
-      } catch (error) {
-        console.log('Error in InformerToESN:', error.message);
-      }
-      taskRunning = false;
-    }
-  }, 6000);
-}
-
-async function main(): Promise<void> {
+export async function informerToESN(): Promise<void> {
   // STEP 1 get latest block number on ESN rplasma contract, get confirmed block number from ETH
   const latestBlockNumberOnContract = (
     await global.reversePlasmaInstanceESN.latestBlockNumber()

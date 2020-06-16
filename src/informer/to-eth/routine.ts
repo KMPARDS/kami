@@ -19,22 +19,7 @@ const FALLBACK_BUNCH_DEPTH = global.config.FALLBACK_BUNCH_DEPTH;
 // global variable for the routine
 let lastSubmittedBlockNumber: number;
 
-export function InformerToETH(): void {
-  let taskRunning = false;
-  setInterval(async () => {
-    if (!taskRunning) {
-      taskRunning = true;
-      try {
-        await main();
-      } catch (error) {
-        console.log('Error in InformerToETH:', error.message);
-      }
-      taskRunning = false;
-    }
-  }, 10000);
-}
-
-async function main(): Promise<void> {
+export async function informerToETH(): Promise<void> {
   // STEP 1
   const currentBlockNumber = await global.providerEsn.getBlockNumber();
   // TODO: fetch correct value to initialize lastSubmittedBlockNumber

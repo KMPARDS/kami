@@ -224,3 +224,6 @@ $RECYCLE.BIN/
 
 # Excluding typescript output dir
 /build
+
+# Excluding kami config files
+/configs

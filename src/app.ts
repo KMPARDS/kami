@@ -5,6 +5,7 @@ import { router as jsonRpcRouter } from './json-rpc';
 
 export const app = express();
 
+app.use(require('cors')());
 app.use(bodyParser.json());
 
 app.get('/hello', (req, res) => {

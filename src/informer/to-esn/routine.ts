@@ -39,14 +39,27 @@ export async function informerToESN(): Promise<void> {
     // STEP 4 make the transaction if not already proposed
     const blockProposal = await generateBlockProposal(blockNumber);
 
-    await global.reversePlasmaInstanceESN.proposeBlock(
-      blockNumber,
-      blockProposal.transactionsRoot.hex(),
-      blockProposal.receiptsRoot.hex(),
-      {
-        nonce: nonce++,
+    while (1) {
+      try {
+        await global.reversePlasmaInstanceESN.proposeBlock(
+          blockNumber,
+          blockProposal.transactionsRoot.hex(),
+          blockProposal.receiptsRoot.hex(),
+          {
+            nonce: nonce++,
+          }
+        );
+        break;
+      } catch (error) {
+        if (error.message.includes('Transaction nonce is too low')) {
+          console.log('InformerToESN: Trying with higher nonce..');
+          continue;
+        }
+        console.log({ blockNumber, nonce });
+        throw error;
       }
-    );
-    console.log(`Informer To ESN: Proposed ${blockNumber} block`);
+    }
+
+    console.log(`InformerToESN: Proposed ${blockNumber} block`);
   }
 }

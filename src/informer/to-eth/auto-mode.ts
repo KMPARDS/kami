@@ -1,7 +1,7 @@
 import { initiateBunch } from './methods';
 
-const DESIRED_BUNCH_DEPTH = 5; // 32 blocks
-const FALLBACK_BUNCH_DEPTH = 7; // 128 blocks
+const DESIRED_BUNCH_DEPTH = global.config.DESIRED_BUNCH_DEPTH;
+const FALLBACK_BUNCH_DEPTH = global.config.FALLBACK_BUNCH_DEPTH;
 
 // Bunch Depth is analogous to time since block time is consistent
 // Kami will perform only one bunch initiation in fallback bunch time

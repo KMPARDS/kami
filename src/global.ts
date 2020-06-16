@@ -44,6 +44,12 @@ global.config = {
   SEED_PEER_PATH: config.SEED_PEER_PATH
     ? path.resolve(process.cwd(), configUrl, '..', config.SEED_PEER_PATH)
     : null,
+  DESIRED_BUNCH_DEPTH: !isNaN(+config.DESIRED_BUNCH_DEPTH)
+    ? +config.DESIRED_BUNCH_DEPTH
+    : 10,
+  FALLBACK_BUNCH_DEPTH: !isNaN(+config.FALLBACK_BUNCH_DEPTH)
+    ? +config.FALLBACK_BUNCH_DEPTH
+    : 12,
 };
 
 // loading providers

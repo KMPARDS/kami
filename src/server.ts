@@ -21,7 +21,7 @@ app
     console.log(`Started on PORT ${port}`);
     console.log('Press [control]+[c] to stop');
 
-    createRoutine(informerToESN, 1000, 'InformerToESN');
+    createRoutine(informerToESN, 8000, 'InformerToESN');
     createRoutine(informerToETH, 10000, 'InformerToETH');
     createRoutine(findAndConnectPeers, 10000, 'FindAndConnectPeers');
     createRoutine(

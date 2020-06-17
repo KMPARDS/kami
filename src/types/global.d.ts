@@ -1,9 +1,10 @@
-import { ethers } from 'ethers';
+import { ethers, PopulatedTransaction } from 'ethers';
 import { PeerList } from '../peers';
 import { URLMask } from '../utils/url';
 import { Erc20 } from '../../static/interfaces/Erc20';
 import { PlasmaManager } from '../../static/interfaces/PlasmaManager';
 import { ReversePlasma } from '../../static/interfaces/ReversePlasma';
+import { NonceManager } from '../informer/to-esn/nonce-manager';
 
 declare global {
   namespace NodeJS {
@@ -33,6 +34,7 @@ declare global {
       esInstanceETH: Erc20;
       plasmaInstanceETH: PlasmaManager;
       reversePlasmaInstanceESN: ReversePlasma;
+      nonceManagerESN: NonceManager;
     }
   }
 }

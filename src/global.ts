@@ -6,6 +6,7 @@ import { PeerList } from './peers';
 import { URLMask } from './utils/url';
 import { ContractJson } from './informer/utils';
 import { validateParam, t } from './type-validation';
+import { NonceManager } from './informer/to-esn/nonce-manager';
 
 // prints console.logs
 global.consoleLog = (...input) => {
@@ -62,6 +63,9 @@ global.providerETH = new ethers.providers.JsonRpcProvider(
 global.providerEsn = new ethers.providers.JsonRpcProvider(
   global.config.ESN_URL.toString()
 );
+
+// initiating nonce manager
+global.nonceManagerESN = new NonceManager();
 
 // loading wallet
 if (

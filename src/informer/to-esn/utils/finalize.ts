@@ -24,7 +24,11 @@ export async function shouldPropose(blockNumber: number) {
     if (proposalValidators.length * 3 > validatorCount * 2) {
       // just in case some other node already did this, then this would throw
       try {
-        await global.reversePlasmaInstanceESN.finalizeProposal(blockNumber, i);
+        const populatedTx = await global.reversePlasmaInstanceESN.populateTransaction.finalizeProposal(
+          blockNumber,
+          i
+        );
+        await global.nonceManagerESN.sendTransaction(populatedTx);
       } catch {}
       return false;
     }

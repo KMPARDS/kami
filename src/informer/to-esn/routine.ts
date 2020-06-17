@@ -4,6 +4,8 @@ import { shouldPropose, generateBlockProposal } from './utils';
 const CONFIRMATIONS = global.config.ETH_CONFIRMATIONS;
 
 export async function informerToESN(): Promise<void> {
+  await global.nonceManagerESN.calibrateNonce();
+
   // STEP 1 get latest block number on ESN rplasma contract, get confirmed block number from ETH
   const latestBlockNumberOnContract = (
     await global.reversePlasmaInstanceESN.latestBlockNumber()
@@ -37,20 +39,13 @@ export async function informerToESN(): Promise<void> {
 
     while (1) {
       try {
-        const estimatedGas = await global.reversePlasmaInstanceESN.estimateGas.proposeBlock(
+        const populatedTx = await global.reversePlasmaInstanceESN.populateTransaction.proposeBlock(
           blockNumber,
           blockProposal.transactionsRoot.hex(),
           blockProposal.receiptsRoot.hex()
         );
-        await global.reversePlasmaInstanceESN.proposeBlock(
-          blockNumber,
-          blockProposal.transactionsRoot.hex(),
-          blockProposal.receiptsRoot.hex(),
-          {
-            nonce: nonce++,
-            gasLimit: estimatedGas.mul(4).div(3), // sending 33% more gas to avoid runtime error due to out of gas
-          }
-        );
+        // send populatedTx to nonce manager function
+        await global.nonceManagerESN.sendTransaction(populatedTx);
         break;
       } catch (error) {
         if (error.message.includes('Transaction nonce is too low')) {

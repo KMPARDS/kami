@@ -28,7 +28,7 @@
     "dotenv": "^8.2.0",
     "ethers": "^5.0.2",
     "express": "4.17.1",
-    "typescript": "^3.9.2"
+    "typescript": "^3.9.4"
   },
   "snyk": true,
   "devDependencies": {

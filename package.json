@@ -47,5 +47,9 @@
       "pre-commit": "npm test",
       "pre-push": "npm test"
     }
+  },
+  "nyc": {
+    "include": "src",
+    "exclude": "src/typechain"
   }
 }

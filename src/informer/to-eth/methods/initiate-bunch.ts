@@ -59,6 +59,7 @@ export async function initiateBunch(
       new Bytes(bunchDepth).hex(),
       bunchProposal.transactionsMegaRoot.hex(),
       bunchProposal.receiptsMegaRoot.hex(),
+      bunchProposal.lastBlockHash.hex(),
     ],
     ...signatures,
   ];

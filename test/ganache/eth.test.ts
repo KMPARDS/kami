@@ -1,8 +1,8 @@
 import assert from 'assert';
 import { ethers } from 'ethers';
 import { Address } from '../../src/utils/bytes';
-import { ContractJson } from '../../src/informer/utils';
 import { t, validate } from '../../src/type-validation';
+import { Erc20Factory, PlasmaManagerFactory } from '../../src/typechain/ETH';
 import { kami1, kami2, kami3, getProvider } from '../test-configs';
 
 global.providerETH = getProvider(kami1.config.ETH_URL);
@@ -62,15 +62,12 @@ export const EthSetup = () =>
     });
 
     it('deploy Era Swap Token Contract', async () => {
-      const esContractJson: ContractJson = require('../../static/contracts/ERC20.json');
-      const ESFactory = new ethers.ContractFactory(
-        esContractJson.abi,
-        esContractJson.evm.bytecode,
+      const erc20Factory = new Erc20Factory(
         contractDeployerWallet.connect(global.providerETH)
       );
 
       // @ts-ignore
-      global.esInstanceETH = await ESFactory.deploy();
+      global.esInstanceETH = await erc20Factory.deploy();
 
       global.consoleLog({
         'global.esInstanceETH.address': global.esInstanceETH.address,
@@ -80,15 +77,12 @@ export const EthSetup = () =>
     });
 
     it('deploy Plasma Smart Contract and set initial values', async () => {
-      const plasmaContractJson: ContractJson = require('../../static/contracts/PlasmaManager.json');
-      const PlasmaFactory = new ethers.ContractFactory(
-        plasmaContractJson.abi,
-        plasmaContractJson.evm.bytecode,
+      const plasmaManagerFactory = new PlasmaManagerFactory(
         contractDeployerWallet.connect(global.providerETH)
       );
 
       // @ts-ignore
-      global.plasmaInstanceETH = await PlasmaFactory.deploy();
+      global.plasmaInstanceETH = await plasmaManagerFactory.deploy();
 
       global.consoleLog({
         'global.plasmaInstanceETH.address': global.plasmaInstanceETH.address,

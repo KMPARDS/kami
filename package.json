@@ -9,9 +9,9 @@
     "start": "concurrently -r npm:start:*",
     "build": "tsc",
     "test:run": "nyc --reporter=html --reporter=text mocha -t 20000 -r ts-node/register test/index.ts",
-    "test:kami1": "node build/ test/test-configs/kami1/kami-config.json",
-    "test:kami2": "node build/ test/test-configs/kami2/kami-config.json",
-    "test:kami3": "node build/ test/test-configs/kami3/kami-config.json",
+    "test:kami1": "env NODE_ENV=test node build/ test/test-configs/kami1/kami-config.json",
+    "test:kami2": "env NODE_ENV=test node build/ test/test-configs/kami2/kami-config.json",
+    "test:kami3": "env NODE_ENV=test node build/ test/test-configs/kami3/kami-config.json",
     "test": "concurrently -r -s first -k npm:test:*",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "snyk-protect": "snyk protect",
@@ -47,5 +47,9 @@
       "pre-commit": "npm test",
       "pre-push": "npm test"
     }
+  },
+  "nyc": {
+    "include": "src",
+    "exclude": "src/typechain"
   }
 }

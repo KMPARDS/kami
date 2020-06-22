@@ -7,6 +7,8 @@ import { URLMask } from './utils/url';
 import { ContractJson } from './informer/utils';
 import { validateParam, t } from './type-validation';
 import { NonceManager } from './informer/to-esn/nonce-manager';
+import { Erc20Factory, PlasmaManagerFactory } from './typechain/ETH';
+import { ReversePlasmaFactory } from './typechain/ESN';
 
 // prints console.logs
 global.consoleLog = (...input) => {
@@ -104,10 +106,6 @@ if (
       // loading contracts
       console.log('Loading contract instances...');
 
-      const esJson: ContractJson = require('../static/contracts/ERC20.json');
-      if (!esJson) {
-        throw new Error('ES JSON not present');
-      }
       validateParam(
         {
           ES_CONTRACT_ADDRESS_ETH: config.ES_CONTRACT_ADDRESS_ETH,
@@ -115,16 +113,11 @@ if (
         t.hex20
       );
       // @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
-      global.esInstanceETH = new ethers.Contract(
+      global.esInstanceETH = new Erc20Factory.connect(
         config.ES_CONTRACT_ADDRESS_ETH,
-        esJson.abi,
         global.wallet.connect(global.providerETH)
       );
 
-      const plasmaJson: ContractJson = require('../static/contracts/PlasmaManager.json');
-      if (!plasmaJson) {
-        throw new Error('PlasmaManager JSON not present');
-      }
       validateParam(
         {
           PLASMA_CONTRACT_ADDRESS_ETH: config.PLASMA_CONTRACT_ADDRESS_ETH,
@@ -132,16 +125,11 @@ if (
         t.hex20
       );
       // @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
-      global.plasmaInstanceETH = new ethers.Contract(
+      global.plasmaInstanceETH = new PlasmaManagerFactory.connect(
         config.PLASMA_CONTRACT_ADDRESS_ETH,
-        plasmaJson.abi,
         global.wallet.connect(global.providerETH)
       );
 
-      const reversePlasmaJson: ContractJson = require('../static/contracts/ReversePlasma.json');
-      if (!reversePlasmaJson) {
-        throw new Error('PlasmaManager JSON not present');
-      }
       validateParam(
         {
           RPLASMA_CONTRACT_ADDRESS_ESN: config.RPLASMA_CONTRACT_ADDRESS_ESN,
@@ -149,9 +137,8 @@ if (
         t.hex20
       );
       // @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
-      global.reversePlasmaInstanceESN = new ethers.Contract(
+      global.reversePlasmaInstanceESN = new ReversePlasmaFactory.connect(
         config.RPLASMA_CONTRACT_ADDRESS_ESN,
-        reversePlasmaJson.abi,
         global.wallet.connect(global.providerEsn)
       );
 

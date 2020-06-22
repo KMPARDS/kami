@@ -37,6 +37,7 @@ export async function signBunch(
     new Bytes(_bunchProposal.bunchDepth).hex(),
     _bunchProposal.transactionsMegaRoot.hex(),
     _bunchProposal.receiptsMegaRoot.hex(),
+    _bunchProposal.lastBlockHash.hex(),
   ]);
 
   return {

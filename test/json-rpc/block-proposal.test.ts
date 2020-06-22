@@ -31,6 +31,7 @@ export const BlockProposal = () =>
         blockNumber: response.result.blockNumber,
         transactionsRoot: response.result.transactionsRoot,
         receiptsRoot: response.result.receiptsRoot,
+        blockHash: response.result.blockHash,
       };
     });
 

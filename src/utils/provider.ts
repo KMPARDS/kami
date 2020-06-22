@@ -6,9 +6,10 @@ export interface BlockCompact {
   blockNumber: number;
   transactionsRoot: Bytes32;
   receiptsRoot: Bytes32;
+  blockHash: Bytes32;
 }
 
-interface ParityBlock {
+interface ParityBlock extends ethers.providers.Block {
   transactionsRoot: 'string';
   receiptsRoot: 'string';
 }
@@ -42,6 +43,7 @@ export async function fetchBlocks(
             ethers.utils.arrayify(block.transactionsRoot)
           ),
           receiptsRoot: new Bytes32(ethers.utils.arrayify(block.receiptsRoot)),
+          blockHash: new Bytes32(block.hash),
         };
 
         resolve();

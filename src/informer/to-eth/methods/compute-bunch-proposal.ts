@@ -26,6 +26,7 @@ export async function computeBunchProposal(
     receiptsMegaRoot: computeMerkleRoot(
       blocks.map((block) => block.receiptsRoot)
     ),
+    lastBlockHash: blocks[blocks.length - 1].blockHash,
     signatures: [],
   };
 }

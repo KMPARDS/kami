@@ -7,6 +7,7 @@ export interface BunchProposal {
   bunchDepth: number;
   transactionsMegaRoot: Bytes32;
   receiptsMegaRoot: Bytes32;
+  lastBlockHash: Bytes32;
   signatures: Signature[];
 }
 
@@ -21,12 +22,14 @@ export function validateBunchProposal(
     bunchDepth,
     transactionsMegaRoot,
     receiptsMegaRoot,
+    lastBlockHash,
     signatures,
   } = bunchProposal;
   validateParam({ startBlockNumber }, t.number);
   validateParam({ bunchDepth }, t.number);
   validateParam({ transactionsMegaRoot }, t.hex32);
   validateParam({ receiptsMegaRoot }, t.hex32);
+  validateParam({ lastBlockHash }, t.hex32);
   validateParam({ signatures }, t.array);
   if (signaturesPresent) {
     bunchProposal.signatures.forEach((signature) => {

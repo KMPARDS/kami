@@ -9,7 +9,7 @@ import { NonceManager } from '../informer/to-esn/nonce-manager';
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      NODE_ENV: 'production' | 'development' | 'debug';
+      NODE_ENV: 'production' | 'development' | 'debug' | 'test';
       PORT?: string;
       ESN_URL: string;
     }

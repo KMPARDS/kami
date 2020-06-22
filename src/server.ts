@@ -21,14 +21,19 @@ app
     console.log(`Started on PORT ${port}`);
     console.log('Press [control]+[c] to stop');
 
-    createRoutine(informerToESN, 8000, 'InformerToESN');
-    createRoutine(informerToETH, 10000, 'InformerToETH');
     createRoutine(findAndConnectPeers, 10000, 'FindAndConnectPeers');
     createRoutine(
       global.peerList.clearGarbagePeers.bind(global.peerList),
       5000,
       'ClearGarbagePeers'
     );
+
+    if (process.env.NODE_ENV !== 'test') {
+      createRoutine(informerToESN, 8000, 'InformerToESN');
+      createRoutine(informerToETH, 10000, 'InformerToETH');
+    } else {
+      console.log('Test mode, not creating informer routines.');
+    }
   })
   .on('error', (error) => {
     if (port === productionPort) {

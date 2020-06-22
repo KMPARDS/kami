@@ -1,9 +1,9 @@
 import { ethers } from 'ethers';
 import { Address } from '../src/utils/bytes';
 import { GanacheServer } from './ganache';
-import { Erc20 } from '../static/interfaces/Erc20';
-import { PlasmaManager } from '../static/interfaces/PlasmaManager';
-import { ReversePlasma } from '../static/interfaces/ReversePlasma';
+import { Erc20 } from '../src/typechain/ETH/Erc20';
+import { PlasmaManager } from '../src/typechain/ETH/PlasmaManager';
+import { ReversePlasma } from '../src/typechain/ESN/ReversePlasma';
 
 declare global {
   namespace NodeJS {

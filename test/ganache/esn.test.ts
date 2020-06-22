@@ -1,9 +1,8 @@
 import assert from 'assert';
 import { ethers } from 'ethers';
 import { Address } from '../../src/utils/bytes';
-import { ContractJson } from '../../src/informer/utils';
 import { t, validate } from '../../src/type-validation';
-
+import { ReversePlasmaFactory } from '../../src/typechain/ESN';
 import { kami1, kami2, kami3, getProvider } from '../test-configs';
 global.providerESN = getProvider(kami1.config.ESN_URL);
 
@@ -46,15 +45,12 @@ export const EsnSetup = () =>
     });
 
     it('deploy Reverse Plasma Smart Contract and set initial values', async () => {
-      const reversePlasmaContractJson: ContractJson = require('../../static/contracts/ReversePlasma.json');
-      const ReversePlasmaFactory = new ethers.ContractFactory(
-        reversePlasmaContractJson.abi,
-        reversePlasmaContractJson.evm.bytecode,
+      const reversePlasmaFactory = new ReversePlasmaFactory(
         contractDeployerWallet.connect(global.providerESN)
       );
 
       // @ts-ignore
-      global.reversePlasmaInstanceESN = await ReversePlasmaFactory.deploy();
+      global.reversePlasmaInstanceESN = await reversePlasmaFactory.deploy();
 
       global.consoleLog({
         'global.reversePlasmaInstanceESN.address':

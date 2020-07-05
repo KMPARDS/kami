@@ -30,4 +30,4 @@ export const kami3: Kami = {
   keystore: require('./kami3/keystore.json'),
 };
 export const getProvider = (url: string) =>
-  new ethers.providers.JsonRpcProvider(url);
+  new ethers.providers.StaticJsonRpcProvider(url);

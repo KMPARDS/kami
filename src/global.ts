@@ -59,10 +59,10 @@ global.config = {
 };
 
 // loading providers
-global.providerETH = new ethers.providers.JsonRpcProvider(
+global.providerETH = new ethers.providers.StaticJsonRpcProvider(
   global.config.ETH_URL.toString()
 );
-global.providerEsn = new ethers.providers.JsonRpcProvider(
+global.providerEsn = new ethers.providers.StaticJsonRpcProvider(
   global.config.ESN_URL.toString()
 );
 

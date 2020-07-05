@@ -9,10 +9,10 @@ declare global {
   namespace NodeJS {
     interface Global {
       serverETH: GanacheServer;
-      providerETH: ethers.providers.JsonRpcProvider;
+      providerETH: ethers.providers.StaticJsonRpcProvider;
       accountsETH: Address[];
       serverESN: GanacheServer;
-      providerESN: ethers.providers.JsonRpcProvider;
+      providerESN: ethers.providers.StaticJsonRpcProvider;
       accountsESN: Address[];
       consoleLog: (...input: any) => void;
       esInstanceETH: Erc20;

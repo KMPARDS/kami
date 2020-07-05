@@ -27,8 +27,8 @@ declare global {
         FALLBACK_BUNCH_DEPTH: number;
         ETH_CONFIRMATIONS: number;
       };
-      providerEsn: ethers.providers.JsonRpcProvider;
-      providerETH: ethers.providers.JsonRpcProvider;
+      providerEsn: ethers.providers.StaticJsonRpcProvider;
+      providerETH: ethers.providers.StaticJsonRpcProvider;
       wallet: ethers.Wallet;
       peerList: PeerList;
       esInstanceETH: Erc20;

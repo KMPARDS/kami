@@ -66,7 +66,6 @@ export const EthSetup = () =>
         contractDeployerWallet.connect(global.providerETH)
       );
 
-      // @ts-ignore
       global.esInstanceETH = await erc20Factory.deploy();
 
       global.consoleLog({
@@ -81,7 +80,6 @@ export const EthSetup = () =>
         contractDeployerWallet.connect(global.providerETH)
       );
 
-      // @ts-ignore
       global.plasmaInstanceETH = await plasmaManagerFactory.deploy();
 
       global.consoleLog({

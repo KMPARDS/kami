@@ -49,7 +49,6 @@ export const EsnSetup = () =>
         contractDeployerWallet.connect(global.providerESN)
       );
 
-      // @ts-ignore
       global.reversePlasmaInstanceESN = await reversePlasmaFactory.deploy();
 
       global.consoleLog({

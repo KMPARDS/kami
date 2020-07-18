@@ -4,7 +4,6 @@ import { ethers } from 'ethers';
 import util from 'util';
 import { PeerList } from './peers';
 import { URLMask } from './utils/url';
-import { ContractJson } from './informer/utils';
 import { validateParam, t } from './type-validation';
 import { NonceManager } from './informer/to-esn/nonce-manager';
 import { Erc20Factory, PlasmaManagerFactory } from './typechain/ETH';
@@ -106,38 +105,27 @@ if (
       // loading contracts
       console.log('Loading contract instances...');
 
-      validateParam(
-        {
-          ES_CONTRACT_ADDRESS_ETH: config.ES_CONTRACT_ADDRESS_ETH,
-        },
-        t.hex20
-      );
-      // @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
-      global.esInstanceETH = new Erc20Factory.connect(
+      const {
+        ES_CONTRACT_ADDRESS_ETH,
+        PLASMA_CONTRACT_ADDRESS_ETH,
+        RPLASMA_CONTRACT_ADDRESS_ESN,
+        VALIDATORSET_CONTRACT_ADDRESS_ESN,
+      } = config;
+
+      validateParam({ ES_CONTRACT_ADDRESS_ETH }, t.hex20);
+      global.esInstanceETH = Erc20Factory.connect(
         config.ES_CONTRACT_ADDRESS_ETH,
         global.wallet.connect(global.providerETH)
       );
 
-      validateParam(
-        {
-          PLASMA_CONTRACT_ADDRESS_ETH: config.PLASMA_CONTRACT_ADDRESS_ETH,
-        },
-        t.hex20
-      );
-      // @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
-      global.plasmaInstanceETH = new PlasmaManagerFactory.connect(
+      validateParam({ PLASMA_CONTRACT_ADDRESS_ETH }, t.hex20);
+      global.plasmaInstanceETH = PlasmaManagerFactory.connect(
         config.PLASMA_CONTRACT_ADDRESS_ETH,
         global.wallet.connect(global.providerETH)
       );
 
-      validateParam(
-        {
-          RPLASMA_CONTRACT_ADDRESS_ESN: config.RPLASMA_CONTRACT_ADDRESS_ESN,
-        },
-        t.hex20
-      );
-      // @ts-ignore Keep until TypeChain for ethers v5 implemented https://github.com/KMPARDS/esn-contracts/issues/30
-      global.reversePlasmaInstanceESN = new ReversePlasmaFactory.connect(
+      validateParam({ RPLASMA_CONTRACT_ADDRESS_ESN }, t.hex20);
+      global.reversePlasmaInstanceESN = ReversePlasmaFactory.connect(
         config.RPLASMA_CONTRACT_ADDRESS_ESN,
         global.wallet.connect(global.providerEsn)
       );

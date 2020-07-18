@@ -4,6 +4,7 @@ import { GanacheServer } from './ganache';
 import { Erc20 } from '../src/typechain/ETH/Erc20';
 import { PlasmaManager } from '../src/typechain/ETH/PlasmaManager';
 import { ReversePlasma } from '../src/typechain/ESN/ReversePlasma';
+import { ValidatorSet } from '../src/typechain/ESN/ValidatorSet';
 
 declare global {
   namespace NodeJS {
@@ -18,6 +19,7 @@ declare global {
       esInstanceETH: Erc20;
       plasmaInstanceETH: PlasmaManager;
       reversePlasmaInstanceESN: ReversePlasma;
+      validatorSetInstanceESN: ValidatorSet;
     }
   }
 }

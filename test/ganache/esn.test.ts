@@ -2,7 +2,10 @@ import assert from 'assert';
 import { ethers } from 'ethers';
 import { Address } from '../../src/utils/bytes';
 import { t, validate } from '../../src/type-validation';
-import { ReversePlasmaFactory } from '../../src/typechain/ESN';
+import {
+  ReversePlasmaFactory,
+  ValidatorSetFactory,
+} from '../../src/typechain/ESN';
 import { kami1, kami2, kami3, getProvider } from '../test-configs';
 global.providerESN = getProvider(kami1.config.ESN_URL);
 
@@ -62,6 +65,32 @@ export const EsnSetup = () =>
         global.esInstanceETH.address,
         0,
         validatorAddressArray
+      );
+    });
+
+    it('deploy Validator Set Smart Contract and set initial values', async () => {
+      const validatorSetFactory = new ValidatorSetFactory(
+        contractDeployerWallet.connect(global.providerESN)
+      );
+
+      global.validatorSetInstanceESN = await validatorSetFactory.deploy(
+        validatorAddressArray,
+        ethers.utils.hexlify(ethers.utils.randomBytes(20))
+      );
+
+      global.consoleLog({
+        'global.validatorSetInstanceESN.address':
+          global.validatorSetInstanceESN.address,
+      });
+
+      validate(global.validatorSetInstanceESN.address, t.hex20);
+
+      await global.validatorSetInstanceESN.setInitialValues(
+        ethers.utils.hexlify(ethers.utils.randomBytes(20)),
+        5,
+        51,
+        4,
+        40
       );
     });
 

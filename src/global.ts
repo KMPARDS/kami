@@ -7,7 +7,7 @@ import { URLMask } from './utils/url';
 import { validateParam, t } from './type-validation';
 import { NonceManager } from './informer/to-esn/nonce-manager';
 import { Erc20Factory, PlasmaManagerFactory } from './typechain/ETH';
-import { ReversePlasmaFactory } from './typechain/ESN';
+import { ReversePlasmaFactory, ValidatorSetFactory } from './typechain/ESN';
 
 // prints console.logs
 global.consoleLog = (...input) => {
@@ -127,6 +127,12 @@ if (
       validateParam({ RPLASMA_CONTRACT_ADDRESS_ESN }, t.hex20);
       global.reversePlasmaInstanceESN = ReversePlasmaFactory.connect(
         config.RPLASMA_CONTRACT_ADDRESS_ESN,
+        global.wallet.connect(global.providerEsn)
+      );
+
+      validateParam({ VALIDATORSET_CONTRACT_ADDRESS_ESN }, t.hex20);
+      global.validatorSetInstanceESN = ValidatorSetFactory.connect(
+        config.VALIDATORSET_CONTRACT_ADDRESS_ESN,
         global.wallet.connect(global.providerEsn)
       );
 

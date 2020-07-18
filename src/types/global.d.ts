@@ -4,6 +4,7 @@ import { URLMask } from '../utils/url';
 import { Erc20 } from '../typechain/ETH/Erc20';
 import { PlasmaManager } from '../typechain/ETH/PlasmaManager';
 import { ReversePlasma } from '../typechain/ESN/ReversePlasma';
+import { ValidatorSet } from '../typechain/ESN/ValidatorSet';
 import { NonceManager } from '../informer/to-esn/nonce-manager';
 
 declare global {
@@ -34,6 +35,7 @@ declare global {
       esInstanceETH: Erc20;
       plasmaInstanceETH: PlasmaManager;
       reversePlasmaInstanceESN: ReversePlasma;
+      validatorSetInstanceESN: ValidatorSet;
       nonceManagerESN: NonceManager;
     }
   }

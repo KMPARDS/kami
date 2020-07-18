@@ -10,6 +10,7 @@ import { createRoutine } from './routine';
 import { findAndConnectPeers } from './peers/routine';
 import { informerToESN } from './informer/to-esn/routine';
 import { informerToETH } from './informer/to-eth/routine';
+import { callInitiateChange } from './initiate-change/routine';
 
 import { app } from './app';
 
@@ -31,6 +32,7 @@ app
     if (process.env.NODE_ENV !== 'test') {
       createRoutine(informerToESN, 8000, 'InformerToESN');
       createRoutine(informerToETH, 10000, 'InformerToETH');
+      createRoutine(callInitiateChange, 10000, 'CallInitiateChange');
     } else {
       console.log('Test mode, not creating informer routines.');
     }

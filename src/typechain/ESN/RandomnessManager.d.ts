@@ -2,7 +2,7 @@
 /* tslint:disable */
 
 import { ethers, EventFilter, Signer, BigNumber, BigNumberish, PopulatedTransaction } from 'ethers';
-import { Contract, ContractTransaction, Overrides } from '@ethersproject/contracts';
+import { Contract, ContractTransaction, Overrides, CallOverrides } from '@ethersproject/contracts';
 import { BytesLike } from '@ethersproject/bytes';
 import { Listener, Provider } from '@ethersproject/providers';
 import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi';
@@ -57,17 +57,12 @@ export class RandomnessManager extends Contract {
   filters: {};
 
   estimateGas: {
-    getRandomBytes(_numberOfBytes: BigNumberish, overrides?: Overrides): Promise<BigNumber>;
-
-    getRandomBytes32(overrides?: Overrides): Promise<BigNumber>;
+    getRandomBytes(_numberOfBytes: BigNumberish): Promise<BigNumber>;
+    getRandomBytes32(): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    getRandomBytes(
-      _numberOfBytes: BigNumberish,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    getRandomBytes32(overrides?: Overrides): Promise<PopulatedTransaction>;
+    getRandomBytes(_numberOfBytes: BigNumberish): Promise<PopulatedTransaction>;
+    getRandomBytes32(): Promise<PopulatedTransaction>;
   };
 }

@@ -131,49 +131,28 @@ export class FundsManager extends Contract {
   filters: {};
 
   estimateGas: {
-    claimWithdrawal(_rawTransactionProof: BytesLike, overrides?: Overrides): Promise<BigNumber>;
-
-    fundsManagerESN(overrides?: CallOverrides): Promise<BigNumber>;
-
-    isTransactionClaimed(
-      _transactionHash: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    plasmaManager(overrides?: CallOverrides): Promise<BigNumber>;
-
+    claimWithdrawal(_rawTransactionProof: BytesLike): Promise<BigNumber>;
+    fundsManagerESN(): Promise<BigNumber>;
+    isTransactionClaimed(_transactionHash: BytesLike): Promise<BigNumber>;
+    plasmaManager(): Promise<BigNumber>;
     setInitialValues(
       _token: string,
       _plasmaManager: string,
-      _fundsManagerESN: string,
-      overrides?: Overrides
+      _fundsManagerESN: string
     ): Promise<BigNumber>;
-
-    token(overrides?: CallOverrides): Promise<BigNumber>;
+    token(): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    claimWithdrawal(
-      _rawTransactionProof: BytesLike,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    fundsManagerESN(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    isTransactionClaimed(
-      _transactionHash: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    plasmaManager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
+    claimWithdrawal(_rawTransactionProof: BytesLike): Promise<PopulatedTransaction>;
+    fundsManagerESN(): Promise<PopulatedTransaction>;
+    isTransactionClaimed(_transactionHash: BytesLike): Promise<PopulatedTransaction>;
+    plasmaManager(): Promise<PopulatedTransaction>;
     setInitialValues(
       _token: string,
       _plasmaManager: string,
-      _fundsManagerESN: string,
-      overrides?: Overrides
+      _fundsManagerESN: string
     ): Promise<PopulatedTransaction>;
-
-    token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    token(): Promise<PopulatedTransaction>;
   };
 }

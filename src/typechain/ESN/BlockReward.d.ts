@@ -98,29 +98,16 @@ export class BlockReward extends Contract {
   filters: {};
 
   estimateGas: {
-    SYSTEM_ADDRESS(overrides?: CallOverrides): Promise<BigNumber>;
-
-    reward(benefactors: string[], kind: BigNumberish[], overrides?: Overrides): Promise<BigNumber>;
-
-    setInitialValues(_validatorManager: string, overrides?: Overrides): Promise<BigNumber>;
-
-    validatorManager(overrides?: CallOverrides): Promise<BigNumber>;
+    SYSTEM_ADDRESS(): Promise<BigNumber>;
+    reward(benefactors: string[], kind: BigNumberish[]): Promise<BigNumber>;
+    setInitialValues(_validatorManager: string): Promise<BigNumber>;
+    validatorManager(): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    SYSTEM_ADDRESS(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    reward(
-      benefactors: string[],
-      kind: BigNumberish[],
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    setInitialValues(
-      _validatorManager: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    validatorManager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    SYSTEM_ADDRESS(): Promise<PopulatedTransaction>;
+    reward(benefactors: string[], kind: BigNumberish[]): Promise<PopulatedTransaction>;
+    setInitialValues(_validatorManager: string): Promise<PopulatedTransaction>;
+    validatorManager(): Promise<PopulatedTransaction>;
   };
 }

@@ -307,39 +307,21 @@ export class TimeAllyStaking extends Contract {
       _platform: string,
       _delegatee: string,
       _amount: BigNumberish,
-      _months: BigNumberish[],
-      overrides?: Overrides
+      _months: BigNumberish[]
     ): Promise<BigNumber>;
-
-    getDelegation(
-      _month: BigNumberish,
-      _delegationIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getDelegations(_month: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    getPrincipalAmount(_month: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    isMonthClaimed(_month: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    nrtManager(overrides?: CallOverrides): Promise<BigNumber>;
-
-    staker(overrides?: CallOverrides): Promise<BigNumber>;
-
-    stakingEndMonth(overrides?: CallOverrides): Promise<BigNumber>;
-
-    stakingPlanId(overrides?: CallOverrides): Promise<BigNumber>;
-
-    stakingStartMonth(overrides?: CallOverrides): Promise<BigNumber>;
-
-    timeAllyManager(overrides?: CallOverrides): Promise<BigNumber>;
-
-    timestamp(overrides?: CallOverrides): Promise<BigNumber>;
-
-    unboundedBasicAmount(overrides?: CallOverrides): Promise<BigNumber>;
-
-    validatorManager(overrides?: CallOverrides): Promise<BigNumber>;
+    getDelegation(_month: BigNumberish, _delegationIndex: BigNumberish): Promise<BigNumber>;
+    getDelegations(_month: BigNumberish): Promise<BigNumber>;
+    getPrincipalAmount(_month: BigNumberish): Promise<BigNumber>;
+    isMonthClaimed(_month: BigNumberish): Promise<BigNumber>;
+    nrtManager(): Promise<BigNumber>;
+    staker(): Promise<BigNumber>;
+    stakingEndMonth(): Promise<BigNumber>;
+    stakingPlanId(): Promise<BigNumber>;
+    stakingStartMonth(): Promise<BigNumber>;
+    timeAllyManager(): Promise<BigNumber>;
+    timestamp(): Promise<BigNumber>;
+    unboundedBasicAmount(): Promise<BigNumber>;
+    validatorManager(): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -347,41 +329,23 @@ export class TimeAllyStaking extends Contract {
       _platform: string,
       _delegatee: string,
       _amount: BigNumberish,
-      _months: BigNumberish[],
-      overrides?: Overrides
+      _months: BigNumberish[]
     ): Promise<PopulatedTransaction>;
-
     getDelegation(
       _month: BigNumberish,
-      _delegationIndex: BigNumberish,
-      overrides?: CallOverrides
+      _delegationIndex: BigNumberish
     ): Promise<PopulatedTransaction>;
-
-    getDelegations(_month: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getPrincipalAmount(
-      _month: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isMonthClaimed(_month: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    nrtManager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    staker(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    stakingEndMonth(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    stakingPlanId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    stakingStartMonth(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    timeAllyManager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    timestamp(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    unboundedBasicAmount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    validatorManager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getDelegations(_month: BigNumberish): Promise<PopulatedTransaction>;
+    getPrincipalAmount(_month: BigNumberish): Promise<PopulatedTransaction>;
+    isMonthClaimed(_month: BigNumberish): Promise<PopulatedTransaction>;
+    nrtManager(): Promise<PopulatedTransaction>;
+    staker(): Promise<PopulatedTransaction>;
+    stakingEndMonth(): Promise<PopulatedTransaction>;
+    stakingPlanId(): Promise<PopulatedTransaction>;
+    stakingStartMonth(): Promise<PopulatedTransaction>;
+    timeAllyManager(): Promise<PopulatedTransaction>;
+    timestamp(): Promise<PopulatedTransaction>;
+    unboundedBasicAmount(): Promise<PopulatedTransaction>;
+    validatorManager(): Promise<PopulatedTransaction>;
   };
 }

@@ -251,80 +251,41 @@ export class NrtManager extends Contract {
   filters: {};
 
   estimateGas: {
-    BURN_ADDR(overrides?: CallOverrides): Promise<BigNumber>;
-
-    SECONDS_IN_MONTH(overrides?: CallOverrides): Promise<BigNumber>;
-
-    annualNRT(overrides?: CallOverrides): Promise<BigNumber>;
-
-    burnPoolBalance(overrides?: CallOverrides): Promise<BigNumber>;
-
-    currentNrtMonth(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getBurnAmount(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getPerThousand(_perThousandIndex: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    getPerThousands(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getPlatform(_platformIndex: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    getPlatformDetails(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getPlatforms(overrides?: CallOverrides): Promise<BigNumber>;
-
-    lastReleaseTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
-
-    luckPoolBalance(overrides?: CallOverrides): Promise<BigNumber>;
-
-    releaseMonthlyNRT(overrides?: Overrides): Promise<BigNumber>;
-
-    setInitialValues(
-      _platforms: string[],
-      _perThousands: BigNumberish[],
-      overrides?: Overrides
-    ): Promise<BigNumber>;
+    BURN_ADDR(): Promise<BigNumber>;
+    SECONDS_IN_MONTH(): Promise<BigNumber>;
+    annualNRT(): Promise<BigNumber>;
+    burnPoolBalance(): Promise<BigNumber>;
+    currentNrtMonth(): Promise<BigNumber>;
+    getBurnAmount(): Promise<BigNumber>;
+    getPerThousand(_perThousandIndex: BigNumberish): Promise<BigNumber>;
+    getPerThousands(): Promise<BigNumber>;
+    getPlatform(_platformIndex: BigNumberish): Promise<BigNumber>;
+    getPlatformDetails(): Promise<BigNumber>;
+    getPlatforms(): Promise<BigNumber>;
+    lastReleaseTimestamp(): Promise<BigNumber>;
+    luckPoolBalance(): Promise<BigNumber>;
+    releaseMonthlyNRT(): Promise<BigNumber>;
+    setInitialValues(_platforms: string[], _perThousands: BigNumberish[]): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    BURN_ADDR(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    SECONDS_IN_MONTH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    annualNRT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    burnPoolBalance(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    currentNrtMonth(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getBurnAmount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getPerThousand(
-      _perThousandIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getPerThousands(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getPlatform(
-      _platformIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getPlatformDetails(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getPlatforms(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    lastReleaseTimestamp(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    luckPoolBalance(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    releaseMonthlyNRT(overrides?: Overrides): Promise<PopulatedTransaction>;
-
+    BURN_ADDR(): Promise<PopulatedTransaction>;
+    SECONDS_IN_MONTH(): Promise<PopulatedTransaction>;
+    annualNRT(): Promise<PopulatedTransaction>;
+    burnPoolBalance(): Promise<PopulatedTransaction>;
+    currentNrtMonth(): Promise<PopulatedTransaction>;
+    getBurnAmount(): Promise<PopulatedTransaction>;
+    getPerThousand(_perThousandIndex: BigNumberish): Promise<PopulatedTransaction>;
+    getPerThousands(): Promise<PopulatedTransaction>;
+    getPlatform(_platformIndex: BigNumberish): Promise<PopulatedTransaction>;
+    getPlatformDetails(): Promise<PopulatedTransaction>;
+    getPlatforms(): Promise<PopulatedTransaction>;
+    lastReleaseTimestamp(): Promise<PopulatedTransaction>;
+    luckPoolBalance(): Promise<PopulatedTransaction>;
+    releaseMonthlyNRT(): Promise<PopulatedTransaction>;
     setInitialValues(
       _platforms: string[],
-      _perThousands: BigNumberish[],
-      overrides?: Overrides
+      _perThousands: BigNumberish[]
     ): Promise<PopulatedTransaction>;
   };
 }

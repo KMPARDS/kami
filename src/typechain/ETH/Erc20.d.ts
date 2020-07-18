@@ -192,64 +192,30 @@ export class Erc20 extends Contract {
   };
 
   estimateGas: {
-    allowance(owner: string, delegate: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    approve(delegate: string, numTokens: BigNumberish, overrides?: Overrides): Promise<BigNumber>;
-
-    balanceOf(tokenOwner: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    decimals(overrides?: CallOverrides): Promise<BigNumber>;
-
-    name(overrides?: CallOverrides): Promise<BigNumber>;
-
-    symbol(overrides?: CallOverrides): Promise<BigNumber>;
-
-    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
-
-    transfer(receiver: string, numTokens: BigNumberish, overrides?: Overrides): Promise<BigNumber>;
-
-    transferFrom(
-      owner: string,
-      buyer: string,
-      numTokens: BigNumberish,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
+    allowance(owner: string, delegate: string): Promise<BigNumber>;
+    approve(delegate: string, numTokens: BigNumberish): Promise<BigNumber>;
+    balanceOf(tokenOwner: string): Promise<BigNumber>;
+    decimals(): Promise<BigNumber>;
+    name(): Promise<BigNumber>;
+    symbol(): Promise<BigNumber>;
+    totalSupply(): Promise<BigNumber>;
+    transfer(receiver: string, numTokens: BigNumberish): Promise<BigNumber>;
+    transferFrom(owner: string, buyer: string, numTokens: BigNumberish): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    allowance(
-      owner: string,
-      delegate: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    approve(
-      delegate: string,
-      numTokens: BigNumberish,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    balanceOf(tokenOwner: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    transfer(
-      receiver: string,
-      numTokens: BigNumberish,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
+    allowance(owner: string, delegate: string): Promise<PopulatedTransaction>;
+    approve(delegate: string, numTokens: BigNumberish): Promise<PopulatedTransaction>;
+    balanceOf(tokenOwner: string): Promise<PopulatedTransaction>;
+    decimals(): Promise<PopulatedTransaction>;
+    name(): Promise<PopulatedTransaction>;
+    symbol(): Promise<PopulatedTransaction>;
+    totalSupply(): Promise<PopulatedTransaction>;
+    transfer(receiver: string, numTokens: BigNumberish): Promise<PopulatedTransaction>;
     transferFrom(
       owner: string,
       buyer: string,
-      numTokens: BigNumberish,
-      overrides?: Overrides
+      numTokens: BigNumberish
     ): Promise<PopulatedTransaction>;
   };
 }

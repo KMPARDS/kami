@@ -125,46 +125,28 @@ export class FundsManager extends Contract {
   filters: {};
 
   estimateGas: {
-    claimDeposit(_rawProof: BytesLike, overrides?: Overrides): Promise<BigNumber>;
-
-    fundsManagerETH(overrides?: CallOverrides): Promise<BigNumber>;
-
-    isTransactionClaimed(
-      _transactionHash: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    reversePlasma(overrides?: CallOverrides): Promise<BigNumber>;
-
+    claimDeposit(_rawProof: BytesLike): Promise<BigNumber>;
+    fundsManagerETH(): Promise<BigNumber>;
+    isTransactionClaimed(_transactionHash: BytesLike): Promise<BigNumber>;
+    reversePlasma(): Promise<BigNumber>;
     setInitialValues(
       _reversePlasma: string,
       _tokenOnETH: string,
-      _fundsManagerETH: string,
-      overrides?: Overrides
+      _fundsManagerETH: string
     ): Promise<BigNumber>;
-
-    tokenOnETH(overrides?: CallOverrides): Promise<BigNumber>;
+    tokenOnETH(): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    claimDeposit(_rawProof: BytesLike, overrides?: Overrides): Promise<PopulatedTransaction>;
-
-    fundsManagerETH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    isTransactionClaimed(
-      _transactionHash: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    reversePlasma(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
+    claimDeposit(_rawProof: BytesLike): Promise<PopulatedTransaction>;
+    fundsManagerETH(): Promise<PopulatedTransaction>;
+    isTransactionClaimed(_transactionHash: BytesLike): Promise<PopulatedTransaction>;
+    reversePlasma(): Promise<PopulatedTransaction>;
     setInitialValues(
       _reversePlasma: string,
       _tokenOnETH: string,
-      _fundsManagerETH: string,
-      overrides?: Overrides
+      _fundsManagerETH: string
     ): Promise<PopulatedTransaction>;
-
-    tokenOnETH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    tokenOnETH(): Promise<PopulatedTransaction>;
   };
 }

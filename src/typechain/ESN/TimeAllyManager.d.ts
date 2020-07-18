@@ -296,89 +296,40 @@ export class TimeAllyManager extends Contract {
     addStakingPlan(
       _months: BigNumberish,
       _fractionFrom15: BigNumberish,
-      _estMode: boolean,
-      overrides?: Overrides
+      _estMode: boolean
     ): Promise<BigNumber>;
-
-    deployer(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getStakingPlan(_stakingPlanId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    getStakingPlans(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getTimeAllyMonthlyNRT(_month: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    getTotalActiveStaking(_month: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    increaseActiveStaking(
-      _amount: BigNumberish,
-      _uptoMonth: BigNumberish,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    isStakingContractValid(_stakingContract: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    nrtManager(overrides?: CallOverrides): Promise<BigNumber>;
-
-    setInitialValues(
-      _nrtAddress: string,
-      _validatorManager: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    stake(_planId: BigNumberish, overrides?: PayableOverrides): Promise<BigNumber>;
-
-    validatorManager(overrides?: CallOverrides): Promise<BigNumber>;
+    deployer(): Promise<BigNumber>;
+    getStakingPlan(_stakingPlanId: BigNumberish): Promise<BigNumber>;
+    getStakingPlans(): Promise<BigNumber>;
+    getTimeAllyMonthlyNRT(_month: BigNumberish): Promise<BigNumber>;
+    getTotalActiveStaking(_month: BigNumberish): Promise<BigNumber>;
+    increaseActiveStaking(_amount: BigNumberish, _uptoMonth: BigNumberish): Promise<BigNumber>;
+    isStakingContractValid(_stakingContract: string): Promise<BigNumber>;
+    nrtManager(): Promise<BigNumber>;
+    setInitialValues(_nrtAddress: string, _validatorManager: string): Promise<BigNumber>;
+    stake(_planId: BigNumberish): Promise<BigNumber>;
+    validatorManager(): Promise<BigNumber>;
   };
 
   populateTransaction: {
     addStakingPlan(
       _months: BigNumberish,
       _fractionFrom15: BigNumberish,
-      _estMode: boolean,
-      overrides?: Overrides
+      _estMode: boolean
     ): Promise<PopulatedTransaction>;
-
-    deployer(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getStakingPlan(
-      _stakingPlanId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getStakingPlans(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getTimeAllyMonthlyNRT(
-      _month: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getTotalActiveStaking(
-      _month: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
+    deployer(): Promise<PopulatedTransaction>;
+    getStakingPlan(_stakingPlanId: BigNumberish): Promise<PopulatedTransaction>;
+    getStakingPlans(): Promise<PopulatedTransaction>;
+    getTimeAllyMonthlyNRT(_month: BigNumberish): Promise<PopulatedTransaction>;
+    getTotalActiveStaking(_month: BigNumberish): Promise<PopulatedTransaction>;
     increaseActiveStaking(
       _amount: BigNumberish,
-      _uptoMonth: BigNumberish,
-      overrides?: Overrides
+      _uptoMonth: BigNumberish
     ): Promise<PopulatedTransaction>;
-
-    isStakingContractValid(
-      _stakingContract: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    nrtManager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    setInitialValues(
-      _nrtAddress: string,
-      _validatorManager: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    stake(_planId: BigNumberish, overrides?: PayableOverrides): Promise<PopulatedTransaction>;
-
-    validatorManager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    isStakingContractValid(_stakingContract: string): Promise<PopulatedTransaction>;
+    nrtManager(): Promise<PopulatedTransaction>;
+    setInitialValues(_nrtAddress: string, _validatorManager: string): Promise<PopulatedTransaction>;
+    stake(_planId: BigNumberish): Promise<PopulatedTransaction>;
+    validatorManager(): Promise<PopulatedTransaction>;
   };
 }

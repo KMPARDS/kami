@@ -210,68 +210,44 @@ export class ValidatorSet extends Contract {
   };
 
   estimateGas: {
-    BLOCKS_INTERVAL(overrides?: CallOverrides): Promise<BigNumber>;
-
-    LUCK_TRIES(overrides?: CallOverrides): Promise<BigNumber>;
-
-    MAX_VALIDATORS(overrides?: CallOverrides): Promise<BigNumber>;
-
-    PERCENT_UNIQUE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    SYSTEM_ADDRESS(overrides?: CallOverrides): Promise<BigNumber>;
-
-    finalizeChange(overrides?: Overrides): Promise<BigNumber>;
-
-    getNextValidators(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getValidators(overrides?: CallOverrides): Promise<BigNumber>;
-
-    initiateChange(overrides?: Overrides): Promise<BigNumber>;
-
-    lastFinalizeChangeBlock(overrides?: CallOverrides): Promise<BigNumber>;
-
+    BLOCKS_INTERVAL(): Promise<BigNumber>;
+    LUCK_TRIES(): Promise<BigNumber>;
+    MAX_VALIDATORS(): Promise<BigNumber>;
+    PERCENT_UNIQUE(): Promise<BigNumber>;
+    SYSTEM_ADDRESS(): Promise<BigNumber>;
+    finalizeChange(): Promise<BigNumber>;
+    getNextValidators(): Promise<BigNumber>;
+    getValidators(): Promise<BigNumber>;
+    initiateChange(): Promise<BigNumber>;
+    lastFinalizeChangeBlock(): Promise<BigNumber>;
     setInitialValues(
       _validatorManager: string,
       _MAX_VALIDATORS: BigNumberish,
       _PERCENT_UNIQUE: BigNumberish,
       _LUCK_TRIES: BigNumberish,
-      _BLOCKS_INTERVAL: BigNumberish,
-      overrides?: Overrides
+      _BLOCKS_INTERVAL: BigNumberish
     ): Promise<BigNumber>;
-
-    validatorManager(overrides?: CallOverrides): Promise<BigNumber>;
+    validatorManager(): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    BLOCKS_INTERVAL(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    LUCK_TRIES(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    MAX_VALIDATORS(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    PERCENT_UNIQUE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    SYSTEM_ADDRESS(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    finalizeChange(overrides?: Overrides): Promise<PopulatedTransaction>;
-
-    getNextValidators(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getValidators(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    initiateChange(overrides?: Overrides): Promise<PopulatedTransaction>;
-
-    lastFinalizeChangeBlock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
+    BLOCKS_INTERVAL(): Promise<PopulatedTransaction>;
+    LUCK_TRIES(): Promise<PopulatedTransaction>;
+    MAX_VALIDATORS(): Promise<PopulatedTransaction>;
+    PERCENT_UNIQUE(): Promise<PopulatedTransaction>;
+    SYSTEM_ADDRESS(): Promise<PopulatedTransaction>;
+    finalizeChange(): Promise<PopulatedTransaction>;
+    getNextValidators(): Promise<PopulatedTransaction>;
+    getValidators(): Promise<PopulatedTransaction>;
+    initiateChange(): Promise<PopulatedTransaction>;
+    lastFinalizeChangeBlock(): Promise<PopulatedTransaction>;
     setInitialValues(
       _validatorManager: string,
       _MAX_VALIDATORS: BigNumberish,
       _PERCENT_UNIQUE: BigNumberish,
       _LUCK_TRIES: BigNumberish,
-      _BLOCKS_INTERVAL: BigNumberish,
-      overrides?: Overrides
+      _BLOCKS_INTERVAL: BigNumberish
     ): Promise<PopulatedTransaction>;
-
-    validatorManager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    validatorManager(): Promise<PopulatedTransaction>;
   };
 }

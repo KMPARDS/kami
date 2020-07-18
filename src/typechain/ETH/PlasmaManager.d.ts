@@ -221,63 +221,28 @@ export class PlasmaManager extends Contract {
   };
 
   estimateGas: {
-    getAllSigners(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getAllValidators(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getBunchHeader(_bunchIndex: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    getNextStartBlockNumber(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getValidator(_validatorIndex: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    isValidator(_validator: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    lastBunchIndex(overrides?: CallOverrides): Promise<BigNumber>;
-
-    setInitialValues(
-      _token: string,
-      _validators: string[],
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    submitBunchHeader(_signedHeader: BytesLike, overrides?: Overrides): Promise<BigNumber>;
-
-    token(overrides?: CallOverrides): Promise<BigNumber>;
+    getAllSigners(): Promise<BigNumber>;
+    getAllValidators(): Promise<BigNumber>;
+    getBunchHeader(_bunchIndex: BigNumberish): Promise<BigNumber>;
+    getNextStartBlockNumber(): Promise<BigNumber>;
+    getValidator(_validatorIndex: BigNumberish): Promise<BigNumber>;
+    isValidator(_validator: string): Promise<BigNumber>;
+    lastBunchIndex(): Promise<BigNumber>;
+    setInitialValues(_token: string, _validators: string[]): Promise<BigNumber>;
+    submitBunchHeader(_signedHeader: BytesLike): Promise<BigNumber>;
+    token(): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    getAllSigners(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getAllValidators(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getBunchHeader(
-      _bunchIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getNextStartBlockNumber(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getValidator(
-      _validatorIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isValidator(_validator: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    lastBunchIndex(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    setInitialValues(
-      _token: string,
-      _validators: string[],
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    submitBunchHeader(
-      _signedHeader: BytesLike,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getAllSigners(): Promise<PopulatedTransaction>;
+    getAllValidators(): Promise<PopulatedTransaction>;
+    getBunchHeader(_bunchIndex: BigNumberish): Promise<PopulatedTransaction>;
+    getNextStartBlockNumber(): Promise<PopulatedTransaction>;
+    getValidator(_validatorIndex: BigNumberish): Promise<PopulatedTransaction>;
+    isValidator(_validator: string): Promise<PopulatedTransaction>;
+    lastBunchIndex(): Promise<PopulatedTransaction>;
+    setInitialValues(_token: string, _validators: string[]): Promise<PopulatedTransaction>;
+    submitBunchHeader(_signedHeader: BytesLike): Promise<PopulatedTransaction>;
+    token(): Promise<PopulatedTransaction>;
   };
 }

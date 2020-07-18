@@ -418,145 +418,79 @@ export class ReversePlasma extends Contract {
   };
 
   estimateGas: {
-    finalizeProposal(
-      _blockNumber: BigNumberish,
-      _proposalId: BigNumberish,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
+    finalizeProposal(_blockNumber: BigNumberish, _proposalId: BigNumberish): Promise<BigNumber>;
     findProposal(
       _blockNumber: BigNumberish,
       _transactionsRoot: BytesLike,
-      _receiptsRoot: BytesLike,
-      overrides?: CallOverrides
+      _receiptsRoot: BytesLike
     ): Promise<BigNumber>;
-
-    getAllValidators(overrides?: CallOverrides): Promise<BigNumber>;
-
+    getAllValidators(): Promise<BigNumber>;
     getEthHeaderProposal(
       _ethBlockNumber: BigNumberish,
-      _proposalIndex: BigNumberish,
-      overrides?: CallOverrides
+      _proposalIndex: BigNumberish
     ): Promise<BigNumber>;
-
-    getEthHeaderProposals(
-      _ethBlockNumber: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getFinalizedEthHeader(
-      _ethBlockNumber: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
+    getEthHeaderProposals(_ethBlockNumber: BigNumberish): Promise<BigNumber>;
+    getFinalizedEthHeader(_ethBlockNumber: BigNumberish): Promise<BigNumber>;
     getProposalValidators(
       _blockNumber: BigNumberish,
-      _proposalId: BigNumberish,
-      overrides?: CallOverrides
+      _proposalId: BigNumberish
     ): Promise<BigNumber>;
-
-    getProposalsCount(_blockNumber: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    getValidator(_validatorIndex: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    isValidator(_validator: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    latestBlockNumber(overrides?: CallOverrides): Promise<BigNumber>;
-
+    getProposalsCount(_blockNumber: BigNumberish): Promise<BigNumber>;
+    getValidator(_validatorIndex: BigNumberish): Promise<BigNumber>;
+    isValidator(_validator: string): Promise<BigNumber>;
+    latestBlockNumber(): Promise<BigNumber>;
     proposeBlock(
       _blockNumber: BigNumberish,
       _transactionsRoot: BytesLike,
-      _receiptsRoot: BytesLike,
-      overrides?: Overrides
+      _receiptsRoot: BytesLike
     ): Promise<BigNumber>;
-
-    reverseDepositAddress(overrides?: CallOverrides): Promise<BigNumber>;
-
+    reverseDepositAddress(): Promise<BigNumber>;
     setInitialValues(
       _tokenOnETH: string,
       _startBlockNumber: BigNumberish,
-      _validators: string[],
-      overrides?: Overrides
+      _validators: string[]
     ): Promise<BigNumber>;
-
-    tokenOnETH(overrides?: CallOverrides): Promise<BigNumber>;
-
-    updateDepositAddress(_reverseDepositAddress: string, overrides?: Overrides): Promise<BigNumber>;
+    tokenOnETH(): Promise<BigNumber>;
+    updateDepositAddress(_reverseDepositAddress: string): Promise<BigNumber>;
   };
 
   populateTransaction: {
     finalizeProposal(
       _blockNumber: BigNumberish,
-      _proposalId: BigNumberish,
-      overrides?: Overrides
+      _proposalId: BigNumberish
     ): Promise<PopulatedTransaction>;
-
     findProposal(
       _blockNumber: BigNumberish,
       _transactionsRoot: BytesLike,
-      _receiptsRoot: BytesLike,
-      overrides?: CallOverrides
+      _receiptsRoot: BytesLike
     ): Promise<PopulatedTransaction>;
-
-    getAllValidators(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
+    getAllValidators(): Promise<PopulatedTransaction>;
     getEthHeaderProposal(
       _ethBlockNumber: BigNumberish,
-      _proposalIndex: BigNumberish,
-      overrides?: CallOverrides
+      _proposalIndex: BigNumberish
     ): Promise<PopulatedTransaction>;
-
-    getEthHeaderProposals(
-      _ethBlockNumber: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getFinalizedEthHeader(
-      _ethBlockNumber: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
+    getEthHeaderProposals(_ethBlockNumber: BigNumberish): Promise<PopulatedTransaction>;
+    getFinalizedEthHeader(_ethBlockNumber: BigNumberish): Promise<PopulatedTransaction>;
     getProposalValidators(
       _blockNumber: BigNumberish,
-      _proposalId: BigNumberish,
-      overrides?: CallOverrides
+      _proposalId: BigNumberish
     ): Promise<PopulatedTransaction>;
-
-    getProposalsCount(
-      _blockNumber: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getValidator(
-      _validatorIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isValidator(_validator: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    latestBlockNumber(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
+    getProposalsCount(_blockNumber: BigNumberish): Promise<PopulatedTransaction>;
+    getValidator(_validatorIndex: BigNumberish): Promise<PopulatedTransaction>;
+    isValidator(_validator: string): Promise<PopulatedTransaction>;
+    latestBlockNumber(): Promise<PopulatedTransaction>;
     proposeBlock(
       _blockNumber: BigNumberish,
       _transactionsRoot: BytesLike,
-      _receiptsRoot: BytesLike,
-      overrides?: Overrides
+      _receiptsRoot: BytesLike
     ): Promise<PopulatedTransaction>;
-
-    reverseDepositAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
+    reverseDepositAddress(): Promise<PopulatedTransaction>;
     setInitialValues(
       _tokenOnETH: string,
       _startBlockNumber: BigNumberish,
-      _validators: string[],
-      overrides?: Overrides
+      _validators: string[]
     ): Promise<PopulatedTransaction>;
-
-    tokenOnETH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    updateDepositAddress(
-      _reverseDepositAddress: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
+    tokenOnETH(): Promise<PopulatedTransaction>;
+    updateDepositAddress(_reverseDepositAddress: string): Promise<PopulatedTransaction>;
   };
 }

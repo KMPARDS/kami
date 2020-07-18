@@ -5,7 +5,7 @@ import { ethers, EventFilter, Signer, BigNumber, BigNumberish, PopulatedTransact
 import { Contract, ContractTransaction, Overrides, CallOverrides } from '@ethersproject/contracts';
 import { BytesLike } from '@ethersproject/bytes';
 import { Listener, Provider } from '@ethersproject/providers';
-import { FunctionFragment, EventFragment } from '@ethersproject/abi';
+import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi';
 
 interface Erc20Interface extends ethers.utils.Interface {
   functions: {
@@ -20,10 +20,36 @@ interface Erc20Interface extends ethers.utils.Interface {
     'transferFrom(address,address,uint256)': FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: 'allowance', values: [string, string]): string;
+  encodeFunctionData(functionFragment: 'approve', values: [string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'balanceOf', values: [string]): string;
+  encodeFunctionData(functionFragment: 'decimals', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'name', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'symbol', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'totalSupply', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'transfer', values: [string, BigNumberish]): string;
+  encodeFunctionData(
+    functionFragment: 'transferFrom',
+    values: [string, string, BigNumberish]
+  ): string;
+
+  decodeFunctionResult(functionFragment: 'allowance', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'approve', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'balanceOf', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'decimals', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'name', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'symbol', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'totalSupply', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'transfer', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'transferFrom', data: BytesLike): Result;
+
   events: {
     'Approval(address,address,uint256)': EventFragment;
     'Transfer(address,address,uint256)': EventFragment;
   };
+
+  getEvent(nameOrSignatureOrTopic: 'Approval'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'Transfer'): EventFragment;
 }
 
 export class Erc20 extends Contract {
@@ -130,6 +156,35 @@ export class Erc20 extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
+  callStatic: {
+    allowance(owner: string, delegate: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    approve(delegate: string, numTokens: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
+
+    balanceOf(tokenOwner: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    decimals(overrides?: CallOverrides): Promise<number>;
+
+    name(overrides?: CallOverrides): Promise<string>;
+
+    symbol(overrides?: CallOverrides): Promise<string>;
+
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transfer(
+      receiver: string,
+      numTokens: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    transferFrom(
+      owner: string,
+      buyer: string,
+      numTokens: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+  };
+
   filters: {
     Approval(tokenOwner: string | null, spender: string | null, tokens: null): EventFilter;
 
@@ -137,30 +192,64 @@ export class Erc20 extends Contract {
   };
 
   estimateGas: {
-    allowance(owner: string, delegate: string): Promise<BigNumber>;
-    approve(delegate: string, numTokens: BigNumberish): Promise<BigNumber>;
-    balanceOf(tokenOwner: string): Promise<BigNumber>;
-    decimals(): Promise<BigNumber>;
-    name(): Promise<BigNumber>;
-    symbol(): Promise<BigNumber>;
-    totalSupply(): Promise<BigNumber>;
-    transfer(receiver: string, numTokens: BigNumberish): Promise<BigNumber>;
-    transferFrom(owner: string, buyer: string, numTokens: BigNumberish): Promise<BigNumber>;
-  };
+    allowance(owner: string, delegate: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-  populateTransaction: {
-    allowance(owner: string, delegate: string): Promise<PopulatedTransaction>;
-    approve(delegate: string, numTokens: BigNumberish): Promise<PopulatedTransaction>;
-    balanceOf(tokenOwner: string): Promise<PopulatedTransaction>;
-    decimals(): Promise<PopulatedTransaction>;
-    name(): Promise<PopulatedTransaction>;
-    symbol(): Promise<PopulatedTransaction>;
-    totalSupply(): Promise<PopulatedTransaction>;
-    transfer(receiver: string, numTokens: BigNumberish): Promise<PopulatedTransaction>;
+    approve(delegate: string, numTokens: BigNumberish, overrides?: Overrides): Promise<BigNumber>;
+
+    balanceOf(tokenOwner: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    decimals(overrides?: CallOverrides): Promise<BigNumber>;
+
+    name(overrides?: CallOverrides): Promise<BigNumber>;
+
+    symbol(overrides?: CallOverrides): Promise<BigNumber>;
+
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transfer(receiver: string, numTokens: BigNumberish, overrides?: Overrides): Promise<BigNumber>;
+
     transferFrom(
       owner: string,
       buyer: string,
-      numTokens: BigNumberish
+      numTokens: BigNumberish,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+  };
+
+  populateTransaction: {
+    allowance(
+      owner: string,
+      delegate: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    approve(
+      delegate: string,
+      numTokens: BigNumberish,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    balanceOf(tokenOwner: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    transfer(
+      receiver: string,
+      numTokens: BigNumberish,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    transferFrom(
+      owner: string,
+      buyer: string,
+      numTokens: BigNumberish,
+      overrides?: Overrides
     ): Promise<PopulatedTransaction>;
   };
 }

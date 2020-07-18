@@ -5,28 +5,49 @@ import { ethers, EventFilter, Signer, BigNumber, BigNumberish, PopulatedTransact
 import { Contract, ContractTransaction, Overrides, CallOverrides } from '@ethersproject/contracts';
 import { BytesLike } from '@ethersproject/bytes';
 import { Listener, Provider } from '@ethersproject/providers';
-import { FunctionFragment, EventFragment } from '@ethersproject/abi';
+import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi';
 
 interface PlasmaManagerInterface extends ethers.utils.Interface {
   functions: {
-    'bunches(uint256)': FunctionFragment;
-    'esnDepositAddress()': FunctionFragment;
     'getAllSigners()': FunctionFragment;
     'getAllValidators()': FunctionFragment;
+    'getBunchHeader(uint256)': FunctionFragment;
     'getNextStartBlockNumber()': FunctionFragment;
+    'getValidator(uint256)': FunctionFragment;
     'isValidator(address)': FunctionFragment;
     'lastBunchIndex()': FunctionFragment;
-    'processedWithdrawals(bytes32)': FunctionFragment;
     'setInitialValues(address,address[])': FunctionFragment;
-    'signers(uint256)': FunctionFragment;
     'submitBunchHeader(bytes)': FunctionFragment;
     'token()': FunctionFragment;
-    'validators(uint256)': FunctionFragment;
   };
+
+  encodeFunctionData(functionFragment: 'getAllSigners', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getAllValidators', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getBunchHeader', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'getNextStartBlockNumber', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getValidator', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'isValidator', values: [string]): string;
+  encodeFunctionData(functionFragment: 'lastBunchIndex', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'setInitialValues', values: [string, string[]]): string;
+  encodeFunctionData(functionFragment: 'submitBunchHeader', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'token', values?: undefined): string;
+
+  decodeFunctionResult(functionFragment: 'getAllSigners', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getAllValidators', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getBunchHeader', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getNextStartBlockNumber', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getValidator', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'isValidator', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'lastBunchIndex', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setInitialValues', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'submitBunchHeader', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'token', data: BytesLike): Result;
 
   events: {
     'NewBunchHeader(uint256,uint256,uint256)': EventFragment;
   };
+
+  getEvent(nameOrSignatureOrTopic: 'NewBunchHeader'): EventFragment;
 }
 
 export class PlasmaManager extends Contract {
@@ -43,28 +64,6 @@ export class PlasmaManager extends Contract {
   interface: PlasmaManagerInterface;
 
   functions: {
-    bunches(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<{
-      startBlockNumber: BigNumber;
-      bunchDepth: BigNumber;
-      transactionsMegaRoot: string;
-      receiptsMegaRoot: string;
-      lastBlockHash: string;
-      0: BigNumber;
-      1: BigNumber;
-      2: string;
-      3: string;
-      4: string;
-    }>;
-
-    esnDepositAddress(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: string;
-    }>;
-
     getAllSigners(
       overrides?: CallOverrides
     ): Promise<{
@@ -77,14 +76,39 @@ export class PlasmaManager extends Contract {
       0: string[];
     }>;
 
+    getBunchHeader(
+      _bunchIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: {
+        startBlockNumber: BigNumber;
+        bunchDepth: BigNumber;
+        transactionsMegaRoot: string;
+        receiptsMegaRoot: string;
+        lastBlockHash: string;
+        0: BigNumber;
+        1: BigNumber;
+        2: string;
+        3: string;
+        4: string;
+      };
+    }>;
+
     getNextStartBlockNumber(
       overrides?: CallOverrides
     ): Promise<{
       0: BigNumber;
     }>;
 
+    getValidator(
+      _validatorIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
     isValidator(
-      arg0: string,
+      _validator: string,
       overrides?: CallOverrides
     ): Promise<{
       0: boolean;
@@ -96,25 +120,11 @@ export class PlasmaManager extends Contract {
       0: BigNumber;
     }>;
 
-    processedWithdrawals(
-      arg0: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<{
-      0: boolean;
-    }>;
-
     setInitialValues(
       _token: string,
       _validators: string[],
       overrides?: Overrides
     ): Promise<ContractTransaction>;
-
-    signers(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<{
-      0: string;
-    }>;
 
     submitBunchHeader(
       _signedHeader: BytesLike,
@@ -126,17 +136,14 @@ export class PlasmaManager extends Contract {
     ): Promise<{
       0: string;
     }>;
-
-    validators(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<{
-      0: string;
-    }>;
   };
 
-  bunches(
-    arg0: BigNumberish,
+  getAllSigners(overrides?: CallOverrides): Promise<string[]>;
+
+  getAllValidators(overrides?: CallOverrides): Promise<string[]>;
+
+  getBunchHeader(
+    _bunchIndex: BigNumberish,
     overrides?: CallOverrides
   ): Promise<{
     startBlockNumber: BigNumber;
@@ -151,19 +158,13 @@ export class PlasmaManager extends Contract {
     4: string;
   }>;
 
-  esnDepositAddress(overrides?: CallOverrides): Promise<string>;
-
-  getAllSigners(overrides?: CallOverrides): Promise<string[]>;
-
-  getAllValidators(overrides?: CallOverrides): Promise<string[]>;
-
   getNextStartBlockNumber(overrides?: CallOverrides): Promise<BigNumber>;
 
-  isValidator(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+  getValidator(_validatorIndex: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  isValidator(_validator: string, overrides?: CallOverrides): Promise<boolean>;
 
   lastBunchIndex(overrides?: CallOverrides): Promise<BigNumber>;
-
-  processedWithdrawals(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
   setInitialValues(
     _token: string,
@@ -171,47 +172,112 @@ export class PlasmaManager extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
-  signers(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
   submitBunchHeader(_signedHeader: BytesLike, overrides?: Overrides): Promise<ContractTransaction>;
 
   token(overrides?: CallOverrides): Promise<string>;
 
-  validators(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+  callStatic: {
+    getAllSigners(overrides?: CallOverrides): Promise<string[]>;
+
+    getAllValidators(overrides?: CallOverrides): Promise<string[]>;
+
+    getBunchHeader(
+      _bunchIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      startBlockNumber: BigNumber;
+      bunchDepth: BigNumber;
+      transactionsMegaRoot: string;
+      receiptsMegaRoot: string;
+      lastBlockHash: string;
+      0: BigNumber;
+      1: BigNumber;
+      2: string;
+      3: string;
+      4: string;
+    }>;
+
+    getNextStartBlockNumber(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getValidator(_validatorIndex: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    isValidator(_validator: string, overrides?: CallOverrides): Promise<boolean>;
+
+    lastBunchIndex(overrides?: CallOverrides): Promise<BigNumber>;
+
+    setInitialValues(
+      _token: string,
+      _validators: string[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    submitBunchHeader(_signedHeader: BytesLike, overrides?: CallOverrides): Promise<void>;
+
+    token(overrides?: CallOverrides): Promise<string>;
+  };
 
   filters: {
     NewBunchHeader(_startBlockNumber: null, _bunchDepth: null, _bunchIndex: null): EventFilter;
   };
 
   estimateGas: {
-    bunches(arg0: BigNumberish): Promise<BigNumber>;
-    esnDepositAddress(): Promise<BigNumber>;
-    getAllSigners(): Promise<BigNumber>;
-    getAllValidators(): Promise<BigNumber>;
-    getNextStartBlockNumber(): Promise<BigNumber>;
-    isValidator(arg0: string): Promise<BigNumber>;
-    lastBunchIndex(): Promise<BigNumber>;
-    processedWithdrawals(arg0: BytesLike): Promise<BigNumber>;
-    setInitialValues(_token: string, _validators: string[]): Promise<BigNumber>;
-    signers(arg0: BigNumberish): Promise<BigNumber>;
-    submitBunchHeader(_signedHeader: BytesLike): Promise<BigNumber>;
-    token(): Promise<BigNumber>;
-    validators(arg0: BigNumberish): Promise<BigNumber>;
+    getAllSigners(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getAllValidators(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getBunchHeader(_bunchIndex: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    getNextStartBlockNumber(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getValidator(_validatorIndex: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    isValidator(_validator: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    lastBunchIndex(overrides?: CallOverrides): Promise<BigNumber>;
+
+    setInitialValues(
+      _token: string,
+      _validators: string[],
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    submitBunchHeader(_signedHeader: BytesLike, overrides?: Overrides): Promise<BigNumber>;
+
+    token(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    bunches(arg0: BigNumberish): Promise<PopulatedTransaction>;
-    esnDepositAddress(): Promise<PopulatedTransaction>;
-    getAllSigners(): Promise<PopulatedTransaction>;
-    getAllValidators(): Promise<PopulatedTransaction>;
-    getNextStartBlockNumber(): Promise<PopulatedTransaction>;
-    isValidator(arg0: string): Promise<PopulatedTransaction>;
-    lastBunchIndex(): Promise<PopulatedTransaction>;
-    processedWithdrawals(arg0: BytesLike): Promise<PopulatedTransaction>;
-    setInitialValues(_token: string, _validators: string[]): Promise<PopulatedTransaction>;
-    signers(arg0: BigNumberish): Promise<PopulatedTransaction>;
-    submitBunchHeader(_signedHeader: BytesLike): Promise<PopulatedTransaction>;
-    token(): Promise<PopulatedTransaction>;
-    validators(arg0: BigNumberish): Promise<PopulatedTransaction>;
+    getAllSigners(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getAllValidators(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getBunchHeader(
+      _bunchIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getNextStartBlockNumber(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getValidator(
+      _validatorIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isValidator(_validator: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    lastBunchIndex(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    setInitialValues(
+      _token: string,
+      _validators: string[],
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    submitBunchHeader(
+      _signedHeader: BytesLike,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

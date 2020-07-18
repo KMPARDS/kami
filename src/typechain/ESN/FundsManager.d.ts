@@ -5,17 +5,34 @@ import { ethers, EventFilter, Signer, BigNumber, BigNumberish, PopulatedTransact
 import { Contract, ContractTransaction, Overrides, CallOverrides } from '@ethersproject/contracts';
 import { BytesLike } from '@ethersproject/bytes';
 import { Listener, Provider } from '@ethersproject/providers';
-import { FunctionFragment, EventFragment } from '@ethersproject/abi';
+import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi';
 
 interface FundsManagerInterface extends ethers.utils.Interface {
   functions: {
     'claimDeposit(bytes)': FunctionFragment;
     'fundsManagerETH()': FunctionFragment;
+    'isTransactionClaimed(bytes32)': FunctionFragment;
     'reversePlasma()': FunctionFragment;
     'setInitialValues(address,address,address)': FunctionFragment;
     'tokenOnETH()': FunctionFragment;
-    'transactionClaimed(bytes32)': FunctionFragment;
   };
+
+  encodeFunctionData(functionFragment: 'claimDeposit', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'fundsManagerETH', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'isTransactionClaimed', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'reversePlasma', values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: 'setInitialValues',
+    values: [string, string, string]
+  ): string;
+  encodeFunctionData(functionFragment: 'tokenOnETH', values?: undefined): string;
+
+  decodeFunctionResult(functionFragment: 'claimDeposit', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'fundsManagerETH', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'isTransactionClaimed', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'reversePlasma', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setInitialValues', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'tokenOnETH', data: BytesLike): Result;
 
   events: {};
 }
@@ -42,6 +59,13 @@ export class FundsManager extends Contract {
       0: string;
     }>;
 
+    isTransactionClaimed(
+      _transactionHash: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: boolean;
+    }>;
+
     reversePlasma(
       overrides?: CallOverrides
     ): Promise<{
@@ -60,18 +84,13 @@ export class FundsManager extends Contract {
     ): Promise<{
       0: string;
     }>;
-
-    transactionClaimed(
-      arg0: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<{
-      0: boolean;
-    }>;
   };
 
   claimDeposit(_rawProof: BytesLike, overrides?: Overrides): Promise<ContractTransaction>;
 
   fundsManagerETH(overrides?: CallOverrides): Promise<string>;
+
+  isTransactionClaimed(_transactionHash: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
   reversePlasma(overrides?: CallOverrides): Promise<string>;
 
@@ -84,33 +103,68 @@ export class FundsManager extends Contract {
 
   tokenOnETH(overrides?: CallOverrides): Promise<string>;
 
-  transactionClaimed(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+  callStatic: {
+    claimDeposit(_rawProof: BytesLike, overrides?: CallOverrides): Promise<void>;
+
+    fundsManagerETH(overrides?: CallOverrides): Promise<string>;
+
+    isTransactionClaimed(_transactionHash: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+
+    reversePlasma(overrides?: CallOverrides): Promise<string>;
+
+    setInitialValues(
+      _reversePlasma: string,
+      _tokenOnETH: string,
+      _fundsManagerETH: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    tokenOnETH(overrides?: CallOverrides): Promise<string>;
+  };
 
   filters: {};
 
   estimateGas: {
-    claimDeposit(_rawProof: BytesLike): Promise<BigNumber>;
-    fundsManagerETH(): Promise<BigNumber>;
-    reversePlasma(): Promise<BigNumber>;
+    claimDeposit(_rawProof: BytesLike, overrides?: Overrides): Promise<BigNumber>;
+
+    fundsManagerETH(overrides?: CallOverrides): Promise<BigNumber>;
+
+    isTransactionClaimed(
+      _transactionHash: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    reversePlasma(overrides?: CallOverrides): Promise<BigNumber>;
+
     setInitialValues(
       _reversePlasma: string,
       _tokenOnETH: string,
-      _fundsManagerETH: string
+      _fundsManagerETH: string,
+      overrides?: Overrides
     ): Promise<BigNumber>;
-    tokenOnETH(): Promise<BigNumber>;
-    transactionClaimed(arg0: BytesLike): Promise<BigNumber>;
+
+    tokenOnETH(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    claimDeposit(_rawProof: BytesLike): Promise<PopulatedTransaction>;
-    fundsManagerETH(): Promise<PopulatedTransaction>;
-    reversePlasma(): Promise<PopulatedTransaction>;
+    claimDeposit(_rawProof: BytesLike, overrides?: Overrides): Promise<PopulatedTransaction>;
+
+    fundsManagerETH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    isTransactionClaimed(
+      _transactionHash: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    reversePlasma(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     setInitialValues(
       _reversePlasma: string,
       _tokenOnETH: string,
-      _fundsManagerETH: string
+      _fundsManagerETH: string,
+      overrides?: Overrides
     ): Promise<PopulatedTransaction>;
-    tokenOnETH(): Promise<PopulatedTransaction>;
-    transactionClaimed(arg0: BytesLike): Promise<PopulatedTransaction>;
+
+    tokenOnETH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

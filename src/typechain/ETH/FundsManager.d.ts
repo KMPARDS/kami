@@ -5,17 +5,34 @@ import { ethers, EventFilter, Signer, BigNumber, BigNumberish, PopulatedTransact
 import { Contract, ContractTransaction, Overrides, CallOverrides } from '@ethersproject/contracts';
 import { BytesLike } from '@ethersproject/bytes';
 import { Listener, Provider } from '@ethersproject/providers';
-import { FunctionFragment, EventFragment } from '@ethersproject/abi';
+import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi';
 
 interface FundsManagerInterface extends ethers.utils.Interface {
   functions: {
     'claimWithdrawal(bytes)': FunctionFragment;
     'fundsManagerESN()': FunctionFragment;
+    'isTransactionClaimed(bytes32)': FunctionFragment;
     'plasmaManager()': FunctionFragment;
     'setInitialValues(address,address,address)': FunctionFragment;
     'token()': FunctionFragment;
-    'transactionClaimed(bytes32)': FunctionFragment;
   };
+
+  encodeFunctionData(functionFragment: 'claimWithdrawal', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'fundsManagerESN', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'isTransactionClaimed', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'plasmaManager', values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: 'setInitialValues',
+    values: [string, string, string]
+  ): string;
+  encodeFunctionData(functionFragment: 'token', values?: undefined): string;
+
+  decodeFunctionResult(functionFragment: 'claimWithdrawal', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'fundsManagerESN', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'isTransactionClaimed', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'plasmaManager', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setInitialValues', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'token', data: BytesLike): Result;
 
   events: {};
 }
@@ -45,6 +62,13 @@ export class FundsManager extends Contract {
       0: string;
     }>;
 
+    isTransactionClaimed(
+      _transactionHash: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: boolean;
+    }>;
+
     plasmaManager(
       overrides?: CallOverrides
     ): Promise<{
@@ -63,13 +87,6 @@ export class FundsManager extends Contract {
     ): Promise<{
       0: string;
     }>;
-
-    transactionClaimed(
-      arg0: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<{
-      0: boolean;
-    }>;
   };
 
   claimWithdrawal(
@@ -78,6 +95,8 @@ export class FundsManager extends Contract {
   ): Promise<ContractTransaction>;
 
   fundsManagerESN(overrides?: CallOverrides): Promise<string>;
+
+  isTransactionClaimed(_transactionHash: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
   plasmaManager(overrides?: CallOverrides): Promise<string>;
 
@@ -90,33 +109,71 @@ export class FundsManager extends Contract {
 
   token(overrides?: CallOverrides): Promise<string>;
 
-  transactionClaimed(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+  callStatic: {
+    claimWithdrawal(_rawTransactionProof: BytesLike, overrides?: CallOverrides): Promise<void>;
+
+    fundsManagerESN(overrides?: CallOverrides): Promise<string>;
+
+    isTransactionClaimed(_transactionHash: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+
+    plasmaManager(overrides?: CallOverrides): Promise<string>;
+
+    setInitialValues(
+      _token: string,
+      _plasmaManager: string,
+      _fundsManagerESN: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    token(overrides?: CallOverrides): Promise<string>;
+  };
 
   filters: {};
 
   estimateGas: {
-    claimWithdrawal(_rawTransactionProof: BytesLike): Promise<BigNumber>;
-    fundsManagerESN(): Promise<BigNumber>;
-    plasmaManager(): Promise<BigNumber>;
+    claimWithdrawal(_rawTransactionProof: BytesLike, overrides?: Overrides): Promise<BigNumber>;
+
+    fundsManagerESN(overrides?: CallOverrides): Promise<BigNumber>;
+
+    isTransactionClaimed(
+      _transactionHash: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    plasmaManager(overrides?: CallOverrides): Promise<BigNumber>;
+
     setInitialValues(
       _token: string,
       _plasmaManager: string,
-      _fundsManagerESN: string
+      _fundsManagerESN: string,
+      overrides?: Overrides
     ): Promise<BigNumber>;
-    token(): Promise<BigNumber>;
-    transactionClaimed(arg0: BytesLike): Promise<BigNumber>;
+
+    token(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    claimWithdrawal(_rawTransactionProof: BytesLike): Promise<PopulatedTransaction>;
-    fundsManagerESN(): Promise<PopulatedTransaction>;
-    plasmaManager(): Promise<PopulatedTransaction>;
+    claimWithdrawal(
+      _rawTransactionProof: BytesLike,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    fundsManagerESN(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    isTransactionClaimed(
+      _transactionHash: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    plasmaManager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     setInitialValues(
       _token: string,
       _plasmaManager: string,
-      _fundsManagerESN: string
+      _fundsManagerESN: string,
+      overrides?: Overrides
     ): Promise<PopulatedTransaction>;
-    token(): Promise<PopulatedTransaction>;
-    transactionClaimed(arg0: BytesLike): Promise<PopulatedTransaction>;
+
+    token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

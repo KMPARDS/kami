@@ -32,7 +32,7 @@ app
     if (process.env.NODE_ENV !== 'test') {
       createRoutine(informerToESN, 8000, 'InformerToESN');
       createRoutine(informerToETH, 10000, 'InformerToETH');
-      createRoutine(callInitiateChange, 10000, 'CallInitiateChange');
+      createRoutine(callInitiateChange, 150000, 'CallInitiateChange');
     } else {
       console.log('Test mode, not creating informer routines.');
     }

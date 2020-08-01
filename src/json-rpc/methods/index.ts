@@ -8,6 +8,7 @@ import {
   viewBlockProposal,
   sendBlockProposal,
 } from '../../informer/to-esn/methods';
+import { getBlockNumber, getPendingTransactions } from '../../blockc/methods';
 import { peerInit, peerValidate, listPeers } from '../../peers/methods';
 import { serializeRequest } from './serialize-request';
 import { getAddress } from './get-address';
@@ -26,6 +27,10 @@ const _methods = {
     initiateBunch,
     viewBlockProposal,
     sendBlockProposal,
+  },
+  blockc: {
+    getBlockNumber,
+    getPendingTransactions,
   },
 };
 

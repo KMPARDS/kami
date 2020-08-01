@@ -12,6 +12,7 @@ import { getBlockNumber, getPendingTransactions } from '../../blockc/methods';
 import { peerInit, peerValidate, listPeers } from '../../peers/methods';
 import { serializeRequest } from './serialize-request';
 import { getAddress } from './get-address';
+import { getSystemUtilisation } from './get-system-utilisation';
 
 const _methods = {
   kami: {
@@ -20,6 +21,7 @@ const _methods = {
     peerValidate,
     listPeers,
     serializeRequest,
+    getSystemUtilisation,
   },
   informer: {
     computeBunchProposal,

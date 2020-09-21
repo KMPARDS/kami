@@ -135,7 +135,7 @@ export const PeerHandshakeWrong = () => {
 
       assert.strictEqual(
         response.error.data,
-        'PORT parameter is not passed',
+        'Method kami_peerInit expected 2 arguments but 1 were sent',
         'Invalid error data'
       );
     });

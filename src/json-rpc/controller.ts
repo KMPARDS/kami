@@ -67,11 +67,15 @@ router.post('/', async (req, res) => {
       ethers.utils.keccak256(serializeJson(request).data)
     );
     try {
-      const result = await methods(request.method)(
-        ...request.params,
-        request,
-        req
-      );
+      const { method, argsLength } = methods(request.method);
+      if (argsLength !== -1 && argsLength !== request.params.length) {
+        throw {
+          ...INVALID_PARAMS,
+          data: `Method ${request.method} expected ${argsLength} arguments but ${request.params.length} were sent`,
+        };
+      }
+
+      const result = await method(...request.params, request, req);
       const response: JsonSuccessResponse = {
         jsonrpc: '2.0',
         previousHash,

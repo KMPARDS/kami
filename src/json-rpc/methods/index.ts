@@ -14,13 +14,15 @@ import { serializeRequest } from './serialize-request';
 import { getAddress } from './get-address';
 import { getSystemUtilisation } from './get-system-utilisation';
 
-const _methods = {
+const _methods: {
+  [key: string]: { [key: string]: Function | [Function, number] };
+} = {
   kami: {
     getAddress,
-    peerInit,
-    peerValidate,
+    peerInit: [peerInit, 2],
+    peerValidate: [peerValidate, 0],
     listPeers,
-    serializeRequest,
+    serializeRequest: [serializeRequest, -1],
     getSystemUtilisation,
   },
   informer: {
@@ -36,7 +38,9 @@ const _methods = {
   },
 };
 
-export function methods(methodName: string): Function | never {
+export function methods(
+  methodName: string
+): { method: Function; argsLength: number } | never {
   const partitioned = methodName.split('_');
 
   if (!(partitioned[0] in _methods))
@@ -45,13 +49,21 @@ export function methods(methodName: string): Function | never {
       data: `Group '${partitioned[0]}' does not exist`,
     };
 
-  // @ts-ignore
   if (!(partitioned[1] in _methods[partitioned[0]]))
     throw {
       ...METHOD_NOT_FOUND,
       data: `Method '${partitioned[1]}' does not exist on Group '${partitioned[0]}'`,
     };
 
-  // @ts-ignore
-  return _methods[partitioned[0]][partitioned[1]];
+  let method = _methods[partitioned[0]][partitioned[1]];
+  let argsLength = 0;
+
+  if (method instanceof Array) {
+    argsLength = method[1];
+    method = method[0];
+  } else {
+    argsLength = method.length;
+  }
+
+  return { method, argsLength };
 }

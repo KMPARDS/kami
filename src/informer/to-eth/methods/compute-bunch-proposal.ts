@@ -22,11 +22,11 @@ export async function computeBunchProposal(
     bunchDepth,
     transactionsMegaRoot: computeMerkleRoot(
       blocks.map((block) => block.transactionsRoot)
-    ),
+    ).hex(),
     receiptsMegaRoot: computeMerkleRoot(
       blocks.map((block) => block.receiptsRoot)
-    ),
-    lastBlockHash: blocks[blocks.length - 1].blockHash,
+    ).hex(),
+    lastBlockHash: blocks[blocks.length - 1].blockHash.hex(),
     signatures: [],
   };
 }

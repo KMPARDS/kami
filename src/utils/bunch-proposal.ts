@@ -5,10 +5,10 @@ import { Signature, Bytes32 } from './bytes';
 export interface BunchProposal {
   startBlockNumber: number;
   bunchDepth: number;
-  transactionsMegaRoot: Bytes32;
-  receiptsMegaRoot: Bytes32;
-  lastBlockHash: Bytes32;
-  signatures: Signature[];
+  transactionsMegaRoot: string;
+  receiptsMegaRoot: string;
+  lastBlockHash: string;
+  signatures: string[];
 }
 
 export function validateBunchProposal(

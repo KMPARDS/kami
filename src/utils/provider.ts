@@ -28,21 +28,60 @@ export async function fetchBlocks(
   await Promise.all(
     blockNumbersToScan.map((currentBlockNumber) => {
       return new Promise(async function (resolve, reject) {
+        // console.log('initial wait', currentBlockNumber);
+        randomWait(bunchDepth);
+
         const blockNumberHex = ethers.utils.hexStripZeros(
           ethers.utils.hexlify(currentBlockNumber)
         );
 
-        const block: ParityBlock = await provider.send('eth_getBlockByNumber', [
-          blockNumberHex !== '0x' ? blockNumberHex : '0x00',
-          true,
-        ]);
+        let block: ParityBlock | null = null;
+
+        let error: any;
+        for (let i = 0; i < 200; i++) {
+          try {
+            const blockPromise = provider
+              .send('eth_getBlockByNumber', [
+                blockNumberHex !== '0x' ? blockNumberHex : '0x00',
+                true,
+              ])
+              .catch((err) => {
+                // console.log('catch1', err.code);
+              })
+              .then((val) => {
+                block = val;
+              });
+
+            await Promise.race([blockPromise, sleep(20000)]);
+
+            if (!block) throw { code: 'TIMEOUT' };
+
+            // Promise.block = await blockPromise;
+            // console.log('resolved', currentBlockNumber);
+            break;
+          } catch (err) {
+            error = err;
+            if (err.code === 'SERVER_ERROR' || err.code === 'TIMEOUT') {
+              // console.log('wait', currentBlockNumber, err.code);
+              randomWait(bunchDepth);
+            } else {
+              throw err;
+            }
+          }
+        }
+
+        if (!block) {
+          throw error;
+        }
 
         blockArray[currentBlockNumber - startBlockNumber] = {
           blockNumber: currentBlockNumber,
           transactionsRoot: new Bytes32(
             ethers.utils.arrayify(block.transactionsRoot)
           ),
+          // @ts-ignore
           receiptsRoot: new Bytes32(ethers.utils.arrayify(block.receiptsRoot)),
+          // @ts-ignore
           blockHash: new Bytes32(block.hash),
         };
 
@@ -52,4 +91,13 @@ export async function fetchBlocks(
   );
 
   return blockArray;
+}
+
+async function randomWait(bunchDepth: number) {
+  const wait = Math.floor(Math.random() * 2 ** bunchDepth * 10);
+  await sleep(wait);
+}
+
+async function sleep(time: number) {
+  await new Promise((res) => setTimeout(res, time));
 }

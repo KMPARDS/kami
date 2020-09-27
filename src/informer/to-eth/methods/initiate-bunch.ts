@@ -47,33 +47,38 @@ export async function initiateBunch(
   const signatures: string[] = _signatures.filter((sig) => sig !== null);
 
   // self signing
-  const sig = await signBunch(hexlifyObject(bunchProposal));
-  signatures.push(sig.signatures[0].hex());
+  const signedProposal = await signBunch(hexlifyObject(bunchProposal));
+  signatures.push(signedProposal.signatures[0]);
 
   // TODO filter signatures and verify that they r of validators
   // console.log('collectSignatures', signatures);
 
-  const rlpArray = [
-    [
-      new Bytes(startBlockNumber).hex(),
-      new Bytes(bunchDepth).hex(),
-      bunchProposal.transactionsMegaRoot.hex(),
-      bunchProposal.receiptsMegaRoot.hex(),
-      bunchProposal.lastBlockHash.hex(),
-    ],
-    ...signatures,
-  ];
+  // const rlpArray = [
+  //   [
+  //     new Bytes(startBlockNumber).hex(),
+  //     new Bytes(bunchDepth).hex(),
+  //     bunchProposal.transactionsMegaRoot,
+  //     bunchProposal.receiptsMegaRoot,
+  //     bunchProposal.lastBlockHash,
+  //   ],
+  //   ...signatures,
+  // ];
 
   // console.log(rlpArray);
 
-  const rlpBytes = ethers.utils.RLP.encode(rlpArray);
+  // const rlpBytes = ethers.utils.RLP.encode(rlpArray);
 
   // console.log(plpBunch);
 
   try {
     // TODO check once if someone already did transaction with higher gas fee, if yes then don't do the tx
     const tx: ethers.ContractTransaction = await global.plasmaInstanceETH.functions.submitBunchHeader(
-      rlpBytes
+      bunchProposal.startBlockNumber,
+      bunchProposal.bunchDepth,
+      bunchProposal.transactionsMegaRoot,
+      bunchProposal.receiptsMegaRoot,
+      bunchProposal.lastBlockHash,
+      signatures
     );
 
     // TODO when transaction done, inform all other kami's regarding the same

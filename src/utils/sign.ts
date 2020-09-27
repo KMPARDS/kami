@@ -20,7 +20,7 @@ export function getDomainSeperator(
   return new Bytes32(ethers.utils.keccak256(rlp));
 }
 
-export function prepareDigest(
+export function prepareDomainDigest(
   byted: Byted,
   domainSeperatorObj: DomainSeperatorObj
 ): Bytes32 {
@@ -32,19 +32,22 @@ export function prepareDigest(
 }
 
 export function prepareKamiDigest(byted: Byted): Bytes32 {
-  return prepareDigest(byted, {
+  const domainSeperatorObj: DomainSeperatorObj = {
     name: 'Era Swap Network',
     chainId: 5196, // TODO: add mainnet and testnet
     description: 'Kami',
-  });
+  };
+
+  return prepareDomainDigest(byted, domainSeperatorObj);
 }
 
 export function prepareBunchDigest(byted: Byted): Bytes32 {
-  return prepareDigest(byted, {
-    name: 'Era Swap Network',
-    chainId: 5196, // TODO: add mainnet and testnet
-    description: 'Bunch',
-  });
+  const preDigest = ethers.utils.concat([
+    '0x1900', // EIP 191
+    global.plasmaInstanceETH.address, // version specific data
+    byted.hex(), // data to sign
+  ]);
+  return new Bytes32(ethers.utils.keccak256(preDigest));
 }
 
 // ------------- signing -------------

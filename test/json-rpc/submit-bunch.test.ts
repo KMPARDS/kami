@@ -31,7 +31,11 @@ export const SubmitBunch = () =>
 
       assert.strictEqual(
         tx.data.slice(0, 10),
-        ethers.utils.id('submitBunchHeader(bytes)').slice(0, 10),
+        ethers.utils
+          .id(
+            'submitBunchHeader(uint256,uint256,bytes32,bytes32,bytes32,bytes[])'
+          )
+          .slice(0, 10),
         'function signature in the transaction should be of submitBunchHeader'
       );
 

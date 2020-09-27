@@ -22,29 +22,32 @@ export async function signBunch(
 
   assert.strictEqual(
     bunchProposal.transactionsMegaRoot,
-    _bunchProposal.transactionsMegaRoot.hex(),
+    _bunchProposal.transactionsMegaRoot,
     'your transactionsMegaRoot not matching with mine'
   );
 
   assert.strictEqual(
     bunchProposal.receiptsMegaRoot,
-    _bunchProposal.receiptsMegaRoot.hex(),
+    _bunchProposal.receiptsMegaRoot,
     'your receiptsMegaRoots not matching with mine'
   );
 
-  const encoded = ethers.utils.RLP.encode([
-    new Bytes(_bunchProposal.startBlockNumber).hex(),
-    new Bytes(_bunchProposal.bunchDepth).hex(),
-    _bunchProposal.transactionsMegaRoot.hex(),
-    _bunchProposal.receiptsMegaRoot.hex(),
-    _bunchProposal.lastBlockHash.hex(),
+  const encoded = ethers.utils.concat([
+    ethers.utils.hexZeroPad(
+      '0x' + _bunchProposal.startBlockNumber.toString(16),
+      32
+    ),
+    ethers.utils.hexZeroPad('0x' + _bunchProposal.bunchDepth.toString(16), 32),
+    _bunchProposal.transactionsMegaRoot,
+    _bunchProposal.receiptsMegaRoot,
+    _bunchProposal.lastBlockHash,
   ]);
 
   return {
     ...bunchProposal,
     signatures: [
+      signBunchData(new Bytes(encoded), global.wallet).hex(),
       ...bunchProposal.signatures,
-      signBunchData(new Bytes(encoded), global.wallet),
     ],
   };
 }

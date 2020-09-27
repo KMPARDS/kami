@@ -6,7 +6,7 @@ import {
   signKamiData,
   recoverAddressKami,
   recoverAddressBunch,
-  prepareDigest,
+  prepareDomainDigest,
 } from '../../src/utils/sign';
 
 const wallet = ethers.Wallet.createRandom();
@@ -25,7 +25,7 @@ export const Signing = () =>
       const paddedBytes = pad.concat(bytes);
       const manualDigest = ethers.utils.keccak256(paddedBytes.data);
 
-      const preparedDigest = prepareDigest(bytes, {
+      const preparedDigest = prepareDomainDigest(bytes, {
         name: 'Era Swap Network',
         chainId: 5196, // TODO: add mainnet and testnet
         description: 'Bunch',
@@ -55,7 +55,7 @@ export const Signing = () =>
       const paddedBytes = pad.concat(bytes);
       const manualDigest = ethers.utils.keccak256(paddedBytes.data);
 
-      const preparedDigest = prepareDigest(bytes, {
+      const preparedDigest = prepareDomainDigest(bytes, {
         name: 'Era Swap Network',
         chainId: 5196, // TODO: add mainnet and testnet
         description: 'Kami',

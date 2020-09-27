@@ -88,8 +88,7 @@ export const EthSetup = () =>
 
       validate(global.plasmaInstanceETH.address, t.hex20);
 
-      await global.plasmaInstanceETH.setInitialValues(
-        global.esInstanceETH.address,
+      await global.plasmaInstanceETH.setInitialValidators(
         validatorAddressArray
       );
     });

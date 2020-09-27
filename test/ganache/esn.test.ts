@@ -1,4 +1,4 @@
-import assert from 'assert';
+import assert, { strictEqual } from 'assert';
 import { ethers } from 'ethers';
 import { Address } from '../../src/utils/bytes';
 import { t, validate } from '../../src/type-validation';
@@ -85,12 +85,32 @@ export const EsnSetup = () =>
 
       validate(global.validatorSetInstanceESN.address, t.hex20);
 
-      await global.validatorSetInstanceESN.setInitialValues(
-        ethers.utils.hexlify(ethers.utils.randomBytes(20)),
+      await global.validatorSetInstanceESN.setMaxValidators(5);
+      const MAX_VALIDATORS = await global.validatorSetInstanceESN.MAX_VALIDATORS();
+      strictEqual(
+        MAX_VALIDATORS.toNumber(),
         5,
+        'MAX_VALIDATORS should be 5 as set'
+      );
+
+      await global.validatorSetInstanceESN.setPercentUnique(51);
+      const PERCENT_UNIQUE = await global.validatorSetInstanceESN.PERCENT_UNIQUE();
+      strictEqual(
+        PERCENT_UNIQUE.toNumber(),
         51,
-        4,
-        40
+        'PERCENT_UNIQUE should be 51 as set'
+      );
+
+      await global.validatorSetInstanceESN.setLuckTries(4);
+      const LUCK_TRIES = await global.validatorSetInstanceESN.LUCK_TRIES();
+      strictEqual(LUCK_TRIES.toNumber(), 4, 'LUCK_TRIES should be 4 as set');
+
+      await global.validatorSetInstanceESN.setBlocksInterval(1);
+      const BLOCKS_INTERVAL = await global.validatorSetInstanceESN.BLOCKS_INTERVAL();
+      strictEqual(
+        BLOCKS_INTERVAL.toNumber(),
+        1,
+        'BLOCKS_INTERVAL should be 1 as set'
       );
     });
 

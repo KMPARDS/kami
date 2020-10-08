@@ -50,7 +50,7 @@ export async function computeBunchProposal(
       lastBlockHash: lastBlock.hash,
       signatures: [],
     };
-    _addBunchToStore(output);
+    await _addBunchToStore(output);
     return output;
   }
 
@@ -71,18 +71,18 @@ export async function computeBunchProposal(
     lastBlockHash: blocks[blocks.length - 1].blockHash.hex(),
     signatures: [],
   };
-  _addBunchToStore(output);
+  await _addBunchToStore(output);
   return output;
 }
 
-function _addBunchToStore(bunch: BunchProposal) {
+async function _addBunchToStore(bunch: BunchProposal) {
   try {
     let obj = {};
     try {
       obj = require(process.cwd() + '/kami-bunch-store.json');
     } catch {}
 
-    writeJson(process.cwd() + '/kami-bunch-store.json', {
+    await writeJson(process.cwd() + '/kami-bunch-store.json', {
       ...obj,
       [bunch.startBlockNumber]: { [bunch.bunchDepth]: bunch },
     });

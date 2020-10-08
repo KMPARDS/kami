@@ -4,7 +4,7 @@ import { t, validateParam } from '../../../type-validation';
 import { Bytes32 } from '../../../utils/bytes';
 import { BunchProposal } from '../../../utils/bunch-proposal';
 import { hexlify, keccak256, concat } from 'ethers/lib/utils';
-import { writeJson } from 'fs-extra';
+import { writeJson, readJson } from 'fs-extra';
 
 export async function computeBunchProposal(
   startBlockNumber: number,
@@ -18,7 +18,7 @@ export async function computeBunchProposal(
       [startBlockNumber: string]: {
         [bunchDepth: string]: BunchProposal;
       };
-    } = require(process.cwd() + '/kami-bunch-store.json');
+    } = await readJson(process.cwd() + '/kami-bunch-store.json');
 
     const output = bunchstore[String(startBlockNumber)][String(bunchDepth)];
 
@@ -27,7 +27,7 @@ export async function computeBunchProposal(
     }
   } catch (error) {}
 
-  if (bunchDepth >= 10) {
+  if (bunchDepth >= 1) {
     const left = await computeBunchProposal(startBlockNumber, bunchDepth - 1);
     const right = await computeBunchProposal(
       startBlockNumber + 2 ** (bunchDepth - 1) - 1,
@@ -79,7 +79,7 @@ async function _addBunchToStore(bunch: BunchProposal) {
   try {
     let obj = {};
     try {
-      obj = require(process.cwd() + '/kami-bunch-store.json');
+      obj = await readJson(process.cwd() + '/kami-bunch-store.json');
     } catch {}
 
     await writeJson(process.cwd() + '/kami-bunch-store.json', {

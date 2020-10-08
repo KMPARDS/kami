@@ -15,12 +15,10 @@ export async function computeBunchProposal(
 
   try {
     const bunchstore: {
-      [startBlockNumber: string]: {
-        [bunchDepth: string]: BunchProposal;
-      };
+      [key: string]: BunchProposal;
     } = await readJson(process.cwd() + '/kami-bunch-store.json');
 
-    const output = bunchstore[String(startBlockNumber)][String(bunchDepth)];
+    const output = bunchstore[startBlockNumber + '-' + bunchDepth];
 
     if (output) {
       return output;
@@ -84,7 +82,7 @@ async function _addBunchToStore(bunch: BunchProposal) {
 
     await writeJson(process.cwd() + '/kami-bunch-store.json', {
       ...obj,
-      [bunch.startBlockNumber]: { [bunch.bunchDepth]: bunch },
+      [bunch.startBlockNumber + '-' + bunch.bunchDepth]: bunch,
     });
   } catch (error) {
     console.log('Caching generated bunch error', error);

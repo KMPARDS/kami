@@ -25,7 +25,7 @@ export async function computeBunchProposal(
     }
   } catch (error) {}
 
-  if (bunchDepth >= 1) {
+  if (bunchDepth > 8) {
     const left = await computeBunchProposal(startBlockNumber, bunchDepth - 1);
     const right = await computeBunchProposal(
       startBlockNumber + 2 ** (bunchDepth - 1) - 1,

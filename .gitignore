@@ -227,3 +227,6 @@ $RECYCLE.BIN/
 
 # Excluding kami config files
 /configs
+
+# Excluding informer cache
+kami-bunch-store.json

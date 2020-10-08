@@ -21,6 +21,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/express": "^4.17.6",
+    "@types/fs-extra": "^9.0.1",
     "@types/mocha": "^7.0.2",
     "@types/node": "^13.13.11",
     "body-parser": "^1.19.0",
@@ -28,6 +29,7 @@
     "dotenv": "^8.2.0",
     "ethers": "^5.0.4",
     "express": "4.17.1",
+    "fs-extra": "^9.0.1",
     "typescript": "^3.9.5"
   },
   "snyk": true,

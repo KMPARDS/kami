@@ -4,6 +4,7 @@ import { t, validateParam } from '../../../type-validation';
 import { Bytes32 } from '../../../utils/bytes';
 import { BunchProposal } from '../../../utils/bunch-proposal';
 import { hexlify, keccak256, concat } from 'ethers/lib/utils';
+import { writeJson } from 'fs-extra';
 
 export async function computeBunchProposal(
   startBlockNumber: number,
@@ -12,7 +13,21 @@ export async function computeBunchProposal(
   validateParam({ startBlockNumber }, t.uint);
   validateParam({ bunchDepth }, t.uint);
 
-  if (bunchDepth >= 5) {
+  try {
+    const bunchstore: {
+      [startBlockNumber: string]: {
+        [bunchDepth: string]: BunchProposal;
+      };
+    } = require(process.cwd() + '/kami-bunch-store.json');
+
+    const output = bunchstore[String(startBlockNumber)][String(bunchDepth)];
+
+    if (output) {
+      return output;
+    }
+  } catch (error) {}
+
+  if (bunchDepth >= 10) {
     const left = await computeBunchProposal(startBlockNumber, bunchDepth - 1);
     const right = await computeBunchProposal(
       startBlockNumber + 2 ** (bunchDepth - 1) - 1,
@@ -21,7 +36,7 @@ export async function computeBunchProposal(
     const lastBlock = await global.providerEsn.getBlock(
       startBlockNumber + 2 ** bunchDepth - 1
     );
-    return {
+    const output = {
       startBlockNumber,
       bunchDepth,
       transactionsMegaRoot: hexlify(
@@ -35,6 +50,8 @@ export async function computeBunchProposal(
       lastBlockHash: lastBlock.hash,
       signatures: [],
     };
+    _addBunchToStore(output);
+    return output;
   }
 
   const blocks = await fetchBlocks(
@@ -42,8 +59,7 @@ export async function computeBunchProposal(
     bunchDepth,
     global.providerEsn
   );
-
-  return {
+  const output = {
     startBlockNumber,
     bunchDepth,
     transactionsMegaRoot: computeMerkleRoot(
@@ -55,4 +71,22 @@ export async function computeBunchProposal(
     lastBlockHash: blocks[blocks.length - 1].blockHash.hex(),
     signatures: [],
   };
+  _addBunchToStore(output);
+  return output;
+}
+
+function _addBunchToStore(bunch: BunchProposal) {
+  try {
+    let obj = {};
+    try {
+      obj = require(process.cwd() + '/kami-bunch-store.json');
+    } catch {}
+
+    writeJson(process.cwd() + '/kami-bunch-store.json', {
+      ...obj,
+      [bunch.startBlockNumber]: { [bunch.bunchDepth]: bunch },
+    });
+  } catch (error) {
+    console.log('Caching generated bunch error', error);
+  }
 }

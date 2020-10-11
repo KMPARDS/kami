@@ -28,7 +28,7 @@ export async function computeBunchProposal(
   if (bunchDepth > 10) {
     const left = await computeBunchProposal(startBlockNumber, bunchDepth - 1);
     const right = await computeBunchProposal(
-      startBlockNumber + 2 ** (bunchDepth - 1) - 1,
+      startBlockNumber + 2 ** (bunchDepth - 1),
       bunchDepth - 1
     );
     const lastBlock = await global.providerEsn.getBlock(

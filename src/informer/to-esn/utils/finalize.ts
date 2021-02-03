@@ -29,6 +29,8 @@ export async function shouldPropose(blockNumber: number) {
           i
         );
         await global.nonceManagerESN.sendTransaction(populatedTx);
+        
+        console.log(`InformerToESN: Finalize ${blockNumber} block`);
       } catch {}
       return false;
     }

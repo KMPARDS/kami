@@ -58,5 +58,6 @@ export async function informerToESN(): Promise<void> {
     }
 
     console.log(`InformerToESN: Proposed ${blockNumber} block`);
+    const shouldKamiFinalizeBlock = await shouldPropose(blockNumber);
   }
 }

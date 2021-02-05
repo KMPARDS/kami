@@ -23,6 +23,9 @@ export async function shouldPropose(blockNumber: number) {
     // first checks if consensus is already acheived
     if (proposalValidators.length * 3 > validatorCount * 2) {
       // just in case some other node already did this, then this would throw
+      let nonce = await global.providerEsn.getTransactionCount(
+        global.wallet.address
+       );
       while(1){
         try {
           const populatedTx = await global.reversePlasmaInstanceESN.populateTransaction.finalizeProposal(

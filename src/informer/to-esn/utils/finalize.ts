@@ -23,15 +23,29 @@ export async function shouldPropose(blockNumber: number) {
     // first checks if consensus is already acheived
     if (proposalValidators.length * 3 > validatorCount * 2) {
       // just in case some other node already did this, then this would throw
-      try {
-        const populatedTx = await global.reversePlasmaInstanceESN.populateTransaction.finalizeProposal(
-          blockNumber,
-          i
-        );
-        await global.nonceManagerESN.sendTransaction(populatedTx);
-        
-        console.log(`InformerToESN: Finalize ${blockNumber} block`);
-      } catch {}
+      let nonce = await global.providerEsn.getTransactionCount(
+        global.wallet.address
+       );
+      while(1){
+        try {
+          const populatedTx = await global.reversePlasmaInstanceESN.populateTransaction.finalizeProposal(
+            blockNumber,
+            i
+          );
+          await global.nonceManagerESN.sendTransaction(populatedTx);
+
+          console.log(`InformerToESN: Finalize ${blockNumber} block`);
+        }  catch (error) {
+          if (error.message.includes('Transaction nonce is too low')) {
+            console.log('InformerToESN: Trying with higher nonce..');
+            continue;
+          }
+          console.log({ blockNumber, nonce });
+          throw error;
+          console.log('Error in finalizing block :',error);
+          break;
+        }
+      }
       return false;
     }
 
